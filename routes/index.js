@@ -9,9 +9,13 @@ exports.index = function(req, res){
 
 exports.create = function(req, res) {
 	var id = Math.floor(Math.random() * 50000);
-	res.redirect('/room/' + id);
+	res.redirect('/roomHost/' + id);
 };
 
-exports.room = function(req, res) {
-	res.render('room', {roomId: req.params.id});
+exports.roomHost = function(req, res) {
+	res.render('roomHost', {roomId: req.params.id});
+}
+
+exports.roomJoin = function(req, res) {
+	res.render('roomJoin', {roomId: req.params.id});
 }

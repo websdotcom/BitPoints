@@ -1,7 +1,11 @@
 extends layout
 
 block content
+  script(src='/javascripts/home.js')
   h1 BitPoints
   p Effortlessly bet on ticket point values something something magic.
   p
     a(href="/create") Create A BitPoint Room
+  br
+  input(type='text')#room-id
+  button#join-room Join Room

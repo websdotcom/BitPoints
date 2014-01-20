@@ -1,5 +1,8 @@
 var socket = io.connect('http://localhost:3000');
-socket.on('news', function (data) {
-  console.log(data);
-  socket.emit('my other event', { my: 'data' });
-});
+
+var roomId = window.location.pathname.split("/")[2];
+socket.emit("createRoom", {roomId: roomId});
+
+socket.on("incomingVote", function(data) {
+	console.log("Vote:", data);
+})

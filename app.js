@@ -33,15 +33,30 @@ if ('development' == app.get('env')) {
 // Routes.
 app.get('/', routes.index);
 app.get('/create', routes.create);
-app.get('/room/:id', routes.room);
+app.get('/roomHost/:id', routes.roomHost);
+app.get('/roomJoin/:id', routes.roomJoin);
 
 // Listen on the port.
 server.listen(app.get("port"));
 
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+	var inRoom = "";
+
+  socket.on('createRoom', function (data) {
+    console.log("Room", data.roomId, "created.");
+    socket.join(data.roomId);
+    inRoom = data.roomId;
   });
+
+  socket.on('joinRoom', function (data) {
+    console.log("Someone joined", data.roomId);
+    socket.join(data.roomId);
+    inRoom = data.roomId;
+  });
+
+  socket.on('sendVote', function(data) {
+  	io.sockets.in(inRoom).emit("incomingVote", data);
+  });
+
 });

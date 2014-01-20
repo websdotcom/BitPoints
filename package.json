@@ -1,9 +1,18 @@
 {
-  "name": "application-name",
+  "name": "BitPoints",
   "version": "0.0.1",
   "private": true,
+  "description": "Agile Estimation with Sockets",
+  "author": "Michael Barrett @twisterghost",
+  "contributors":[
+    "Nick Swider @swider"
+  ],
   "scripts": {
     "start": "node app.js"
+  },
+  "engines": {
+    "node": "0.8.*",
+    "npm":  "1.2.*"
   },
   "dependencies": {
     "express": "3.4.8",

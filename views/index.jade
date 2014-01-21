@@ -13,7 +13,7 @@ block content
 			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 			cillum dolore eu fugiat nulla pariatur.
 		div.join
-			h2 Join an Room
+			h2 Join Room
 			form(id="join", action="/roomJoin")
 				label(for='room-id') Room ID*
 				input(type='text')#room-id
@@ -25,6 +25,7 @@ block content
 		div.create
 			h2 Create Room
 			form(id="create", action="/create")
+				label(for='title') Room Title
 				input(type='text')#title
 				input(type='submit', value='Create A BitPoint Room')#join-room
 

@@ -58,7 +58,17 @@ html {
 		::-moz-selection { background: @selection; }
 	}
 }
-
+.button(){
+	padding: 0 10px;
+	border: none;
+	font: normal 1.1em/1.6em @serif;
+	background: @link;
+	color: @bg;
+	cursor: pointer;
+	&:hover {
+		background: @hover;
+	}
+}
 
 
 /* ---------------------
@@ -92,15 +102,29 @@ header {
 		padding: 30px;
 		border: 2px solid @link;
 		h2 {
+			margin-bottom: 20px;
 			font: 400 1.2em/1.4em @title;
 			color: @link;
 		}
-		
+		label {
+			width: 120px;
+			display: inline-block;
+		}	
+		input[type=text] {
+			width: 124px;
+			padding: 3px;
+			font: 400 1em/1.3em @sans;
+			background: rgba(255, 255, 255, .6);
+			border: none;
+			.border-radius(4px);
+		}
+		input[type=submit] {
+			.button();
+			margin-top: 20px;
+		}
 	}
 	.join {
 		margin-right: 50px;
-
-
 	}
 	.create {
 
@@ -164,6 +188,9 @@ body { perspective: 1000; }
 h2#status {
 
 }
+#toggleRound {
+	.button();
+}
 
 ul {
 	width: 100%;
@@ -173,7 +200,7 @@ ul {
 		width: 200px;
 		margin: 20px;
 		> img {
-
+			margin-right: 10px
 		}
 		> h3 {
 			display: inline-block;

@@ -59,5 +59,8 @@ io.sockets.on('connection', function (socket) {
   socket.on('sendVote', function(data) {
   	io.sockets.in(inRoom).emit("incomingVote", data);
   });
+  socket.on('newRound', function(data) {
+    io.sockets.in(inRoom).emit('newRound', data);
+  });
 
 });

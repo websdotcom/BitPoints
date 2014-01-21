@@ -145,11 +145,6 @@ header {
 	line-height: 30px;
 	font-size: 14px;
 	font-weight: bold;
-
-	.status {
-		display: none;
-		float: right;
-	}
 }
 #voterInfo {
 	position: relative;
@@ -208,9 +203,6 @@ table#estimateOptions {
 
 body { perspective: 1000; }
 
-h2#status {
-
-}
 #toggleRound {
 	.button();
 }
@@ -267,9 +259,12 @@ ul {
 			-ms-transform-style: preserve-3d;
 			transform-style: preserve-3d;
 			&.showValue {
-				-webkit-transform: rotateY(180deg);
-				-ms-transform: rotateY(180deg);
-				transform: rotateY(180deg);
+				.transform(rotateY(180deg));
+			}
+			&.spin {
+				-webkit-transition: 30s;
+				transition: 30s;
+				.transform(rotateY(10980deg));
 			}
 			.cardInner, .cardBack {
 				width: 100%;
@@ -279,9 +274,7 @@ ul {
 				border: 10px solid #fff;
 				border-radius: 5px;
 				box-shadow: 0 0 3px #444;
-				-moz-box-sizing:border-box;
-				-webkit-box-sizing:border-box;
-				box-sizing:border-box;
+				.box-sizing();
 				-webkit-backface-visibility: hidden;
 				-moz-backface-visibility: hidden;
 				-ms-backface-visibility: hidden;
@@ -294,25 +287,16 @@ ul {
 			}
 			.cardInner {
 				background-color: #fff;
-				-webkit-transform: rotateY(180deg);
-				-ms-transform: rotateY(180deg);
-				transform: rotateY(180deg);
+				.transform(rotateY(180deg));
 				.cardValue {
 					text-align: center;
 					font: normal 6em/2.4em @sans;
 					color: #565656;
+					&.min { color: #000fd2; }
+					&.max { color: #d21900; }
 				}
 			}
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
 

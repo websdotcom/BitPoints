@@ -62,5 +62,8 @@ io.sockets.on('connection', function (socket) {
   socket.on('newRound', function(data) {
     io.sockets.in(inRoom).emit('newRound', data);
   });
+  socket.on('roundEnd', function(data) {
+    io.sockets.in(inRoom).emit('roundEnd', data);
+  });
 
 });

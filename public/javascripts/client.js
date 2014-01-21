@@ -44,5 +44,6 @@ $('#toggleRound').on('click', function(e){
 		$(this).text('Begin Estimating');
 		$('.card').addClass('showValue');
 		$('#average').show().find('.val').text(getAverage());
+		socket.emit("roundEnd",{roomId: roomId});
 	}
 });

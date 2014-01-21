@@ -15,5 +15,9 @@ $(function(){
 	});
 	socket.on("newRound", function(data) {
 		$('.lastVote').removeClass('lastVote');
+		$('.status').hide().filter('.newRound').show();
+	});
+	socket.on("roundEnd", function(data) {
+		$('.status').hide().filter('.roundEnd').show();
 	});
 });

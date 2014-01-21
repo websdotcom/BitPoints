@@ -1,3 +1,4 @@
+var gravatar = require('gravatar');
 
 /*
  * GET home page
@@ -26,6 +27,8 @@ exports.roomHost = function(req, res) {
 exports.roomJoin = function(req, res) {
 	res.render('roomJoin', {
 		roomId: req.params.id,
-		gravatar: req.params.gravatar ? req.params.gravatar : null
+		user: req.query.user,
+		avatar: gravatar.url(req.query.email ? req.query.email : 'teamjirachat@gmail.com', {s: '100', d: 'monsterid'})
 	});
 }
+

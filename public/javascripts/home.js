@@ -1,6 +1,6 @@
 $(function(){
 	$("#join").on('submit', function(e) {
-		document.location = "/roomJoin/" + $("#room-id").val() + "?email=" + $("#email").val();
+		document.location = "/roomJoin/" + $("#room-id").val() + "?user=" + $("#user").val() + "&email=" + $("#email").val();
 		e.preventDefault();
 	});
 	$("#create").on('submit', function(e) {

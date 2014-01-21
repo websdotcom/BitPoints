@@ -1,0 +1,144 @@
+.border-radius(@radius) {
+	-moz-border-radius: @radius; 
+	-webkit-border-radius: @radius; 
+	border-radius: @radius;
+}
+
+.left-border-radius(@radius: 10px) {
+	-moz-border-radius-top-left: @radius;
+	-webkit-border-top-left-radius: @radius;
+	border-top-left-radius: @radius;
+	
+	-moz-border-radius-bottom-left: @radius;
+	-webkit-border-bottom-left-radius: @radius;
+	border-bottom-left-radius: @radius;
+}
+.right-border-radius(@radius: 10px) {
+	-moz-border-radius-top-right: @radius;
+	-webkit-border-top-right-radius: @radius;
+	border-top-right-radius: @radius;
+	
+	-moz-border-radius-bottom-right: @radius;
+	-webkit-border-bottom-right-radius: @radius;
+	border-bottom-right-radius: @radius;
+}
+.top-border-radius(@radius: 10px) {
+	-moz-border-radius-top-left: @radius;
+	-webkit-border-top-left-radius: @radius;
+	border-top-left-radius: @radius;
+	
+	-moz-border-radius-top-right: @radius;
+	-webkit-border-top-right-radius: @radius;
+	border-top-right-radius: @radius;
+}
+.bottom-border-radius(@radius: 10px) {
+	-moz-border-radius-bottom-left: @radius;
+	-webkit-border-bottom-left-radius: @radius;
+	border-bottom-left-radius: @radius;
+	
+	-moz-border-radius-bottom-right: @radius;
+	-webkit-border-bottom-right-radius: @radius;
+	border-bottom-right-radius: @radius;
+}
+.border-radius-bl(@radius) {
+	-moz-border-radius-bottom-left: @radius;
+	-webkit-border-bottom-left-radius: @radius;
+	border-bottom-left-radius: @radius;
+}
+
+.box-sizing(@val: border-box) {
+	box-sizing: @val;
+	-ms-box-sizing: @val;
+	-moz-box-sizing: @val;
+	-webkit-box-sizing: @val;
+}
+
+.transform(@val) {
+	-moz-transform: @val;
+	-o-transform: @val;
+	-webkit-transform: @val;
+	transform: @val;
+}
+
+.rotate(@val) {
+	-moz-transform: rotate(@val);  /* FF3.5+ */
+	-o-transform: rotate(@val);  /* Opera 10.5 */
+	-webkit-transform: rotate(@val);  /* Saf3.1+, Chrome */
+	//-ms-transform: rotate(@val);  /* IE9 */ Breaks more than it helps...
+	transform: rotate(@val);
+
+	/* IE6-IE8 */
+	@radians: ~`parseInt("@{val}") * Math.PI * 2 / 360`;
+	@costheta: ~`Math.cos("@{radians}")`;
+	@sintheta: ~`Math.sin("@{radians}")`;
+	@negsintheta: ~`"@{sintheta}" * -1`;
+	filter: ~"progid:DXImageTransform.Microsoft.Matrix(M11=@{costheta}, M12=@{negsintheta}, M21=@{sintheta}, M22=@{costheta}, SizingMethod='auto expand')";
+	zoom: 1;
+}
+
+.transition(@prop: color, @time: 1s, @style: ease-in){
+	-webkit-transition: @prop @time @style;  
+	-moz-transition: @prop @time @style;  
+	-o-transition: @prop @time @style;  
+	transition: @prop @time @style;
+}
+
+.border-image(@val) {
+	-webkit-border-image: @val;
+	-moz-border-image: @val;
+	-o-border-image: @val;
+	border-image: @val;
+}
+
+.box-shadow(@val) {
+	-moz-box-shadow: @val; 
+	-webkit-box-shadow: @val; 
+	box-shadow: @val;
+}
+
+.gradient-background(@start, @stop) {
+	background-color: @start;
+	background-image: -moz-linear-gradient(top, @start, @stop); 
+	background-image: -o-linear-gradient(top, @start, @stop); 
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @start),color-stop(1, @stop)); 
+	background-image: -webkit-linear-gradient(@start, @stop); 
+	background-image: linear-gradient(top, @start, @stop);
+	//don't pass in values that have an alpha channel -- they make the IE filter puke
+	filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorStr='@{start}', endColorStr='@{stop}')";
+}
+
+.gradient-background-alpha(@start, @stop) {
+	background-image: -moz-linear-gradient(top, @start, @stop); 
+	background-image: -o-linear-gradient(top, @start, @stop); 
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @start),color-stop(1, @stop)); 
+	background-image: -webkit-linear-gradient(@start, @stop); 
+	background-image: linear-gradient(top, @start, @stop);
+}
+
+.gradient-background3(@start, @middle, @stop, @middlePos: 50%) {
+	background: @start;
+	background: -moz-linear-gradient(top, @start 0%, @middle @middlePos, @stop 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@start), color-stop(@middlePos,@middle), color-stop(100%,@stop));
+	background: -webkit-linear-gradient(top, @start 0%,@middle @middlePos,@stop 100%);
+	background: -o-linear-gradient(top, @start 0%,@middle @middlePos,@stop 100%);
+	background: -ms-linear-gradient(top, @start 0%,@middle @middlePos,@stop 100%);
+	background: linear-gradient(top, @start 0%,@middle @middlePos,@stop 100%);
+	//don't pass in values that have an alpha channel -- they make the IE filter puke
+	filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{start}', endColorstr='@{stop}', GradientType=0)";
+}
+
+
+
+/* clearfix */
+.cf() {
+	&:after {
+		visibility: hidden;
+		display: block;
+		font-size: 0;
+		content: " ";
+		clear: both;
+		height: 0;
+	}
+}
+* html .cf             { zoom: 1; } /* IE6 */
+*:first-child+html .cf { zoom: 1; } /* IE */

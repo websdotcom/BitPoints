@@ -1,0 +1,128 @@
+/*
+ * @title: BitPoints Base Styles
+ * @authors : Nick Swider
+ */
+
+@import "lib";
+@import url(http://fonts.googleapis.com/css?family=Press+Start+2P);
+
+/* ---------------------
+			VARIABLES
+--------------------- */
+@text: #ccc;
+@link: #29d31a;
+@hover: #3af32c;
+@bg: #343434;
+@selection: rgba(41, 211, 26, .6);
+
+@sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+@serif: Georgia, Cambria, "Times New Roman", Times, serif;
+@title: "Press Start 2P", cursive;
+
+
+/* ---------------------
+				 RESET
+--------------------- */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, code, del, em, font, img, small, strike, strong, dl, dt, dd, ol, ul, li, fieldset, form, label, table, caption, tbody, tfoot, thead, tr, th, td, nav, menu {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body { line-height: 1; }
+ol, ul { list-style: none; }
+// tables still need 'cellspacing="0"' in the markup
+table { border-collapse: collapse; border-spacing: 0; }
+
+
+/* ---------------------
+				 BASE
+--------------------- */
+
+html {
+	background: @bg;
+	body {
+		font: 400 16px/1.8em @sans;
+		color: @text;
+		a {
+			color: @link;
+			font-family: @serif;
+			font-style: italic;
+			text-decoration: none;
+			&:hover, &:focus, &:active {
+				color: @hover;
+			}
+		}
+		::selection { background: @selection; }
+		::-moz-selection { background: @selection; }
+	}
+}
+
+
+
+/* ---------------------
+				HOMEPAGE
+--------------------- */
+header {
+	width: 100%;
+	padding: 20px;
+	border-bottom: 2px solid @link;
+	h1 {
+		font: 400 3em/1.4em @title;
+		color: @link;
+	}
+	h3 {
+		font: 400 2em/1.4em @sans;
+	}
+}
+
+.main {
+	width: 678px;
+	margin: 50px auto;
+	.cf;
+	.description {
+		float: left;
+		width: 100%;
+		margin-bottom: 50px;
+	}
+	.join, .create {
+		float: left;
+		width: 250px;
+		padding: 30px;
+		border: 2px solid @link;
+		h2 {
+			font: 400 1.2em/1.4em @title;
+			color: @link;
+		}
+		
+	}
+	.join {
+		margin-right: 50px;
+
+
+	}
+	.create {
+
+
+	}
+}
+
+
+/* ---------------------
+				 ROOM
+--------------------- */
+
+
+
+
+
+
+
+
+
+
+
+

@@ -50,9 +50,10 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('joinRoom', function (data) {
-    console.log("Someone joined", data.roomId);
+    console.log(data.user+" joined "+data.roomId);
     socket.join(data.roomId);
     inRoom = data.roomId;
+    io.sockets.in(inRoom).emit("newVoter", data);
   });
 
   socket.on('sendVote', function(data) {

@@ -1,8 +1,13 @@
 extends layout
 
 block content
-  h1 Welcome to #{title} (#{roomId})
+	h1 Welcome to #{title} (#{roomId})
 
+	ul#users
 
-  script(src="/socket.io/socket.io.js")
-  script(src="/javascripts/client.js")
+	script.
+		var bp = {
+			roomId: #{roomId}
+		}
+	script(src="/socket.io/socket.io.js")
+	script(src="/javascripts/client.js")

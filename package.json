@@ -5,7 +5,8 @@
   "description": "Agile Estimation with Sockets",
   "author": "Michael Barrett @twisterghost",
   "contributors":[
-    "Nick Swider @swider"
+    "Nick Swider @swider",
+    "Jack Anderson @jackwanders"
   ],
   "scripts": {
     "start": "node app.js"

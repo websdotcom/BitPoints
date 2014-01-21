@@ -13,7 +13,7 @@ var
 				numVotes++;
 			}
 		}
-		return Math.ceil(total/numVotes);
+		return numVotes === 0 ? 0 : Math.ceil(total/numVotes);
 	};
 
 socket.emit("createRoom", {roomId: roomId});
@@ -39,6 +39,7 @@ $('#toggleRound').on('click', function(e){
 		$(this).text('Stop Estimating');
 		$('.card').removeClass('visible showValue');
 		socket.emit("newRound",{roomId: roomId});
+		votes = {};
 	}else if(status == 2){ // Show cards
 		$(this).text('Begin Estimating');
 		$('.card').addClass('showValue');

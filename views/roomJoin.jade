@@ -5,7 +5,9 @@ block content
 	#voterInfo
 		img.voterImage#avatar(src='#{avatar}')
 		h3.voterName #{user}
-		input(title='Select card color', type='color', value='#032E63')#color
+		#cardColor
+			h4 Card Color
+			input(title='Select card color', type='color', value='#032E63')#color
 
 	table#estimateOptions
 		tr

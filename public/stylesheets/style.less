@@ -143,18 +143,30 @@ header {
 }
 #voterInfo {
 	position: relative;
-	width: 152px;
-	margin: 0 auto;
+	margin: 10px;
 
 	.voterName,.voterImage {
 		margin-left: 0;
 	}
 	
-	input {
-		box-sizing: border-box;
-		width: 152px;
-		margin-top: 4px;
-		height: 30px;
+	#cardColor {
+		position: absolute;
+		top: 0;
+		left: 170px;
+
+		h4 {
+			height: 32px;
+			text-align: center;
+		}
+
+		input {
+			box-sizing: border-box;
+			width: 90px;
+			height: 120px;
+			padding: 0 2px;
+			border: 2px solid white;
+			border-radius: 3px;
+		}
 	}
 }
 

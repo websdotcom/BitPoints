@@ -12,8 +12,12 @@ socket.on("newVoter", function(data) {
 });
 
 socket.on("incomingVote", function(data) {
-	if(status == 1)
-		$('li[data-user='+data.user+'] div.card').addClass('visible').find('div.cardValue').text(data.estimate);
+	if(status == 1){
+		var $card = $('li[data-user='+data.user+'] div.card');
+		$card.find('div.cardValue').text(data.estimate);
+		$card.find('.cardBack').css('background-color', data.color);
+		$card.addClass('visible')
+	}
 });
 
 $('#toggleRound').on('click', function(e){

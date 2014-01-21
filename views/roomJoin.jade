@@ -1,23 +1,28 @@
 extends layout
 
 block content
-	h1 Welcome to room #{roomId}
-	img#avatar(src='#{avatar}')
-	p #{user}
+	h1#voterInfo
+		i Logged into Room #{roomId} as: 
+		img#avatar(src='#{avatar}')
+		span #{user}
+		input(type='color', value='#032E63')#color
 
-	h3#estimate
-
-	ul#estimateOptions
-		li 1
-		li 2
-		li 3
-		li 5
-		li 8
-		li 13
-		li 21
-		li 34
-		li 55
-		li 89
+	table#estimateOptions
+		tr
+			td 1
+			td 2
+		tr
+			td 3
+			td 5
+		tr
+			td 8
+			td 13
+		tr
+			td 21
+			td 34
+		tr
+			td 55
+			td 89
 
 	script.
 		var bp = {

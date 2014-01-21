@@ -6,9 +6,11 @@ var
 
 $(function(){
 	socket.emit("joinRoom", {roomId: roomId, avatar: avatar, user: user});
-	$('#estimateOptions li').on('click', function(e){
-		var points = $(this).text();
-		$('#estimate').text(points);
-		socket.emit("sendVote", {roomId: roomId, user: user, estimate: points});
+	$('#estimateOptions td').on('click', function(e){
+		$('.lastVote').removeClass('lastVote')
+		var
+			points = $(this).addClass('lastVote').text(),
+			color = $('#color').val().length >= 4 ? $('#color').val() : '#032E63';
+		socket.emit("sendVote", {roomId: roomId, user: user, estimate: points, color: color });
 	});
 });

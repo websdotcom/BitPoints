@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	i#voterRoomInfo Logged into Room #{roomId} as: 
+	#voterRoomInfo Room: #{roomId} 
 	#voterInfo
 		img.voterImage#avatar(src='#{avatar}')
 		h3.voterName #{user}

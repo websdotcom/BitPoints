@@ -33,7 +33,7 @@ if ('development' == app.get('env')) {
 // Routes.
 app.get('/', routes.index);
 app.get('/create', routes.create);
-app.get(/^\/roomHost\/([0-9]+)\/([a-zA-Z0-9]*)/, routes.roomHost);
+app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
 app.get('/roomJoin/:id', routes.roomJoin);
 
 // Listen on the port.

@@ -137,23 +137,24 @@ header {
 				 VOTER
 --------------------- */
 
-h1#voterInfo {
-	i {
-		display: block;
-		font-size: 16px;
-	}
-	img {
-		float: left;
-		margin-right: 10px;
-	}
-	span {
-		float: left;
-		width: 210px
+#voterRoomInfo {
+	display: block;
+	font-size: 16px;
+}
+#voterInfo {
+	position: relative;
+	width: 152px;
+	margin: 0 auto;
 
+	.voterName,.voterImage {
+		margin-left: 0;
 	}
+	
 	input {
-		float: left;
-
+		box-sizing: border-box;
+		width: 152px;
+		margin-top: 4px;
+		height: 30px;
 	}
 }
 
@@ -192,6 +193,28 @@ h2#status {
 	.button();
 }
 
+.voterImage {
+	display: block;
+	padding: 25px 25px 0;
+	margin-left: 24px;
+	border: solid rgba(255,255,255,0.25);
+	border-width: 1px 1px 0;
+	border-radius: 10px 10px 0 0;
+	background: rgba(0,0,0,0.25)
+}
+.voterName {
+	display: block;
+	height: 40px;
+	width: 150px;
+	margin-left: 24px;
+	border: solid rgba(255,255,255,0.25);
+	border-width: 0 1px 1px;
+	border-radius: 0 0 10px 10px;
+	line-height: 40px;
+	text-align: center;
+	background: rgba(0,0,0,0.25);
+}
+
 ul {
 	width: 100%;
 	li {
@@ -199,26 +222,7 @@ ul {
 		position: relative;
 		width: 200px;
 		margin: 20px;
-		> img {
-			display: block;
-			padding: 25px 25px 0;
-			margin-left: 24px;
-			border: solid rgba(255,255,255,0.25);
-			border-width: 1px 1px 0;
-			border-radius: 10px 10px 0 0;
-			background: rgba(0,0,0,0.25)
-		}
-		> h3 {
-			height: 40px;
-			width: 150px;
-			margin-left: 24px;
-			border: solid rgba(255,255,255,0.25);
-			border-width: 0 1px 1px;
-			border-radius: 0 0 10px 10px;
-			line-height: 40px;
-			text-align: center;
-			background: rgba(0,0,0,0.3);
-		} 
+		
 		.card {
 			position: absolute;
 			width: 200px;

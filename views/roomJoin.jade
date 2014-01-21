@@ -1,11 +1,11 @@
 extends layout
 
 block content
-	h1#voterInfo
-		i Logged into Room #{roomId} as: 
-		img#avatar(src='#{avatar}')
-		span #{user}
-		input(type='color', value='#032E63')#color
+	i#voterRoomInfo Logged into Room #{roomId} as: 
+	#voterInfo
+		img.voterImage#avatar(src='#{avatar}')
+		h3.voterName #{user}
+		input(title='Select card color', type='color', value='#032E63')#color
 
 	table#estimateOptions
 		tr

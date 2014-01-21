@@ -3,7 +3,7 @@ var
 	roomId = bp.roomId,
 	status = 0, // 0 - start, 1 - betting open, 2 - reveal
 	tim = (function(){var d="{{",a="}}",e="[a-z0-9_][\\.a-z0-9_]*",c=new RegExp(d+"("+e+")"+a,"gim"),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split("."),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}());
-	userTemp = '<li data-user="{{user}}"><img src="{{avatar}}" /><h3>{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div></div></div></li>';
+	userTemp = '<li data-user="{{user}}"><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div></div></div></li>';
 
 socket.emit("createRoom", {roomId: roomId});
 

@@ -196,6 +196,21 @@ table#estimateOptions {
 		&.lastVote {
 			.gradient-background-alpha(fadeOut(spin(@link, 180), 40%), fadeOut(spin(@link, 180), 100%));
 		}
+		&.coffee {
+			font-size: 0;
+
+			&:before {
+				content: '';
+				display: block;
+				width: 35px;
+				height: 35px;
+				background: url("../images/coffee-white.png") no-repeat center center;
+				background-origin: content-box;
+				background-size: 90%;
+				margin: 0 auto;
+			}
+
+		}
 	}
 }
 
@@ -294,11 +309,29 @@ ul {
 				background-color: #fff;
 				.transform(rotateY(180deg));
 				.cardValue {
+					position: relative;
 					text-align: center;
 					font: normal 6em/2.4em @sans;
 					color: #565656;
 					&.min { color: #000fd2; }
 					&.max { color: #d21900; }
+
+					&.coffee {
+						text-indent: 9999px;
+
+						&:before {
+							content: '';
+							display: block;
+							position: absolute;
+							top: 30px;
+							width: 180px;
+							height: 180px;
+							background: url("../images/coffee-black.png") no-repeat center center;
+							background-origin: content-box;
+							background-size: 80%;
+							margin: 0 auto;
+						}
+					}
 				}
 			}
 		}

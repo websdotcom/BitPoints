@@ -19,17 +19,19 @@ var
 		var vote;
 		for(var user in votes) {
 			if(votes.hasOwnProperty(user)) {
-				vote = votes[user];
-				voteData.total += vote;
-				if(voteData.lastVote == -1){
-					voteData.lastVote = vote;
-					voteData.min = vote;
-					voteData.max = vote;
+				vote = parseInt(votes[user],10);
+				if(!isNaN(vote)) {
+					voteData.total += vote;
+					if(voteData.lastVote == -1){
+						voteData.lastVote = vote;
+						voteData.min = vote;
+						voteData.max = vote;
+					}
+					if(voteData.lastVote != vote){ voteData.allVotesEqual = false; }
+					if(voteData.max < vote){ voteData.max = vote; }
+					if(voteData.min > vote){ voteData.min = vote; }
+					voteData.numVotes++;
 				}
-				if(voteData.lastVote != vote){ voteData.allVotesEqual = false; }
-				if(voteData.max < vote){ voteData.max = vote; }
-				if(voteData.min > vote){ voteData.min = vote; }
-				voteData.numVotes++;
 			}
 		}
 		voteData.average = voteData.numVotes === 0 ? 0 : Math.ceil(voteData.total/voteData.numVotes);
@@ -45,6 +47,7 @@ socket.on("incomingVote", function(data) {
 	if(status == 1){
 		var $card = $('li[data-user='+data.user+'] div.card');
 		$card.find('div.cardValue').text(data.estimate);
+		if(data.estimate === 'coffee') { $card.find('div.cardValue').addClass('coffee'); }
 		$card.find('.cardBack').css('background-color', data.color);
 		$card.addClass('visible');
 		votes[data.user] = parseInt(data.estimate, 10);

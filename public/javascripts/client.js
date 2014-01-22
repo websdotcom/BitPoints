@@ -48,7 +48,7 @@ socket.on("incomingVote", function(data) {
 		var $card = $('li[data-user='+data.user+'] div.card');
 		$card.find('div.cardValue').text(data.estimate);
 		if(data.estimate === 'coffee') { $card.find('div.cardValue').addClass('coffee'); }
-		$card.find('.cardBack').css('background-color', data.color);
+		$card.find('.cardBack').css('background-color', data.color).removeClass('argile denim graphpaper paisley wood goat').addClass(data.pattern);
 		$card.addClass('visible');
 		votes[data.user] = data.estimate;
 	}
@@ -59,7 +59,8 @@ $('#toggleRound').on('click', function(e){
 	if(status == 1){ // Start a new round
 		$('#average').hide().find('.val').empty();
 		$(this).text('Stop Estimating');
-		$('.card').removeClass('visible showValue').removeClass('spin');
+		$('.card').removeClass('visible showValue spin');
+		$('.cardValue').removeClass('coffee min max');
 		socket.emit("newRound",{roomId: roomId});
 		votes = {};
 	}else if(status == 2){ // Show cards
@@ -82,3 +83,4 @@ $('#toggleRound').on('click', function(e){
 		socket.emit("roundEnd",{roomId: roomId});
 	}
 });
+

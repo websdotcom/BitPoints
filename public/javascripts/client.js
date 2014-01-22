@@ -19,7 +19,7 @@ var
 		var vote;
 		for(var user in votes) {
 			if(votes.hasOwnProperty(user)) {
-				vote = parseInt(votes[user],10);
+				vote = parseFloat(votes[user]);
 				if(!isNaN(vote)) {
 					voteData.total += vote;
 					if(voteData.lastVote == -1){
@@ -50,7 +50,7 @@ socket.on("incomingVote", function(data) {
 		if(data.estimate === 'coffee') { $card.find('div.cardValue').addClass('coffee'); }
 		$card.find('.cardBack').css('background-color', data.color);
 		$card.addClass('visible');
-		votes[data.user] = parseInt(data.estimate, 10);
+		votes[data.user] = data.estimate;
 	}
 });
 

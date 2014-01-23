@@ -20,10 +20,11 @@ $(function(){
 	$('#estimateOptions td').on('click', function(e){
 		$('.lastVote').removeClass('lastVote');
 		var
-			points = $(this).addClass('lastVote').text(),
+			points = $(this).addClass('lastVote').data('value'),
+			value = $(this).html(),
 			pattern = $('#pattern').val(),
 			color = $('#color').val().length >= 4 ? $('#color').val() : '#032E63';
-		socket.emit("sendVote", {roomId: roomId, user: user, estimate: points, pattern: pattern, color: color });
+		socket.emit("sendVote", {roomId: roomId, user: user, estimate: points, cardValue: value, pattern: pattern, color: color });
 	});
 	socket.on("newRound", function(data) {
 		$('.lastVote').removeClass('lastVote');

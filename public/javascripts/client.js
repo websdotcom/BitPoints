@@ -38,7 +38,8 @@ var
 				}
 			}
 		}
-		voteData.average = voteData.numVotes === 0 ? 0 : Math.ceil(voteData.total/voteData.numVotes);
+		voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
+		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
 	};
 
 socket.emit("createRoom", {roomId: roomId});
@@ -50,8 +51,8 @@ socket.on("newVoter", function(data) {
 socket.on("incomingVote", function(data) {
 	if(status == 1){
 		var $card = $('li[data-user='+data.user+'] div.card');
-		$card.find('div.cardValue').text(data.estimate);
-		if(data.estimate === 'coffee') { $card.find('div.cardValue').addClass('coffee'); }
+		$card.find('div.cardValue').html(data.cardValue);
+		if(data.cardValue === 'coffee') { $card.find('div.cardValue').addClass('coffee'); }
 		$card.find('.cardBack').css('background-color', data.color).removeClass('argile denim graphpaper paisley wood goat').addClass(data.pattern);
 		$card.addClass('visible');
 		votes[data.user] = data.estimate;

@@ -13,4 +13,5 @@ logs
 results
 node_modules
 npm-debug.log
+.node-version
 

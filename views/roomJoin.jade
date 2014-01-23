@@ -7,9 +7,10 @@ block content
 	#voterInfo
 		img.voterImage#avatar(src='#{avatar}')
 		h3.voterName #{user}
-		#cardColor
-			h4 Card Color
-			input(title='Select card color', type='color', value='#{cardColor}')#color
+		#cardStyle
+			h4 Card Style
+			div#cardPreview
+				div.cardBack.argile
 
 	table#estimateOptions
 		tr
@@ -32,6 +33,20 @@ block content
 			td &infin;
 			td.coffee coffee
 			td.blank &nbsp;
+
+	div#cardStylePop
+		div.close X
+		label Pattern
+		select#pattern
+			option argile
+			option denim
+			option graphpaper
+			option paisley
+			option wood
+			option goat
+		label Color
+			input(title='Select card color', type='color', value='#{cardColor')#color
+
 
 	script.
 		var bp = {

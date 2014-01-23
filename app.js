@@ -72,3 +72,5 @@ io.sockets.on('connection', function (socket) {
   });
 
 });
+
+console.log("BitPoints is ready to go at http://localhost:" + config.port);

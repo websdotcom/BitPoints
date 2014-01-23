@@ -1,4 +1,11 @@
 BitPoints
 =========
+Effortlessly point tickets visually and collaboratively over the internet in real time.
 
-THE FUTURE IS NOW, THIS TIME
+## Install it
+`git clone https://github.com/twisterghost/BitPoints.git`
+
+`npm install`
+
+## Run it
+`npm start`

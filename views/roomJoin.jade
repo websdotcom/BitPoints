@@ -10,7 +10,7 @@ block content
 		#cardStyle
 			h4 Card Style
 			div#cardPreview
-				div.cardBack.argile
+				div.cardBack.argile(style='background-color:#{cardColor}')
 
 	table#estimateOptions
 		tr
@@ -45,7 +45,7 @@ block content
 			option wood
 			option goat
 		label Color
-			input(title='Select card color', type='color', value='#{cardColor')#color
+			input(title='Select card color', type='color', value='#{cardColor}')#color
 
 
 	script.

@@ -192,7 +192,6 @@ header {
 		backface-visibility: hidden;
 	}
 	.cardBack {
-		background-color: #032E63;
 		background-repeat: repeat;
 		background-position: 50% 50%;
 		&.argile {
@@ -387,10 +386,14 @@ body { perspective: 1000; }
 
 #toggleRound {
 	.button();
+	float: left;
 }
 
 #average {
 	display: none;
+	float: left;
+	margin-left: 2em;
+	line-height: 2em;
 
 	.val {
 		font-weight: bold;
@@ -420,6 +423,7 @@ body { perspective: 1000; }
 }
 
 ul#users {
+	clear: both;
 	width: 100%;
 	li {
 		float: left;

@@ -33,3 +33,9 @@ exports.roomJoin = function(req, res) {
 	});
 }
 
+exports.addTicketCookie = function(req, res) {
+	res.cookie('ticketSystem', req.query.ticketSystem, { maxAge: 900000 });
+	res.cookie('ticketHost', req.query.ticketHost, { maxAge: 900000 });
+	res.cookie('ticketID', req.query.ticketID, { maxAge: 900000 });
+	res.send({ status: 'OK' });
+}

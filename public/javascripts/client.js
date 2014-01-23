@@ -69,7 +69,8 @@ $('#toggleRound').on('click', function(e){
 		socket.emit("newRound",{roomId: roomId});
 		votes = {};
 	}else if(status == 2){ // Show cards
-		$(this).text('Begin Estimating');
+
+		$(this).text('Begin Estimating '+document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
 		$('.card').addClass('showValue');
 		processVotes();
 		$('#average').show().find('.val').text(voteData.average);

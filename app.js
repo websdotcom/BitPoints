@@ -20,6 +20,7 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(express.cookieParser());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,6 +36,7 @@ app.get('/', routes.index);
 app.get('/create', routes.create);
 app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
 app.get('/roomJoin/:id', routes.roomJoin);
+app.get('/addTicketCookie', routes.addTicketCookie);
 
 // Listen on the port.
 server.listen(app.get("port"));

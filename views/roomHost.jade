@@ -1,14 +1,15 @@
 extends layout
 
 block content
-	h1 Welcome to #{title} (#{roomId})
+	#room
+		h1 Welcome to #{title} (#{roomId})
 
-	button#toggleRound Begin Estimating
+		button#toggleRound Begin Estimating
 
-	#average The average estimate is 
-		span.val
+		#average The average estimate is 
+			span.val
 
-	ul#users
+		ul#users
 
 	script.
 		var bp = {

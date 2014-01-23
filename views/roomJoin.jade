@@ -9,30 +9,29 @@ block content
 		h3.voterName #{user}
 		#cardColor
 			h4 Card Color
-			input(title='Select card color', type='color', value='#032E63')#color
+			input(title='Select card color', type='color', value='#{cardColor}')#color
 
 	table#estimateOptions
 		tr
 			td ?
-			td 0.5
-		tr
+			td &frac12;
 			td 1
-			td 2
 		tr
+			td 2
 			td 3
 			td 5
 		tr
 			td 8
 			td 13
-		tr
 			td 21
-			td 34
 		tr
+			td 34
 			td 55
 			td 89
 		tr
 			td &infin;
 			td.coffee coffee
+			td.blank &nbsp;
 
 	script.
 		var bp = {

@@ -1,32 +1,37 @@
 extends layout
 
 block content
-	header
-		h1 BitPoints
-		p Effortlessly bet on ticket point values something something magic.
-		
-	div.main
-		p.description.
-			BitPoint helps scrum teams lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-			cillum dolore eu fugiat nulla pariatur.
-		div.join
-			h2 Join Room
-			form(id="join", action="/roomJoin")
-				label(for='room-id') Room ID*
-				input(type='text')#room-id
-				label(for='name') Name*
-				input(type='text')#user
-				label(for='email') Gravatar Email
-				input(type='text')#email
-				input(type='submit', value='Join Room')#join-room
-		div.create
-			h2 Create Room
-			form(id="create", action="/create")
-				label(for='title') Room Title
-				input(type='text')#title
-				input(type='submit', value='Create A BitPoint Room')#join-room
+	#homepage
+		header
+			h1 BitPoints
+			p Ditch the Deck
+			ul
+				li Scrum Poker, Evolved
+				li Estimate Anywhere
+				li Go Faster
+			
+		div.main
+			p.description.
+				BitPoints helps scrum teams estimate stories by getting rid of physical <em>scrum poker</em> decks and creating a more visible platform for team members to post and discuss points. Average estimates are automatically calculated and high/low estimates are highlighted for discussion. BitPoint is also perfect for distributed scrum teams, as team members can join from any internet-connected device.
+			div.join
+				h2 Join Room
+				form(id="join", action="/roomJoin")
+					.field
+						label(for='room-id') Room ID*
+						input(type='text')#room-id
+					.field
+						label(for='name') Name*
+						input(type='text')#user
+					.field
+						label(for='email') Gravatar Email
+						input(type='text')#email
+					input(type='submit', value='Join Room')#join-room
+			div.create
+				h2 Create Room
+				form(id="create", action="/create")
+					.field
+						label(for='title') Room Title
+						input(type='text')#title
+					input(type='submit', value='Create A BitPoint Room')#join-room
 
-	script(src='/javascripts/home.js')
+		script(src='/javascripts/home.js')

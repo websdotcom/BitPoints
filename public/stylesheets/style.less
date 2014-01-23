@@ -4,20 +4,21 @@
  */
 
 @import "lib";
-@import url(http://fonts.googleapis.com/css?family=Press+Start+2P);
+@import url(http://fonts.googleapis.com/css?family=Aldrich);
 
 /* ---------------------
 			VARIABLES
 --------------------- */
 @text: #ccc;
-@link: #29d31a;
-@hover: #3af32c;
-@bg: #343434;
+@darktext: #555;
+@link: #f7f7f7;
+@hover: darken(@link,15%);
+@bg: #0578a3;
 @selection: rgba(41, 211, 26, .6);
 
 @sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 @serif: Georgia, Cambria, "Times New Roman", Times, serif;
-@title: "Press Start 2P", cursive;
+@title: "Aldrich", sans-serif;
 
 
 /* ---------------------
@@ -47,7 +48,7 @@ html {
 		color: @text;
 		a {
 			color: @link;
-			font-family: @serif;
+			font-family: @title;
 			font-style: italic;
 			text-decoration: none;
 			&:hover, &:focus, &:active {
@@ -61,7 +62,7 @@ html {
 .button(){
 	padding: 0 10px;
 	border: none;
-	font: normal 1.1em/1.6em @serif;
+	font: normal 1.1em/2em @title;
 	background: @link;
 	color: @bg;
 	cursor: pointer;
@@ -74,13 +75,29 @@ html {
 /* ---------------------
 				HOMEPAGE
 --------------------- */
+#homepage {
+	margin: 50px 50px 0;
+}
 header {
-	width: 100%;
-	padding: 20px;
-	border-bottom: 2px solid @link;
+	width: 25em;
+	float: left;
 	h1 {
-		font: 400 3em/1.4em @title;
+		font: 600 4em/1em @title;
 		color: @link;
+	}
+	p {
+		margin: -.3em 0 0 3.5em;
+		font-size: 1.75em;
+		font-weight: 400;
+	}
+	ul {
+		margin-top: 2em;
+		li {
+			font-size: 1.3em;
+			font-weight: 200;
+			line-height: 1.7em;
+			letter-spacing: 1px;
+		}
 	}
 	h3 {
 		font: 400 2em/1.4em @sans;
@@ -88,19 +105,19 @@ header {
 }
 
 .main {
-	width: 678px;
-	margin: 50px auto;
+	margin-left: 25em;
 	.cf;
+
 	.description {
-		float: left;
-		width: 100%;
-		margin-bottom: 50px;
 	}
 	.join, .create {
+		position: relative;
 		float: left;
+		height: 200px;
 		width: 250px;
+		margin-top: 50px;
 		padding: 30px;
-		border: 2px solid @link;
+		background: rgba(255,255,255,0.1);
 		h2 {
 			margin-bottom: 20px;
 			font: 400 1.2em/1.4em @title;
@@ -111,16 +128,23 @@ header {
 			display: inline-block;
 		}	
 		input[type=text] {
-			width: 124px;
-			padding: 3px;
+			box-sizing: border-box;
+			width: 130px;
+			padding: 3px 6px;
 			font: 400 1em/1.3em @sans;
-			background: rgba(255, 255, 255, .6);
+			color: @darktext;
+			background: fadeOut(@link,20%);
 			border: none;
 			.border-radius(4px);
 		}
 		input[type=submit] {
 			.button();
+			position: absolute;
+			bottom: 30px;
+			left: 30px;
 			margin-top: 20px;
+			width: 250px;
+			box-sizing: border-box;
 		}
 	}
 	.join {
@@ -184,17 +208,22 @@ table#estimateOptions {
 	width: 100%;
 	border-spacing: 10px;
 	td {
-		width: 50%;
+		width: 33%;
+		position: relative;
 		font: normal 2em/1.5em @sans;
 		text-align: center;
-		color: #fff;
+		color: @darktext;
+		border-radius: 3px;
 		cursor: pointer;
-		.gradient-background-alpha(fadeOut(@link, 40%), fadeOut(@link, 100%));
+		background: @link;
 		&:hover {
-			.gradient-background-alpha(fadeOut(@hover, 40%), fadeOut(@hover, 100%));
+			background: @hover;
 		}
 		&.lastVote {
-			.gradient-background-alpha(fadeOut(spin(@link, 180), 40%), fadeOut(spin(@link, 180), 100%));
+			background: darken(@link,20%);
+		}
+		&.blank {
+			background: none !important;
 		}
 		&.coffee {
 			font-size: 0;
@@ -202,12 +231,15 @@ table#estimateOptions {
 			&:before {
 				content: '';
 				display: block;
-				width: 35px;
-				height: 35px;
-				background: url("../images/coffee-white.png") no-repeat center center;
+				position: absolute;
+				top: 0;
+				left: 50%;
+				width: 48px;
+				height: 48px;
+				background: url("../images/coffee-black.png") no-repeat center center;
 				background-origin: content-box;
-				background-size: 90%;
-				margin: 0 auto;
+				background-size: 80%;
+				margin-left: -24px;
 			}
 
 		}
@@ -222,6 +254,10 @@ table#estimateOptions {
 --------------------- */
 
 body { perspective: 1000; }
+
+#room {
+	margin: 30px;
+}
 
 #toggleRound {
 	.button();
@@ -257,7 +293,7 @@ body { perspective: 1000; }
 	background: rgba(0,0,0,0.25);
 }
 
-ul {
+ul#users {
 	width: 100%;
 	li {
 		float: left;
@@ -282,9 +318,9 @@ ul {
 				.transform(rotateY(180deg));
 			}
 			&.spin {
-				-webkit-transition: 30s;
-				transition: 30s;
-				.transform(rotateY(10980deg));
+				-webkit-transition: 5s;
+				transition: 5s;
+				.transform(rotateY(5940deg));
 			}
 			.cardInner, .cardBack {
 				width: 100%;
@@ -312,7 +348,7 @@ ul {
 					position: relative;
 					text-align: center;
 					font: normal 6em/2.4em @sans;
-					color: #565656;
+					color: @darktext;
 					&.min { color: #000fd2; }
 					&.max { color: #d21900; }
 
@@ -328,7 +364,7 @@ ul {
 							height: 180px;
 							background: url("../images/coffee-black.png") no-repeat center center;
 							background-origin: content-box;
-							background-size: 80%;
+							background-size: 60%;
 							margin: 0 auto;
 						}
 					}
@@ -338,3 +374,61 @@ ul {
 	}
 }
 
+@media(max-width:800px) {
+	#homepage {
+		header {
+			ul { display: none; }
+		}
+		.main {
+			clear: both;
+			margin-left: 0;
+			.description {
+				padding-top: 20px;
+			}
+			.join, .create {
+				float: none;
+				margin: 50px 0 0;
+				width: 100%;
+				height: auto;
+				box-sizing: border-box;
+
+				input[type=submit] {
+					position: static;
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+
+@media(max-width:500px) {
+	#homepage {
+		margin: 0;
+		header {
+			width: 100%;
+			h1 {
+				text-align: center;
+				padding: 10px;
+				font-size: 3em;
+			}
+			p { display: none; }
+		}
+		.main {
+			.description { 
+				position: absolute;
+				top: 560px;
+				padding: 10px;
+			}
+			.join, .create {
+				margin-top: 10px;
+
+				label {
+					width: 45%;
+				}
+				input[type=text] {
+					width: 55%;
+				}
+			}
+		}
+	}
+}

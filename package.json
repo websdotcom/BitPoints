@@ -20,6 +20,8 @@
     "jade": "*",
     "less-middleware": "*",
     "socket.io": "~0.9.16",
-    "gravatar": "*"
+    "gravatar": "*",
+    "mongoose": "3.8.x",
+    "lodash": "*"
   }
 }

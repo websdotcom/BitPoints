@@ -1,5 +1,6 @@
 {
 	"port": 80,
+	"mongoHost": "localhost",
 	"debug": false,
 	"ioLogLevel": 0
 }

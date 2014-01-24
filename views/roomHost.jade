@@ -13,7 +13,8 @@ block content
 
 	script.
 		var bp = {
-			roomId: #{roomId}
+			roomId: #{roomId},
+			title: "#{title}"
 		}
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/client.js")

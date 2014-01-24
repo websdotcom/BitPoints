@@ -1,6 +1,7 @@
 var
 	socket = io.connect('http://'+window.location.host),
 	roomId = bp.roomId,
+	title = bp.title,
 	votes = {},
 	status = 0, // 0 - start, 1 - betting open, 2 - reveal
 	tim = (function(){var d="{{",a="}}",e="[a-z0-9_][\\.a-z0-9_]*",c=new RegExp(d+"("+e+")"+a,"gim"),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split("."),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}());
@@ -42,7 +43,7 @@ var
 		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
 	};
 
-socket.emit("createRoom", {roomId: roomId});
+socket.emit("createRoom", {roomId: roomId, title: title});
 
 socket.on("newVoter", function(data) {
 	$(tim(userTemp, data)).appendTo('#users');

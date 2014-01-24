@@ -4,21 +4,21 @@
  */
 
 @import "lib";
-@import url(http://fonts.googleapis.com/css?family=Aldrich);
+@import url(http://fonts.googleapis.com/css?family=Alegreya+Sans+SC:100,300,400);
 
 /* ---------------------
 			VARIABLES
 --------------------- */
-@text: #ccc;
+@text: #e3e3e3;
 @darktext: #555;
-@link: #f7f7f7;
+@link: #fff;
 @hover: darken(@link,15%);
-@bg: #0578a3;
+@bg: #0895de;
 @selection: rgba(41, 211, 26, .6);
 
 @sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 @serif: Georgia, Cambria, "Times New Roman", Times, serif;
-@title: "Aldrich", sans-serif;
+@title: "Alegreya Sans SC", sans-serif;
 
 
 /* ---------------------
@@ -84,12 +84,18 @@ header {
 	float: left;
 	h1 {
 		font: 600 4em/1em @title;
+		text-indent: 9999px;
+		background: url('/images/logo-white-800.png') no-repeat center left;
+		background-size: contain;
+		background-origin: content-box;
 		color: @link;
+		height: 80px;
 	}
 	p {
-		margin: -.3em 0 0 3.5em;
-		font-size: 1.75em;
-		font-weight: 400;
+		margin: -8px 0 0 157px;
+		font-size: 1.25em;
+		font-weight: 200;
+		color: #fff;
 	}
 	ul {
 		margin-top: 2em;
@@ -240,7 +246,7 @@ header {
 					width: 180px;
 					height: 180px;
 					margin: 0 auto;
-					background: url("../images/coffee-black.png") no-repeat center center;
+					background: url("/images/coffee-black.png") no-repeat center center;
 					background-origin: content-box;
 					background-size: 60%;
 				}
@@ -468,15 +474,26 @@ ul#users {
 	#homepage {
 		margin: 0;
 		header {
+			position: fixed;
+			top: 0;
+			z-index: 1000;
 			width: 100%;
+			height: 50px;
+			background: @bg;
+			box-shadow: 0 3px 3px rgba(0,0,0,0.4);
 			h1 {
+				height: 50px;
 				text-align: center;
-				padding: 10px;
-				font-size: 3em;
+				padding: 0;
+				font-size: 2em;
+				line-height: 50px;
+				background-size: auto 40px;
+				background-position: center center;
 			}
 			p { display: none; }
 		}
 		.main {
+			margin-top: 60px;
 			.description { 
 				position: absolute;
 				top: 560px;

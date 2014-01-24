@@ -1,19 +1,26 @@
 var gravatar = require('gravatar');
 
-/*
- * GET home page
+/**
+ * GET homepage
  */
-
 exports.index = function(req, res){
   res.render('index');
 };
 
+/**
+ * GET create room from homepage
+ * @param	title	Room name
+ */
 exports.create = function(req, res) {
 	var id = Math.floor(Math.random() * 50000);
-	console.log(req.params);
 	res.redirect('/roomHost/' + id + '/' + req.query.title);
 };
 
+/**
+ * GET room UI
+ * @param	id	BitPoint RoomID
+ * @param	title	Room name
+ */
 exports.roomHost = function(req, res) {
 	var
 		id = req.params[0],
@@ -24,6 +31,12 @@ exports.roomHost = function(req, res) {
 	});
 }
 
+/**
+ * GET voter UI
+ * @param	id	BitPoint RoomID
+ * @param	user	Display name of user
+ * @param	email	Email address used for Gravatar
+ */
 exports.roomJoin = function(req, res) {
 	res.render('roomJoin', {
 		roomId: req.params.id,
@@ -33,6 +46,12 @@ exports.roomJoin = function(req, res) {
 	});
 }
 
+/**
+ * GET set cookie from ticketing systems
+ * @param	ticketSystem	Ticketing app slug: jira|bugzilla\githubIssues|...
+ * @param	ticketHost	Domain ticketSystem is running on
+ * @param	ticketID	Key of last ticket viewed
+ */
 exports.addTicketCookie = function(req, res) {
 	res.cookie('ticketSystem', req.query.ticketSystem, { maxAge: 900000 });
 	res.cookie('ticketHost', req.query.ticketHost, { maxAge: 900000 });

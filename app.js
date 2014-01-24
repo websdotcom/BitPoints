@@ -104,6 +104,9 @@ io.sockets.on('connection', function (socket) {
   socket.on('roundEnd', function(data) {
     io.sockets.in(inRoom).emit('roundEnd', data);
   });
+  socket.on('deck', function(data) {
+    io.sockets.in(inRoom).emit('deck', data);
+  });
 
 });
 

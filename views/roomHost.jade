@@ -4,6 +4,17 @@ block content
 	#room
 		h1 Welcome to #{title} (#{roomId})
 
+		#deckTypes
+			span.title Deck Type:
+			.option
+				label(for="fibonacci")
+					input(type="radio", value="fibonacci", name="deckType", id="fibonacci")
+					span Fibonacci
+			.option
+				label(for="standard")
+					input(type="radio", value="standard", name="deckType", id="standard", checked="checked")
+					span Standard
+
 		button#toggleRound Begin Estimating
 
 		#average The average estimate is 

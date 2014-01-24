@@ -5,6 +5,19 @@ var
 	avatar = bp.avatar;
 
 $(function(){
+	var renderDeck = function(deck) {
+		var deckTable = $('#estimateOptions'),
+			openRow = true,
+			deckString = '<tr>';
+
+		for(var i = 0; i < deck.length; i++) {
+			if((i+1)%3 === 1) { deckString += '<tr>'; openRow = true; }
+			deckString += '<td data-value="'+deck[i].value+'"'+(deck[i].estimate==='coffee'?' class="coffee"':'')+'>'+deck[i].estimate+'</td>';
+			if((i+1)%3 === 0) { deckString += '</tr>'; openRow = false; }
+		}
+		if(openRow) { deckString += '</tr>'; }
+		deckTable.empty().append(deckString);
+	};
 
 	$('#cardStyle, #cardStylePop .close').on('click', function(e){
 		$('#cardStylePop').toggle();
@@ -17,7 +30,7 @@ $(function(){
 	});
 
 	socket.emit("joinRoom", {roomId: roomId, avatar: avatar, user: user});
-	$('#estimateOptions td').on('click', function(e){
+	$('#estimateOptions').on('click', 'td', function(e){
 		$('.lastVote').removeClass('lastVote');
 		var
 			points = $(this).addClass('lastVote').data('value'),
@@ -38,5 +51,9 @@ $(function(){
 		$('#pattern').val('goat').change();
 		$('#color').val('#EFC725').change();
 	}
+
+	socket.on("deck", function(data) {
+		renderDeck(data);
+	});
 
 });

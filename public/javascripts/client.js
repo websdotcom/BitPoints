@@ -1,4 +1,38 @@
 var
+	decks = {
+		'standard': [
+			{ value: NaN, estimate: '?' },
+			{ value: 0, estimate: '0' },
+			{ value: 0.5, estimate: '&frac12;' },
+			{ value: 1, estimate: '1' },
+			{ value: 2, estimate: '2' },
+			{ value: 3, estimate: '3' },
+			{ value: 5, estimate: '5' },
+			{ value: 8, estimate: '8' },
+			{ value: 13, estimate: '13' },
+			{ value: 20, estimate: '20' },
+			{ value: 40, estimate: '40' },
+			{ value: 100, estimate: '100' },
+			{ value: NaN, estimate: '&infin;' },
+			{ value: NaN, estimate: 'coffee' }
+		],
+		'fibonacci': [
+			{ value: NaN, estimate: '?' },
+			{ value: 0, estimate: '0' },
+			{ value: 1, estimate: '1' },
+			{ value: 2, estimate: '2' },
+			{ value: 3, estimate: '3' },
+			{ value: 5, estimate: '5' },
+			{ value: 8, estimate: '8' },
+			{ value: 13, estimate: '13' },
+			{ value: 21, estimate: '21' },
+			{ value: 34, estimate: '34' },
+			{ value: 55, estimate: '55' },
+			{ value: 89, estimate: '89' },
+			{ value: NaN, estimate: '&infin;' },
+			{ value: NaN, estimate: 'coffee' }
+		]
+	},
 	socket = io.connect('http://'+window.location.host),
 	roomId = bp.roomId,
 	title = bp.title,
@@ -7,10 +41,13 @@ var
 	tim = (function(){var d="{{",a="}}",e="[a-z0-9_][\\.a-z0-9_]*",c=new RegExp(d+"("+e+")"+a,"gim"),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split("."),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}());
 	userTemp = '<li data-user="{{user}}"><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div></div></div></li>',
 	voteData = {},
+	getDeck = function() {
+		return decks[$('input[name=deckType]:checked').val() || 'standard'];
+	},
 	getVoteFromCardValue = function(val) {
 		if(val === '&frac12;') { return 0.5; }
 		return parseFloat(val);
-	}
+	},
 	processVotes = function() {
 		voteData = {
 			average: -1,
@@ -47,6 +84,7 @@ socket.emit("createRoom", {roomId: roomId, title: title});
 
 socket.on("newVoter", function(data) {
 	$(tim(userTemp, data)).appendTo('#users');
+	socket.emit("deck",getDeck());
 });
 
 socket.on("incomingVote", function(data) {

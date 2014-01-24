@@ -483,9 +483,27 @@ ul#users {
 	}
 }
 
-@media(max-width:800px) {
+@media(max-width:1170px) {
+	#homepage {
+		margin: 50px 20px 0;
+		header {
+			width: 20em;
+		}
+		.main {
+			margin-left: 20em;
+			.join {
+				margin-right: 20px;
+			}
+		}
+	}
+}
+
+@media(max-width:1000px) {
 	#homepage {
 		header {
+			width: 100%;
+			h1 { background-position: center center; }
+			p { margin-left: 51.5%}
 			ul { display: none; }
 		}
 		.main {
@@ -507,6 +525,10 @@ ul#users {
 				}
 			}
 		}
+
+		#stats {
+			margin-top: 20px;
+		}
 	}
 }
 
@@ -517,7 +539,6 @@ ul#users {
 			position: fixed;
 			top: 0;
 			z-index: 1000;
-			width: 100%;
 			height: 50px;
 			background: @bg;
 			box-shadow: 0 3px 3px rgba(0,0,0,0.4);
@@ -528,15 +549,15 @@ ul#users {
 				font-size: 2em;
 				line-height: 50px;
 				background-size: auto 40px;
-				background-position: center center;
 			}
 			p { display: none; }
 		}
+		#stats { display: none; }
 		.main {
 			margin-top: 60px;
 			.description { 
 				position: absolute;
-				top: 560px;
+				top: 540px;
 				padding: 10px;
 			}
 			.join, .create {
@@ -549,6 +570,11 @@ ul#users {
 					width: 55%;
 				}
 			}
+		}
+		footer {
+			position: absolute;
+			top: 750px;
+			width: 100%;
 		}
 	}
 }

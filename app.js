@@ -50,8 +50,13 @@ if (config.debug) {
 // Routes.
 app.get('/', function(req, res){
   models.Room.find(function (err, rooms){
+    var numRooms = err ? 0 : rooms.length,
+      numVoters = err ? 0 :_.reduce(_.pluck(rooms,'members'), function(memo, num){ return memo + num; }, 0)
     res.render('index', {
-      numRooms: err ? 0 : rooms.length
+      numRooms: numRooms,
+      numVoters: numVoters,
+      roomString: numRooms + (numRooms === 1 ? " room" : " rooms"),
+      voterString: numVoters + (numVoters === 1 ? " person" : " people")
     });
   });
 });

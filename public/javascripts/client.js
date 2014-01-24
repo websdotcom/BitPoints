@@ -44,6 +44,9 @@ var
 	getDeck = function() {
 		return decks[$('input[name=deckType]:checked').val() || 'standard'];
 	},
+	updateVoterDecks = function() {
+		socket.emit("deck",getDeck());
+	},
 	getVoteFromCardValue = function(val) {
 		if(val === '&frac12;') { return 0.5; }
 		return parseFloat(val);
@@ -84,7 +87,7 @@ socket.emit("createRoom", {roomId: roomId, title: title});
 
 socket.on("newVoter", function(data) {
 	$(tim(userTemp, data)).appendTo('#users');
-	socket.emit("deck",getDeck());
+	updateVoterDecks();
 });
 
 socket.on("incomingVote", function(data) {
@@ -96,6 +99,10 @@ socket.on("incomingVote", function(data) {
 		$card.addClass('visible');
 		votes[data.user] = data.estimate;
 	}
+});
+
+$('input[name=deckType]').on('change', function(e) {
+	updateVoterDecks();
 });
 
 $('#toggleRound').on('click', function(e){

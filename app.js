@@ -27,7 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configure socket.io.
 io.set("log level", config.ioLogLevel);
 
-
 // Debugging for dev environments.
 if (config.debug) {
   app.use(express.logger('dev'));

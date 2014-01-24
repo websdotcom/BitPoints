@@ -24,7 +24,7 @@ var getConfig = function(env) {
 };
 
 // Attempt to get config file. If no config.json is found, use a default config.
-var ENVIRONMENT = process.env.NODE_ENV || 'local';
+var ENVIRONMENT = process.env.NODE_ENV || 'development';
 
 var config = getConfig(ENVIRONMENT);
 if(!config) {

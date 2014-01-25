@@ -19,6 +19,17 @@ var
 	models = {},
 	modelsDir = __dirname + '/models';
 
+// Set up utility methods
+var
+	getActiveRooms = function(daysBack,callback) {
+		var limit = new Date();
+		limit.setDate(limit.getDate()-daysBack);
+		models.Room.find({'lastActivity':{$gte:limit.toISOString()}},callback);
+	},
+	// convenience methods for returning rooms active in the past X days
+	getRoomsPastDay = _.curry(getActiveRooms)(1),
+	getRoomsPastWeek = _.curry(getActiveRooms)(7);
+
 require('fs').readdirSync(modelsDir).forEach(function(file) {
 	if (file.match(/.+\.js/g) !== null && file !== 'index.js') {
 		_.merge(models, require(modelsDir + '/' + file));
@@ -50,7 +61,7 @@ if (config.debug) {
 
 // Routes.
 app.get('/', function(req, res){
-	models.Room.find(function (err, rooms){
+	getRoomsPastDay(function (err, rooms){
 		var numRooms = err ? 0 : rooms.length,
 			numVoters = err ? 0 :_.reduce(_.pluck(rooms,'members'), function(memo, num){ return memo + num; }, 0);
 		res.render('index', {

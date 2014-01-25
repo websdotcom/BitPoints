@@ -21,6 +21,21 @@ var
 
 // Set up utility methods
 var
+	// method for passing events from host to clients
+	setupRoomEvents = function(socket,room,events) {
+		var emitFn = function(eventName) {
+				return function(data) {
+					io.sockets.in(room).emit(eventName, data);
+				};
+			};
+
+		for(var incomingEvent in events) {
+			if(events.hasOwnProperty(incomingEvent)) {
+				socket.on(incomingEvent, emitFn(events[incomingEvent]));
+			}
+		}
+	},
+
 	getActiveRooms = function(daysBack,callback) {
 		var limit = new Date();
 		limit.setDate(limit.getDate()-daysBack);
@@ -107,17 +122,11 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 
-	socket.on('sendVote', function(data) {
-		io.sockets.in(inRoom).emit('incomingVote', data);
-	});
-	socket.on('newRound', function(data) {
-		io.sockets.in(inRoom).emit('newRound', data);
-	});
-	socket.on('roundEnd', function(data) {
-		io.sockets.in(inRoom).emit('roundEnd', data);
-	});
-	socket.on('deck', function(data) {
-		io.sockets.in(inRoom).emit('deck', data);
+	setupRoomEvents(socket,inRoom,{
+		'sendVote': 'incomingVote',
+		'newRound': 'newRound',
+		'roundEnd': 'roundEnd',
+		'deck': 'deck'
 	});
 
 });

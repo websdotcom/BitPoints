@@ -21,7 +21,7 @@ var
 
 // Set up utility methods
 var
-	// method for passing events from host to clients
+	// method for passing events between host and clients
 	setupRoomEvents = function(socket,room,events) {
 		var emitFn = function(eventName) {
 				return function(data) {

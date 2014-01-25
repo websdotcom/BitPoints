@@ -247,27 +247,63 @@ footer {
 	.cardInner {
 		background-color: #fff;
 		.transform(rotateY(180deg));
-		.cardValue {
-			position: relative;
-			text-align: center;
-			font: normal 6em/2.4em @sans;
+		.cardValue,
+		.cornerValue {
 			color: @darktext;
-			&.min { color: #000fd2; }
-			&.max { color: #d21900; }
-
 			&.coffee {
 				text-indent: 9999px;
 				&:before {
 					content: '';
 					display: block;
 					position: absolute;
-					top: 30px;
-					width: 180px;
-					height: 180px;
 					margin: 0 auto;
-					background: url("/images/coffee-black.png") no-repeat center center;
+					background: url("/images/coffee-black.png") no-repeat;
 					background-origin: content-box;
-					background-size: 60%;
+				}
+			}
+		}
+		.cardValue {
+			text-align: center;
+			position: relative;
+			font: normal 6em/2.4em @sans;
+			&.min { color: #000fd2; }
+			&.max { color: #d21900; }
+
+			&.coffee:before {
+				top: 30px;
+				width: 180px;
+				height: 180px;
+				background-position: center center;
+				background-size: 60%;
+			}
+		}
+		.cornerValue {
+			position: absolute;
+			font: normal 1.25em/1em @sans;
+			width: 50px;
+			text-align: left;
+
+			&.coffee:before {
+				width: 25px;
+				height: 25px;
+				background-size: 100%;
+			}
+
+			&.topleft {
+				top: 0;
+				left: 0;
+
+				&.coffee:before {
+					background-position: top left;
+				}
+			}
+			&.bottomright {
+				bottom: 0;
+				right: 0;
+				.rotate(180deg);
+
+				&.coffee:before {
+					background-position: bottom right;
 				}
 			}
 		}

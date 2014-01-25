@@ -39,7 +39,7 @@ var
 	votes = {},
 	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
 	tim = (function(){var d='{{',a='}}',e='[a-z0-9_][\\.a-z0-9_]*',c=new RegExp(d+'('+e+')'+a,'gim'),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split('.'),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}()),
-	userTemp = '<li data-user="{{user}}"><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div></div></div></li>',
+	userTemp = '<li data-user="{{user}}"><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div><div class="cornerValue topleft"></div><div class="cornerValue bottomright"></div></div></div></li>',
 	voteData = {},
 	getDeck = function() {
 		return decks[$('input[name=deckType]:checked').val() || 'standard'];
@@ -92,10 +92,18 @@ socket.on('newVoter', function(data) {
 
 socket.on('newVote', function(data) {
 	if(roundStatus === 1){
-		var $card = $('li[data-user='+data.user+'] div.card');
-		$card.find('div.cardValue').html(data.cardValue);
-		if(data.cardValue === 'coffee') { $card.find('div.cardValue').addClass('coffee'); }
-		$card.find('.cardBack').css('background-color', data.color).removeClass('argile denim graphpaper paisley wood goat').addClass(data.pattern);
+		var $card = $('li[data-user='+data.user+'] .card'),
+			$mainValue = $card.find('.cardValue'),
+			$cornerValues = $card.find('.cornerValue'),
+			$cardBack = $card.find('.cardBack');
+
+		$mainValue.html(data.cardValue);
+		$cornerValues.html(data.cardValue);
+		if(data.cardValue === 'coffee') {
+			$mainValue.addClass('coffee');
+			$cornerValues.addClass('coffee');
+		}
+		$cardBack.css('background-color', data.color).removeClass('argile denim graphpaper paisley wood goat').addClass(data.pattern);
 		$card.addClass('visible');
 		votes[data.user] = data.estimate;
 	}
@@ -112,6 +120,7 @@ $('#toggleRound').on('click', function(e){
 		$(this).text('Stop Estimating');
 		$('.card').removeClass('visible showValue spin');
 		$('.cardValue').removeClass('coffee min max');
+		$('.cornerValue').removeClass('coffee');
 		socket.emit('newRound',{roomId: roomId});
 		votes = {};
 	}else if(roundStatus === 2){ // Show cards
@@ -122,7 +131,7 @@ $('#toggleRound').on('click', function(e){
 		if(voteData.numVotes > 3 && voteData.allVotesEqual){
 			$('.card').addClass('spin');
 		}
-		$('.card div.cardValue').each(function(i, el){
+		$('.card .cardValue').each(function(i, el){
 			var
 				$card = $(el),
 				vote = $card.text();

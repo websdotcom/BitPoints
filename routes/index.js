@@ -4,7 +4,7 @@ var gravatar = require('gravatar');
  * GET homepage
  */
 exports.index = function(req, res){
-  res.render('index');
+	res.render('index');
 };
 
 /**
@@ -29,7 +29,7 @@ exports.roomHost = function(req, res) {
 		roomId: id,
 		title: title
 	});
-}
+};
 
 /**
  * GET voter UI
@@ -44,7 +44,7 @@ exports.roomJoin = function(req, res) {
 		avatar: gravatar.url(req.query.email ? req.query.email : 'teamjirachat@gmail.com', {s: '100', d: 'monsterid'}),
 		cardColor: '#'+Math.floor(Math.random()*16777215).toString(16)
 	});
-}
+};
 
 /**
  * GET set cookie from ticketing systems
@@ -57,4 +57,4 @@ exports.addTicketCookie = function(req, res) {
 	res.cookie('ticketHost', req.query.ticketHost, { maxAge: 900000 });
 	res.cookie('ticketID', req.query.ticketID, { maxAge: 900000 });
 	res.send({ status: 'OK' });
-}
+};

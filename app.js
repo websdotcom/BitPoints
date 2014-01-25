@@ -1,27 +1,28 @@
-// Module dependencies.
+// Module dependencies
 var
-  express = require('express'),
-  http = require('http'),
-  path = require('path'),
-  mongoose = require('mongoose'),
-  fs = require('fs'),
-  _ = require('lodash'),
+	express = require('express'),
+	http = require('http'),
+	path = require('path'),
+	mongoose = require('mongoose'),
+	fs = require('fs'),
+	_ = require('lodash'),
 
-  app = express(),
-  server = http.createServer(app),
-  io = require("socket.io").listen(server),
+	app = express(),
+	server = http.createServer(app),
+	io = require('socket.io').listen(server),
 
-  routes = require('./routes'),
-  config = require("./config.js").config;
+	routes = require('./routes'),
+	config = require('./config.js').config;
 
 // Load Mongoose models.
 var
-  models = {},
-  modelsDir = __dirname + '/models';
+	models = {},
+	modelsDir = __dirname + '/models';
+
 require('fs').readdirSync(modelsDir).forEach(function(file) {
-  if (file.match(/.+\.js/g) !== null && file !== 'index.js') {
-    _.merge(models, require(modelsDir + '/' + file));
-  }
+	if (file.match(/.+\.js/g) !== null && file !== 'index.js') {
+		_.merge(models, require(modelsDir + '/' + file));
+	}
 });
 
 // Configure the app for all environments.
@@ -39,26 +40,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 mongoose.connect('mongodb://'+config.mongoHost+'/BitPoints');
 
 // Configure socket.io.
-io.set("log level", config.ioLogLevel);
+io.set('log level', config.ioLogLevel);
 
 // Debugging for dev environments.
 if (config.debug) {
-  app.use(express.logger('dev'));
-  app.use(express.errorHandler());
+	app.use(express.logger('dev'));
+	app.use(express.errorHandler());
 }
 
 // Routes.
 app.get('/', function(req, res){
-  models.Room.find(function (err, rooms){
-    var numRooms = err ? 0 : rooms.length,
-      numVoters = err ? 0 :_.reduce(_.pluck(rooms,'members'), function(memo, num){ return memo + num; }, 0)
-    res.render('index', {
-      numRooms: numRooms,
-      numVoters: numVoters,
-      roomString: numRooms + (numRooms === 1 ? " room" : " rooms"),
-      voterString: numVoters + (numVoters === 1 ? " person" : " people")
-    });
-  });
+	models.Room.find(function (err, rooms){
+		var numRooms = err ? 0 : rooms.length,
+			numVoters = err ? 0 :_.reduce(_.pluck(rooms,'members'), function(memo, num){ return memo + num; }, 0);
+		res.render('index', {
+			numRooms: numRooms,
+			numVoters: numVoters,
+			roomString: numRooms + (numRooms === 1 ? ' room' : ' rooms'),
+			voterString: numVoters + (numVoters === 1 ? ' person' : ' people')
+		});
+	});
 });
 app.get('/create', routes.create);
 app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
@@ -66,48 +67,48 @@ app.get('/roomJoin/:id', routes.roomJoin);
 app.get('/addTicketCookie', routes.addTicketCookie);
 
 // Listen on the port.
-server.listen(app.get("port"));
+server.listen(app.get('port'));
 
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
 	var
-    inRoom = "", 
-    room = new models.Room();
+	inRoom = '',
+	room = new models.Room();
 
-  socket.on('createRoom', function (data) {
-    console.log("Room", data.roomId, "created.");
-    socket.join(data.roomId);
-    room.roomId = data.roomId;
-    room.title = data.title;
-    room.save(function(err, room){
-      if(err){ console.error("Failed to persist new room!"); return; }
-    });
-  });
+	socket.on('createRoom', function (data) {
+		console.log('Room', data.roomId, 'created.');
+		socket.join(data.roomId);
+		room.roomId = data.roomId;
+		room.title = data.title;
+		room.save(function(err, room){
+			if(err){ console.error('Failed to persist new room!'); return; }
+		});
+	});
 
-  socket.on('joinRoom', function (data) {
-    console.log(data.user+" joined "+data.roomId);
-    socket.join(data.roomId);
-    inRoom = data.roomId;
-    io.sockets.in(inRoom).emit("newVoter", data);
-    models.Room.findOne({ roomId: inRoom }, function(err, room){
-      if(err){ console.error('Couldn\'t find room '+inRoom); return; }
-      room.addUser(data);
-    });
-  });
+	socket.on('joinRoom', function (data) {
+		console.log(data.user+' joined '+data.roomId);
+		socket.join(data.roomId);
+		inRoom = data.roomId;
+		io.sockets.in(inRoom).emit('newVoter', data);
+		models.Room.findOne({ roomId: inRoom }, function(err, room){
+			if(err){ console.error('Couldn\'t find room '+inRoom); return; }
+			room.addUser(data);
+		});
+	});
 
-  socket.on('sendVote', function(data) {
-  	io.sockets.in(inRoom).emit("incomingVote", data);
-  });
-  socket.on('newRound', function(data) {
-    io.sockets.in(inRoom).emit('newRound', data);
-  });
-  socket.on('roundEnd', function(data) {
-    io.sockets.in(inRoom).emit('roundEnd', data);
-  });
-  socket.on('deck', function(data) {
-    io.sockets.in(inRoom).emit('deck', data);
-  });
+	socket.on('sendVote', function(data) {
+		io.sockets.in(inRoom).emit('incomingVote', data);
+	});
+	socket.on('newRound', function(data) {
+		io.sockets.in(inRoom).emit('newRound', data);
+	});
+	socket.on('roundEnd', function(data) {
+		io.sockets.in(inRoom).emit('roundEnd', data);
+	});
+	socket.on('deck', function(data) {
+		io.sockets.in(inRoom).emit('deck', data);
+	});
 
 });
 
-console.log("BitPoints is ready to go at http://localhost:" + config.port);
+console.log('BitPoints is ready to go at http://localhost:' + config.port);

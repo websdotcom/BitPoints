@@ -37,15 +37,15 @@ var
 	roomId = bp.roomId,
 	title = bp.title,
 	votes = {},
-	status = 0, // 0 - start, 1 - betting open, 2 - reveal
-	tim = (function(){var d="{{",a="}}",e="[a-z0-9_][\\.a-z0-9_]*",c=new RegExp(d+"("+e+")"+a,"gim"),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split("."),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}());
+	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
+	tim = (function(){var d='{{',a='}}',e='[a-z0-9_][\\.a-z0-9_]*',c=new RegExp(d+'('+e+')'+a,'gim'),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split('.'),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}()),
 	userTemp = '<li data-user="{{user}}"><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div></div></div></li>',
 	voteData = {},
 	getDeck = function() {
 		return decks[$('input[name=deckType]:checked').val() || 'standard'];
 	},
 	updateVoterDecks = function() {
-		socket.emit("deck",getDeck());
+		socket.emit('deck',getDeck());
 	},
 	getVoteFromCardValue = function(val) {
 		if(val === '&frac12;') { return 0.5; }
@@ -67,12 +67,12 @@ var
 				vote = getVoteFromCardValue(votes[user]);
 				if(!isNaN(vote)) {
 					voteData.total += vote;
-					if(voteData.lastVote == -1){
+					if(voteData.lastVote === -1){
 						voteData.lastVote = vote;
 						voteData.min = vote;
 						voteData.max = vote;
 					}
-					if(voteData.lastVote != vote){ voteData.allVotesEqual = false; }
+					if(voteData.lastVote !== vote){ voteData.allVotesEqual = false; }
 					if(voteData.max < vote){ voteData.max = vote; }
 					if(voteData.min > vote){ voteData.min = vote; }
 					voteData.numVotes++;
@@ -83,15 +83,15 @@ var
 		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
 	};
 
-socket.emit("createRoom", {roomId: roomId, title: title});
+socket.emit('createRoom', {roomId: roomId, title: title});
 
-socket.on("newVoter", function(data) {
+socket.on('newVoter', function(data) {
 	$(tim(userTemp, data)).appendTo('#users');
 	updateVoterDecks();
 });
 
-socket.on("incomingVote", function(data) {
-	if(status == 1){
+socket.on('incomingVote', function(data) {
+	if(roundStatus === 1){
 		var $card = $('li[data-user='+data.user+'] div.card');
 		$card.find('div.cardValue').html(data.cardValue);
 		if(data.cardValue === 'coffee') { $card.find('div.cardValue').addClass('coffee'); }
@@ -106,17 +106,16 @@ $('input[name=deckType]').on('change', function(e) {
 });
 
 $('#toggleRound').on('click', function(e){
-	status++; if(status == 3){ status = 1; }
-	if(status == 1){ // Start a new round
+	roundStatus = (roundStatus%2)+1;
+	if(roundStatus === 1){ // Start a new round
 		$('#average').hide().find('.val').empty();
 		$(this).text('Stop Estimating');
 		$('.card').removeClass('visible showValue spin');
 		$('.cardValue').removeClass('coffee min max');
-		socket.emit("newRound",{roomId: roomId});
+		socket.emit('newRound',{roomId: roomId});
 		votes = {};
-	}else if(status == 2){ // Show cards
-
-		$(this).text('Begin Estimating '+document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+	}else if(roundStatus === 2){ // Show cards
+		$(this).text('Begin Estimating '+document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1'));
 		$('.card').addClass('showValue');
 		processVotes();
 		$('#average').show().find('.val').text(voteData.average);
@@ -127,12 +126,14 @@ $('#toggleRound').on('click', function(e){
 			var
 				$card = $(el),
 				vote = $card.text();
-			if(voteData.min == vote)
+			if(voteData.min === vote) {
 				$card.addClass('min');
-			if(voteData.max == vote)
+			}
+			if(voteData.max === vote) {
 				$card.addClass('max');
+			}
 		});
-		socket.emit("roundEnd",{roomId: roomId});
+		socket.emit('roundEnd',{roomId: roomId});
 	}
 });
 

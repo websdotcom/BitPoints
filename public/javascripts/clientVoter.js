@@ -29,7 +29,7 @@ $(function(){
 		$('.cardBack').css('background-color', $(this).val());
 	});
 
-	socket.emit("joinRoom", {roomId: roomId, avatar: avatar, user: user});
+	socket.emit('joinRoom', {roomId: roomId, avatar: avatar, user: user});
 	$('#estimateOptions').on('click', 'td', function(e){
 		$('.lastVote').removeClass('lastVote');
 		var
@@ -37,22 +37,22 @@ $(function(){
 			value = $(this).html(),
 			pattern = $('#pattern').val(),
 			color = $('#color').val().length >= 4 ? $('#color').val() : '#032E63';
-		socket.emit("sendVote", {roomId: roomId, user: user, estimate: points, cardValue: value, pattern: pattern, color: color });
+		socket.emit('sendVote', {roomId: roomId, user: user, estimate: points, cardValue: value, pattern: pattern, color: color });
 	});
-	socket.on("newRound", function(data) {
+	socket.on('newRound', function(data) {
 		$('.lastVote').removeClass('lastVote');
 		$('.status').hide().filter('.newRound').show();
 	});
-	socket.on("roundEnd", function(data) {
+	socket.on('roundEnd', function(data) {
 		$('.status').hide().filter('.roundEnd').show();
 	});
 
-	if(user == 'Noah'){
+	if(user === 'Noah'){
 		$('#pattern').val('goat').change();
 		$('#color').val('#EFC725').change();
 	}
 
-	socket.on("deck", function(data) {
+	socket.on('deck', function(data) {
 		renderDeck(data);
 	});
 

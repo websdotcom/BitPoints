@@ -45,7 +45,7 @@ var
 		return decks[$('input[name=deckType]:checked').val() || 'standard'];
 	},
 	updateVoterDecks = function() {
-		socket.emit('deck',getDeck());
+		socket.emit('deckChange',getDeck());
 	},
 	getVoteFromCardValue = function(val) {
 		if(val === '&frac12;') { return 0.5; }
@@ -90,7 +90,7 @@ socket.on('newVoter', function(data) {
 	updateVoterDecks();
 });
 
-socket.on('incomingVote', function(data) {
+socket.on('newVote', function(data) {
 	if(roundStatus === 1){
 		var $card = $('li[data-user='+data.user+'] div.card');
 		$card.find('div.cardValue').html(data.cardValue);

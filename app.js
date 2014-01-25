@@ -29,10 +29,8 @@ var
 				};
 			};
 
-		for(var incomingEvent in events) {
-			if(events.hasOwnProperty(incomingEvent)) {
-				socket.on(incomingEvent, emitFn(events[incomingEvent]));
-			}
+		for(var i = 0; i < events.length; i++) {
+			socket.on(events[i], emitFn(events[i]));
 		}
 	},
 
@@ -122,12 +120,10 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 
-	setupRoomEvents(socket,inRoom,{
-		'sendVote': 'incomingVote',
-		'newRound': 'newRound',
-		'roundEnd': 'roundEnd',
-		'deck': 'deck'
-	});
+	// set up host <-> client events that just pass through app
+	setupRoomEvents(socket,inRoom,[
+		'newVote','newRound','roundEnd','deckChange'
+	]);
 
 });
 

@@ -37,7 +37,7 @@ $(function(){
 			value = $(this).html(),
 			pattern = $('#pattern').val(),
 			color = $('#color').val().length >= 4 ? $('#color').val() : '#032E63';
-		socket.emit('sendVote', {roomId: roomId, user: user, estimate: points, cardValue: value, pattern: pattern, color: color });
+		socket.emit('newVote', {roomId: roomId, user: user, estimate: points, cardValue: value, pattern: pattern, color: color });
 	});
 	socket.on('newRound', function(data) {
 		$('.lastVote').removeClass('lastVote');
@@ -52,7 +52,7 @@ $(function(){
 		$('#color').val('#EFC725').change();
 	}
 
-	socket.on('deck', function(data) {
+	socket.on('deckChange', function(data) {
 		renderDeck(data);
 	});
 

@@ -95,11 +95,10 @@ server.listen(app.get('port'));
 
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
-	var
-	inRoom = '',
-	room = new models.Room();
+	var inRoom = '';
 
 	socket.on('createRoom', function (data) {
+		var room = new models.Room();
 		console.log('Room', data.roomId, 'created.');
 		socket.join(data.roomId);
 		room.roomId = data.roomId;

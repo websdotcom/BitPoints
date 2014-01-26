@@ -38,11 +38,15 @@ exports.roomHost = function(req, res) {
  * @param	email	Email address used for Gravatar
  */
 exports.roomJoin = function(req, res) {
+	var colorPad = "000000",
+		color = Math.floor(Math.random()*16777215).toString(16)
+		paddedColor = colorPad.substring(0,6-color.length)+color;
+
 	res.render('roomJoin', {
 		roomId: req.params.id,
 		user: req.query.user,
 		avatar: gravatar.url(req.query.email ? req.query.email : 'teamjirachat@gmail.com', {s: '100', d: 'monsterid'}),
-		cardColor: '#'+Math.floor(Math.random()*16777215).toString(16)
+		cardColor: '#'+paddedColor
 	});
 };
 

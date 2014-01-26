@@ -119,10 +119,13 @@ $('#toggleRound').on('click', function(e){
 		$('#average').hide().find('.val').empty();
 		$(this).text('Stop Estimating');
 		$('.card').removeClass('visible showValue spin');
-		$('.cardValue').removeClass('coffee min max');
-		$('.cornerValue').removeClass('coffee');
-		socket.emit('newRound',{roomId: roomId});
-		votes = {};
+		// wait until cards are fully hidden to rmeove classes and emit events
+		_.delay(function(){
+			$('.cardValue').removeClass('coffee min max');
+			$('.cornerValue').removeClass('coffee');
+			socket.emit('newRound',{roomId: roomId});
+			votes = {};
+		},600);
 	}else if(roundStatus === 2){ // Show cards
 		$(this).text('Begin Estimating '+document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1'));
 		$('.card').addClass('showValue');

@@ -2,6 +2,10 @@ BitPoints
 =========
 Effortlessly point tickets visually and collaboratively over the internet in real time.
 
+## Prereqs
+* MongoDB install
+* NodeJS
+
 ## Install it
 `git clone https://github.com/twisterghost/BitPoints.git`
 

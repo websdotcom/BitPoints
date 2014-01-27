@@ -6,6 +6,7 @@ var
 	mongoose = require('mongoose'),
 	fs = require('fs'),
 	_ = require('lodash'),
+	JiraApi = require('jira').JiraApi,
 
 	app = express(),
 	server = http.createServer(app),
@@ -135,9 +136,22 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 
+	socket.on('newRound', function(data) {
+		var jira = new JiraApi('https', 'jira.freewebs.com', null, config.jiraUsername, config.jiraPassword, 'latest', true, false);
+
+		jira.findIssue(data.jiraId, function(error, issue) {
+			if (!error) {
+				_.extend(data, {issueTitle: issue.key + ' ' + issue.fields.summary});
+			}
+
+			console.log(data);
+			io.sockets.in(inRoom).emit('newRound', data);
+		});
+	});
+
 	// set up host <-> client events that just pass through app
 	setupRoomEvents(socket,inRoom,[
-		'newVote','newRound','roundEnd','deckChange','kickVoter'
+		'newVote', 'roundEnd','deckChange','kickVoter'
 	]);
 
 });

@@ -149,3 +149,11 @@ $('#toggleRound').on('click', function(e){
 	}
 });
 
+// Warn the host user of the atrocity they are about to commit.
+window.onbeforeunload = function() {
+	return "Leaving or refreshing as the host of a room may cause one or more of "
+		+ "the following:\n"
+		+ "- The end of times\n"
+		+ "- Your cat/dog/house catching fire\n"
+		+ "- Votes and participants being lost";
+}

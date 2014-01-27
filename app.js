@@ -123,7 +123,7 @@ io.sockets.on('connection', function (socket) {
 		inRoom = data.roomId;
 		io.sockets.in(inRoom).emit('newVoter', data);
 		models.Room.findOne({ roomId: inRoom }, function(err, room){
-			if(err){ console.error('Couldn\'t find room '+inRoom); return; }
+			if(err || !room){ console.error('Couldn\'t find room '+inRoom); return; }
 			room.addUser(data);
 		});
 	});

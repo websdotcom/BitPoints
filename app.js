@@ -144,7 +144,6 @@ io.sockets.on('connection', function (socket) {
 				_.extend(data, {issueTitle: issue.key + ' ' + issue.fields.summary});
 			}
 
-			console.log(data);
 			io.sockets.in(inRoom).emit('newRound', data);
 		});
 	});

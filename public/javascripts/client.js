@@ -91,7 +91,7 @@ socket.on('newVoter', function(data) {
 });
 
 socket.on('voterLeave', function(data) {
-	$('li[data-user=' + data.name + ']').remove();
+	$('li[data-user="' + data.name + '"]').remove();
 });
 
 socket.on('newVote', function(data) {

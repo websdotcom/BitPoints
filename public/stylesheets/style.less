@@ -517,6 +517,39 @@ ul#users {
 		.card {
 			.cardStyle();
 		}
+		.kickVoter {
+			display: none;
+			position: absolute;
+			top: 66px;
+			right: 3px;
+			background: rgb(211, 39, 39);
+			width: 20px;
+			height: 40px;
+			line-height: 38px;
+			text-align: center;
+			color: white;
+			border: solid rgba(255,255,255,0.5);
+			border-width: 1px 1px 1px 0;
+			border-radius: 0 5px 5px 0;
+			cursor: pointer;
+		}
+
+		&:hover .kickVoter {
+			display: block;
+		}
+	}
+}
+
+#kick {
+	margin: 50px;
+	background: rgba(0,0,0,0.5);
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 10px;
+
+	p {
+		margin: 0;
+		text-align: center;
 	}
 }
 

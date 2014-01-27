@@ -90,6 +90,7 @@ app.get('/create', routes.create);
 app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
 app.get('/roomJoin/:id', routes.roomJoin);
 app.get('/addTicketCookie', routes.addTicketCookie);
+app.get('/kick', routes.kick);
 
 // Listen on the port.
 server.listen(app.get('port'));
@@ -107,7 +108,7 @@ io.sockets.on('connection', function (socket) {
 		room.roomId = data.roomId;
 		room.title = data.title;
 		host = true;
-		
+
 		// if there are any voters in the room that's just been created, prompt them to join
 		io.sockets.in(inRoom).emit('roomRefresh', {});
 
@@ -136,7 +137,7 @@ io.sockets.on('connection', function (socket) {
 
 	// set up host <-> client events that just pass through app
 	setupRoomEvents(socket,inRoom,[
-		'newVote','newRound','roundEnd','deckChange'
+		'newVote','newRound','roundEnd','deckChange','kickVoter'
 	]);
 
 });

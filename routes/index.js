@@ -38,8 +38,8 @@ exports.roomHost = function(req, res) {
  * @param	email	Email address used for Gravatar
  */
 exports.roomJoin = function(req, res) {
-	var colorPad = "000000",
-		color = Math.floor(Math.random()*16777215).toString(16)
+	var colorPad = '000000',
+		color = Math.floor(Math.random()*16777215).toString(16),
 		paddedColor = colorPad.substring(0,6-color.length)+color;
 
 	res.render('roomJoin', {
@@ -47,6 +47,13 @@ exports.roomJoin = function(req, res) {
 		user: req.query.user || generateName(),
 		avatar: gravatar.url(req.query.email ? req.query.email : 'teamjirachat@gmail.com', {s: '100', d: 'monsterid'}),
 		cardColor: '#'+paddedColor
+	});
+};
+
+exports.kick = function(req, res) {
+	res.render('kick', {
+		roomId: req.query.roomId,
+		user: req.query.user
 	});
 };
 

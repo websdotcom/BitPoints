@@ -91,6 +91,13 @@ $(function(){
 		$('.status').hide().filter('.roundEnd').show();
 	});
 
+	socket.on('kickVoter', function(data) {
+		if(user === data.user) {
+			socket.disconnect();
+			document.location = '/kick/?roomId=' + roomId + '&user=' + user;
+		}
+	});
+
 	initCardStyle();
 
 	socket.on('deckChange', function(data) {

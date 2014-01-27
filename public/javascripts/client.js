@@ -91,7 +91,7 @@ socket.on('newVoter', function(data) {
 });
 
 socket.on('voterLeave', function(data) {
-	$("li[data-user='" + data.name + "']").remove();
+	$('li[data-user=' + data.name + ']').remove();
 });
 
 socket.on('newVote', function(data) {
@@ -128,8 +128,8 @@ $('#toggleRound').on('click', function(e){
 			$('.cardValue').removeClass('coffee min max');
 			$('.cornerValue').removeClass('coffee');
 			socket.emit('newRound',{roomId: roomId});
-			votes = {};
 		},600);
+		votes = {};
 	}else if(roundStatus === 2){ // Show cards
 		$(this).text('Begin Estimating '+document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1'));
 		$('.card').addClass('showValue');
@@ -152,12 +152,3 @@ $('#toggleRound').on('click', function(e){
 		socket.emit('roundEnd',{roomId: roomId});
 	}
 });
-
-// Warn the host user of the atrocity they are about to commit.
-window.onbeforeunload = function() {
-	return "Leaving or refreshing as the host of a room may cause one or more of "
-		+ "the following:\n"
-		+ "- The end of times\n"
-		+ "- Your cat/dog/house catching fire\n"
-		+ "- Votes and participants being lost";
-}

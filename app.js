@@ -107,6 +107,10 @@ io.sockets.on('connection', function (socket) {
 		room.roomId = data.roomId;
 		room.title = data.title;
 		host = true;
+		
+		// if there are any voters in the room that's just been created, prompt them to join
+		io.sockets.in(inRoom).emit('roomRefresh', {});
+
 		room.save(function(err, room){
 			if(err){ console.error('Failed to persist new room!'); return; }
 		});

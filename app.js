@@ -39,6 +39,7 @@ var
 		limit.setDate(limit.getDate()-daysBack);
 		models.Room.find({'lastActivity':{$gte:limit.toISOString()}},callback);
 	},
+
 	// convenience methods for returning rooms active in the past X days
 	getRoomsPastDay = _.curry(getActiveRooms)(1),
 	getRoomsPastWeek = _.curry(getActiveRooms)(7);
@@ -96,6 +97,8 @@ server.listen(app.get('port'));
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
 	var inRoom = '';
+	var host = false;
+	var myName;
 
 	socket.on('createRoom', function (data) {
 		var room = new models.Room();
@@ -103,13 +106,15 @@ io.sockets.on('connection', function (socket) {
 		socket.join(data.roomId);
 		room.roomId = data.roomId;
 		room.title = data.title;
+		host = true;
 		room.save(function(err, room){
 			if(err){ console.error('Failed to persist new room!'); return; }
 		});
 	});
 
 	socket.on('joinRoom', function (data) {
-		console.log(data.user+' joined '+data.roomId);
+		myName = data.user;
+		console.log(myName+' joined '+data.roomId);
 		socket.join(data.roomId);
 		inRoom = data.roomId;
 		io.sockets.in(inRoom).emit('newVoter', data);
@@ -117,6 +122,12 @@ io.sockets.on('connection', function (socket) {
 			if(err){ console.error('Couldn\'t find room '+inRoom); return; }
 			room.addUser(data);
 		});
+	});
+
+	socket.on('disconnect', function(data) {
+		if (!host) {
+			io.sockets.in(inRoom).emit('voterLeave', {name: myName});
+		}
 	});
 
 	// set up host <-> client events that just pass through app

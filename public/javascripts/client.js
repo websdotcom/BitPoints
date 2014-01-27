@@ -90,9 +90,13 @@ socket.on('newVoter', function(data) {
 	updateVoterDecks();
 });
 
+socket.on('voterLeave', function(data) {
+	$("li[data-user='" + data.name + "']").remove();
+});
+
 socket.on('newVote', function(data) {
 	if(roundStatus === 1){
-		var $card = $('li[data-user='+data.user+'] .card'),
+		var $card = $('li[data-user="'+data.user+'"] .card'),
 			$mainValue = $card.find('.cardValue'),
 			$cornerValues = $card.find('.cornerValue'),
 			$cardBack = $card.find('.cardBack');

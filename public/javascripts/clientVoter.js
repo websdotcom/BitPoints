@@ -19,8 +19,35 @@ $(function(){
 			if(openRow) { deckString += '</tr>'; }
 			deckTable.empty().append(deckString);
 		},
-		joinRoom = function(roomId,avatar,user) {
+		joinRoom = function(roomId) {
 			socket.emit('joinRoom', {roomId: roomId, avatar: avatar, user: user});
+		},
+		setCardAttr = function(attr,style) {
+			window.localStorage.setItem('bitpoints-'+user+'-card-'+attr,style);
+		},
+		getCardAttr = function(attr) {
+			return window.localStorage.getItem('bitpoints-'+user+'-card-'+attr);
+		},
+		initCardStyle = function() {
+
+			// Noah is special
+			if(user === 'Noah'){
+				$('#pattern').val('goat').change();
+				$('#color').val('#EFC725').change();
+			}
+			
+			// Set any data that's in local storage
+			if(getCardAttr('pattern')) {
+				$('#pattern').val(getCardAttr('pattern')).change();
+			}
+
+			if(getCardAttr('color')) {
+				$('#color').val(getCardAttr('color')).change();
+			}
+
+			// update local storage
+			setCardAttr('pattern',$('#pattern').val());
+			setCardAttr('color',$('#color').val());
 		};
 
 	$('#cardStyle, #cardStylePop .close').on('click', function(e){
@@ -29,18 +56,20 @@ $(function(){
 
 	$('#pattern').on('change', function(e){
 		$('.cardBack').removeClass('argile denim graphpaper paisley wood goat').addClass($(this).val());
+		setCardAttr('pattern',$(this).val());
 	});
 
 	$('#color').on('change', function(e){
 		$('.cardBack').css('background-color', $(this).val());
+		setCardAttr('color',$(this).val());
 	});
 
 
-	joinRoom(roomId, avatar, user);
+	joinRoom(roomId);
 
 	// Re-join room if it gets refreshed
 	socket.on('roomRefresh', function(data) {
-		joinRoom(roomId, avatar, user);
+		joinRoom(roomId);
 	});
 
 	$('#estimateOptions').on('click', 'td', function(e){
@@ -62,10 +91,7 @@ $(function(){
 		$('.status').hide().filter('.roundEnd').show();
 	});
 
-	if(user === 'Noah'){
-		$('#pattern').val('goat').change();
-		$('#color').val('#EFC725').change();
-	}
+	initCardStyle();
 
 	socket.on('deckChange', function(data) {
 		renderDeck(data);

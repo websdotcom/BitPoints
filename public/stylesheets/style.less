@@ -80,7 +80,7 @@ html {
 --------------------- */
 #homepage {
 	position: relative;
-	margin: 50px 50px 0;
+	margin: 120px 120px 0;
 
 	#mainContent {
 		position: absolute;
@@ -90,18 +90,12 @@ html {
 		header {
 			h1 {
 				font: 600 4em/1em @title;
-				text-indent: 9999px;
+				text-indent: -9999px;
 				background: url('/images/logo-white-800.png') no-repeat center left;
 				background-size: contain;
 				background-origin: content-box;
 				color: @link;
-				height: 60px;
-			}
-			p {
-				margin: -40px 0 0 240px;
-				font-size: 1.25em;
-				font-weight: 200;
-				color: #fff;
+				height: 70px;
 			}
 			#stats {
 				margin-top: 100px;
@@ -573,29 +567,32 @@ ul#users {
 	}
 }
 
+@media(max-width:1100px) {
+	#homepage {
+		margin: 50px 50px 0;
+	}
+}
 
 @media(max-width:960px) {
 	#homepage {
-		#mainContent {
-			position: static;
-			margin-bottom: 40px;
-		}
 		#supplementalContent {
-			margin-left: 0;
-			padding-top: 0;
+			margin-left: 450px;
 
 			ul {
-				display: none;
+				font-size: 80%;
 			}
 		}
 	}
 }
 
-@media(max-width: 600px) {
+
+@media(max-width: 800px) {
 	#homepage {
 		margin: 0px;
 		#mainContent {
+			position: static;
 			width: 100%;
+			margin-bottom: 40px;
 
 			header {
 				position: fixed;
@@ -605,11 +602,10 @@ ul#users {
 				background-color: desaturate(darken(@primaryColor,10%),10%);
 				box-shadow: 0 3px 3px rgba(0,0,0,0.4);
 				h1 {
-					height: 60px;
+					height: 40px;
+					margin: 10px 0;
 					background-position: center center;
-					background-size: 40%;
 				}
-				p { display: none;}
 			}
 
 			#actions {
@@ -627,6 +623,14 @@ ul#users {
 				.create .halfwidth + .halfwidth {
 					margin-left: 0 !important;
 				}
+			}
+		}
+		#supplementalContent {
+			margin-left: 0;
+			padding: 10px;
+
+			ul {
+				display: none;
 			}
 		}
 	}

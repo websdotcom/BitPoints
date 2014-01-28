@@ -1,5 +1,11 @@
 var gravatar = require('gravatar');
 
+var generateName = function() {
+	var prefixes = ['Proud', 'Awesome', 'Totally', 'Mega', 'Tubular'];
+	var names = ['Abaddon','Alchemist','Ancient Apparition','Anti Mage','Axe','Bane','Batrider','Beastmaster','Bloodseeker','Bounty Hunter','Brewmaster','Bristleback','Broodmother','Centaur Warrunner','Chaos Knight','Chen','Clinkz','Clockwerk','Crystal Maiden','Dark Seer','Dazzle','Death Prophet','Disruptor','Doom','Dragon Knight','Drow Ranger','Earth Spirit','Earthshaker','Elder Titan','Ember Spirit','Enchantress','Enigma','Faceless Void','Gyrocopter','Huskar','Invoker','Jakiro','Juggernaut','Keeper of the Light','Kunkka','Legion Commander','Leshrac','Lich','Lifestealer','Lina','Lion','Lone Druid','Luna','Lycanthrope','Magnus','Medusa','Meepo','Mirana','Morphling','Naga Siren','Nature\'s Prophet','Necrolyte','Night Stalker','Nyx Assassin','Ogre Magi','Omniknight','Outworld Devourer','Phantom Assassin','Phantom Lancer','Puck','Pudge','Pugna','Queen of Pain','Razor','Riki','Rubick','Sand King','Shadow Demon','Shadow Fiend','Shadow Shaman','Silencer','Skeleton King','Skywrath Mage','Slardar','Slark','Sniper','Spectre','Spirit Breaker','Storm Spirit','Sven','Templar Assassin','Tidehunter','Timbersaw','Tinker','Tiny','Treant Protector','Troll Warlord','Tusk','Undying','Ursa','Vengeful Spirit','Venomancer','Viper','Visage','Warlock','Weaver','Windrunner','Wisp','Witch Doctor','Zeus'];
+	return prefixes[Math.floor(Math.random() * prefixes.length)] + ' ' + names[Math.floor(Math.random() * names.length)];
+};
+
 /**
  * GET homepage
  */
@@ -69,9 +75,3 @@ exports.addTicketCookie = function(req, res) {
 	res.cookie('ticketID', req.query.ticketID, { maxAge: 900000 });
 	res.send({ status: 'OK' });
 };
-
-var generateName = function() {
-	var prefixes = ["Proud", "Awesome", "Totally", "Mega", "Tubular"];
-	var names = ["Abaddon","Alchemist","Ancient Apparition","Anti Mage","Axe","Bane","Batrider","Beastmaster","Bloodseeker","Bounty Hunter","Brewmaster","Bristleback","Broodmother","Centaur Warrunner","Chaos Knight","Chen","Clinkz","Clockwerk","Crystal Maiden","Dark Seer","Dazzle","Death Prophet","Disruptor","Doom","Dragon Knight","Drow Ranger","Earth Spirit","Earthshaker","Elder Titan","Ember Spirit","Enchantress","Enigma","Faceless Void","Gyrocopter","Huskar","Invoker","Jakiro","Juggernaut","Keeper of the Light","Kunkka","Legion Commander","Leshrac","Lich","Lifestealer","Lina","Lion","Lone Druid","Luna","Lycanthrope","Magnus","Medusa","Meepo","Mirana","Morphling","Naga Siren","Nature's Prophet","Necrolyte","Night Stalker","Nyx Assassin","Ogre Magi","Omniknight","Outworld Devourer","Phantom Assassin","Phantom Lancer","Puck","Pudge","Pugna","Queen of Pain","Razor","Riki","Rubick","Sand King","Shadow Demon","Shadow Fiend","Shadow Shaman","Silencer","Skeleton King","Skywrath Mage","Slardar","Slark","Sniper","Spectre","Spirit Breaker","Storm Spirit","Sven","Templar Assassin","Tidehunter","Timbersaw","Tinker","Tiny","Treant Protector","Troll Warlord","Tusk","Undying","Ursa","Vengeful Spirit","Venomancer","Viper","Visage","Warlock","Weaver","Windrunner","Wisp","Witch Doctor","Zeus"];
-	return prefixes[Math.floor(Math.random() * prefixes.length)] + " " + names[Math.floor(Math.random() * names.length)];
-}

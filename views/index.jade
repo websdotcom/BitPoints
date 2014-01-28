@@ -7,7 +7,8 @@ block content
 				h1 BitPoints
 			section#actions
 				div.join
-					h2 Join a Room In Progress
+					h2
+						span Join a Room In Progress
 					form(id="join", action="/roomJoin")
 						input#room-id.halfwidth(name='room-id',type='text',placeholder='Room ID*',data-required='true')
 						input#user.halfwidth(name='user',type='text',placeholder='Name*',data-required='true')
@@ -16,7 +17,8 @@ block content
 				div#stats.
 					#{voterString} estimating stories in #{roomString}
 				div.create
-					h2 Create a new BitPoints Room
+					h2
+						span Create a new BitPoints Room
 					form(id="create", action="/create")
 						input#title.halfwidth(name='title',type='text',placeholder='Room Title*',data-required='true')
 						input#join-room.halfwidth(type='submit',value='Create a Room')

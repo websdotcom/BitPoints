@@ -2,8 +2,10 @@ extends layout
 
 block content
 	#voterRoomInfo Room: #{roomId} 
-		.status.newRound Choose a card!
-		.status.roundEnd Round is over.
+		.status.newRound
+			| Choose a card
+			span#ticketInfo
+		.status.roundEnd Round is over
 	#voterInfo
 		img.voterImage#avatar(src='#{avatar}')
 		h3.voterName #{user}

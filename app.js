@@ -66,6 +66,7 @@ mongoose.connect('mongodb://'+config.mongoHost+'/BitPoints');
 
 // Configure socket.io.
 io.set('log level', config.ioLogLevel);
+app.locals.io = io;
 
 // Debugging for dev environments.
 if (config.debug) {

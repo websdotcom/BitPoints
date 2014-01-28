@@ -24,7 +24,7 @@ As a user with Administrator privileges, add this code block to the 'Announcemen
 // BitPoints Integration
 jQuery(function(){
   if(jQuery('#key-val').length > 0){
-    jQuery('<img src="http://{{BITPOINTS_HOST}}/addTicketCookie?ticketSystem=jira&ticketID='+jQuery('#key-val').text()+'&ticketHost={{JIRA_HOST}}" style="width:1px;height:1px;position:absolute;" />').appendTo('body');
+    jQuery('<img src="http://{{BITPOINTS_HOST}}/addTicketCookie?ticketSystem=jira&ticketHost={{JIRA_HOST}}&ticketID='+jQuery('#key-val').text()+'&ticketTitle='+jQuery('#summary-val').text()+'" style="width:1px;height:1px;position:absolute;" />').appendTo('body');
   }
 });
 </script>

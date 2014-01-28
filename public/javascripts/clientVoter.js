@@ -84,6 +84,7 @@ $(function(){
 
 	socket.on('newRound', function(data) {
 		$('.lastVote').removeClass('lastVote');
+		if(data.ticket){ $('#ticketInfo').html(': <a href="'+data.ticket.url+'" target="_blank">'+data.ticket.key+'</a>'); }
 		$('.status').hide().filter('.newRound').show();
 	});
 

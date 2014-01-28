@@ -40,6 +40,7 @@ var
 	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
 	tim = (function(){var d='{{',a='}}',e='[a-z0-9_][\\.a-z0-9_]*',c=new RegExp(d+'('+e+')'+a,'gim'),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split('.'),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}()),
 	userTemp = '<li data-user="{{user}}"><div title="Remove this voter from room" class="kickVoter">&times;</div><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div><div class="cornerValue topleft"></div><div class="cornerValue bottomright"></div></div></div></li>',
+	ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>',
 	voteData = {},
 	getDeck = function() {
 		return decks[$('input[name=deckType]:checked').val() || 'standard'];
@@ -81,9 +82,6 @@ var
 		}
 		voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
 		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
-	},
-	updateTicketInfo = function() {
-		var key = document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 	};
 
 socket.emit('createRoom', {roomId: roomId, title: title});
@@ -95,6 +93,11 @@ socket.on('newVoter', function(data) {
 
 socket.on('voterLeave', function(data) {
 	$('li[data-user="' + data.name + '"]').remove();
+});
+
+socket.on('updateTicket', function(data) {
+	bp.currentTicket = data;
+	$('#ticket').html(tim(ticketTemp, data));
 });
 
 socket.on('newVote', function(data) {
@@ -134,7 +137,7 @@ $('#toggleRound').on('click', function(e){
 		window.setTimeout(function(){
 			$('.cardValue').removeClass('coffee min max');
 			$('.cornerValue').removeClass('coffee');
-			socket.emit('newRound',{roomId: roomId});
+			socket.emit('newRound', {roomId: roomId, ticket: bp.currentTicket});
 		},600);
 		votes = {};
 	}else if(roundStatus === 2){ // Show cards
@@ -156,7 +159,6 @@ $('#toggleRound').on('click', function(e){
 				$card.addClass('max');
 			}
 		});
-		updateTicketInfo();
 		socket.emit('roundEnd',{roomId: roomId});
 	}
 });

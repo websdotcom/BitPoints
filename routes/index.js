@@ -33,6 +33,7 @@ exports.roomHost = function(req, res) {
 	var
 		id = req.params[0],
 		title = req.params[1] ? req.params[1] : 'Room '+id;
+	res.cookie('roomID', id, { maxAge: 900000 });
 	res.render('roomHost', {
 		roomId: id,
 		title: title
@@ -53,7 +54,7 @@ exports.roomJoin = function(req, res) {
 	res.render('roomJoin', {
 		roomId: req.params.id,
 		user: req.query.user || generateName(),
-		avatar: gravatar.url(req.query.email ? req.query.email : 'teamjirachat@gmail.com', {s: '100', d: 'monsterid'}),
+		avatar: gravatar.url(req.query.email ? req.query.email : Math.random()*1000+'', {s: '100', d: 'monsterid'}),
 		cardColor: '#'+paddedColor
 	});
 };

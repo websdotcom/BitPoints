@@ -393,7 +393,6 @@ table#estimateOptions {
 	border-spacing: 10px;
 	td {
 		width: 33%;
-		position: relative;
 		font: normal 2em/1.5em @sans;
 		text-align: center;
 		color: @darktext;
@@ -414,15 +413,12 @@ table#estimateOptions {
 			&:before {
 				content: '';
 				display: block;
-				position: absolute;
-				top: 0;
-				left: 50%;
 				width: 48px;
 				height: 48px;
 				background: url("../images/coffee-black.png") no-repeat center center;
 				background-origin: content-box;
 				background-size: 80%;
-				margin-left: -24px;
+				margin: 0 auto;
 			}
 
 		}
@@ -483,10 +479,8 @@ body { perspective: 1000; }
 
 #deckTypes {
 	position: absolute;
-	top: 0;
+	top: 30px;
 	right: 0;
-	height: 40px;
-	line-height: 40px;
 	width: 380px;
 
 	.title {

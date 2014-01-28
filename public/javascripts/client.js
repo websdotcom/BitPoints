@@ -60,9 +60,13 @@ var
 			allVotesEqual: true,
 			lastVote: -1,
 			total: 0,
-			numVotes: 0
+			numVotes: 0,
+			spread: 0
 		};
-		var vote;
+		var vote,
+			deck = getDeck(),
+			minCardIdx = 0, maxCardIdx = 0;
+
 		for(var user in votes) {
 			if(votes.hasOwnProperty(user)) {
 				vote = getVoteFromCardValue(votes[user]);
@@ -80,8 +84,16 @@ var
 				}
 			}
 		}
+		for(var i = 0; i < deck.length; i++) {
+			if(deck[i].value === voteData.min) { minCardIdx = i; }
+			if(deck[i].value === voteData.max) { maxCardIdx = i; }
+		}
+		voteData.spread = maxCardIdx - minCardIdx;
 		voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
 		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
+	},
+	updateTicketInfo = function() {
+		var key = document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 	};
 
 socket.emit('createRoom', {roomId: roomId, title: title});
@@ -144,10 +156,20 @@ $('#toggleRound').on('click', function(e){
 		$(this).text('Begin Estimating');
 		$('.card').addClass('showValue');
 		processVotes();
-		$('#average').show().find('.val').text(voteData.average);
-		if(voteData.numVotes > 3 && voteData.allVotesEqual){
-			$('.card').addClass('spin');
+		
+		// If there's only one person, vote data is useless
+		if(voteData.numVotes > 1) {
+
+			// Only show average if there is less than a three-card gap between lowest and highest votes
+			if(voteData.spread < 3) {
+				$('#average').show().find('.val').text(voteData.average);
+			}
+			// Animate fun-times if everyone votes the same
+			if(voteData.numVotes > 3 && voteData.allVotesEqual){
+				$('.card').addClass('spin');
+			}
 		}
+
 		$('.card .cardValue').each(function(i, el){
 			var
 				$card = $(el),

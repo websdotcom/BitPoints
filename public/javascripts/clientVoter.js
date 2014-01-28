@@ -85,6 +85,7 @@ $(function(){
 	socket.on('newRound', function(data) {
 		$('.lastVote').removeClass('lastVote');
 		$('.status').hide().filter('.newRound').show();
+		$('#issueInfo').html(data.issueTitle || '');
 	});
 
 	socket.on('roundEnd', function(data) {

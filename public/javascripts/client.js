@@ -130,11 +130,14 @@ $('#toggleRound').on('click', function(e){
 		$('#average').hide().find('.val').empty();
 		$(this).text('Stop Estimating');
 		$('.card').removeClass('visible showValue spin');
+
+		var jiraId = $('#jira-id').val();
+
 		// wait until cards are fully hidden to rmeove classes and emit events
 		window.setTimeout(function(){
 			$('.cardValue').removeClass('coffee min max');
 			$('.cornerValue').removeClass('coffee');
-			socket.emit('newRound',{roomId: roomId});
+			socket.emit('newRound',{roomId: roomId, jiraId: jiraId});
 		},600);
 		votes = {};
 	}else if(roundStatus === 2){ // Show cards

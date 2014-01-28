@@ -15,7 +15,8 @@
 @hover: darken(@link,15%);
 @primaryColor: #2581FF;
 @accentColor: #A4CC09;
-@selection: rgba(41, 211, 26, .6);
+@errorColor: #FF4136;
+@selection: desaturate(darken(@primaryColor,5%),5%);
 
 @sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 @serif: Georgia, Cambria, "Times New Roman", Times, serif;
@@ -132,12 +133,17 @@ html {
 					box-sizing: border-box;
 					width: 100%;
 					margin: 5px 0;
-					padding: 0 12px;
-					font: 400 1em/2.25em @sans;
+					padding: 0 11px;
+					font: 400 1em/34px @sans;
 					color: @darktext;
+					border: 1px solid white;
 					background: white;
-					border: none;
 					.border-radius(6px);
+
+					&.error {
+						border-color: @errorColor;
+						.box-shadow(0 0 4px 2px fadeOut(@errorColor,30%));
+					}
 				}
 
 				input[type=submit] {

@@ -54,7 +54,7 @@ require('fs').readdirSync(modelsDir).forEach(function(file) {
 app.set('port', config.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(express.favicon());
+app.use(express.favicon(path.join(__dirname, 'public/images/favicon.png')));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());

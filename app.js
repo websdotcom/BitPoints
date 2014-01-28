@@ -89,8 +89,9 @@ app.get('/', function(req, res){
 app.get('/create', routes.create);
 app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
 app.get('/roomJoin/:id', routes.roomJoin);
-app.get('/addTicketCookie', routes.addTicketCookie);
 app.get('/kick', routes.kick);
+
+app.get('/addTicketCookie', routes.ticketing.addTicketCookie);
 
 // Listen on the port.
 server.listen(app.get('port'));

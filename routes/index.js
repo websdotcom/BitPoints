@@ -1,3 +1,5 @@
+exports.ticketing = require('./ticketing');
+
 var gravatar = require('gravatar');
 
 var generateName = function() {
@@ -56,6 +58,11 @@ exports.roomJoin = function(req, res) {
 	});
 };
 
+/**
+ * GET as a host, force a user out of your room
+ * @param	roomId	BitPoint RoomID
+ * @param	user	Display name of user to kick
+ */
 exports.kick = function(req, res) {
 	res.render('kick', {
 		roomId: req.query.roomId,
@@ -63,15 +70,3 @@ exports.kick = function(req, res) {
 	});
 };
 
-/**
- * GET set cookie from ticketing systems
- * @param	ticketSystem	Ticketing app slug: jira|bugzilla\githubIssues|...
- * @param	ticketHost	Domain ticketSystem is running on
- * @param	ticketID	Key of last ticket viewed
- */
-exports.addTicketCookie = function(req, res) {
-	res.cookie('ticketSystem', req.query.ticketSystem, { maxAge: 900000 });
-	res.cookie('ticketHost', req.query.ticketHost, { maxAge: 900000 });
-	res.cookie('ticketID', req.query.ticketID, { maxAge: 900000 });
-	res.send({ status: 'OK' });
-};

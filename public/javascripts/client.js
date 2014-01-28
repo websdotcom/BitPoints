@@ -81,6 +81,9 @@ var
 		}
 		voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
 		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
+	},
+	updateTicketInfo = function() {
+		var key = document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 	};
 
 socket.emit('createRoom', {roomId: roomId, title: title});
@@ -135,7 +138,7 @@ $('#toggleRound').on('click', function(e){
 		},600);
 		votes = {};
 	}else if(roundStatus === 2){ // Show cards
-		$(this).text('Begin Estimating '+document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1'));
+		$(this).text('Begin Estimating');
 		$('.card').addClass('showValue');
 		processVotes();
 		$('#average').show().find('.val').text(voteData.average);
@@ -153,6 +156,7 @@ $('#toggleRound').on('click', function(e){
 				$card.addClass('max');
 			}
 		});
+		updateTicketInfo();
 		socket.emit('roundEnd',{roomId: roomId});
 	}
 });

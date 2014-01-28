@@ -2,40 +2,32 @@ extends layout
 
 block content
 	#homepage
-		header
-			h1 BitPoints
-			p Ditch the Deck
+		#mainContent
+			header
+				h1 BitPoints
+				p Ditch the Deck
+			section#actions
+				div.join
+					h2 Join a Room In Progress
+					form(id="join", action="/roomJoin")
+						input#room-id.halfwidth(name='room-id',type='text',placeholder='Room ID')
+						input#user.halfwidth(name='user',type='text',placeholder='Name')
+						input#email(name='email',type='text',placeholder='Gravatar Email')
+						input(type='submit', value='Join a Room')#join-room
+				div#stats.
+					#{voterString} estimating stories in #{roomString}
+				div.create
+					h2 Create a new BitPoints Room
+					form(id="create", action="/create")
+						input#title.halfwidth(name='title',type='text',placeholder='Enter a Room Title')
+						input#join-room.halfwidth(type='submit',value='Create a Room')
+		#supplementalContent
 			ul
 				li Scrum Poker, Evolved
 				li Estimate Anywhere
 				li Go Faster
-			div#stats.
-				#{voterString} estimating stories in #{roomString}
-			
-		div.main
 			p.description.
 				BitPoints helps scrum teams estimate stories by getting rid of physical <em>scrum poker</em> decks and creating a more visible platform for team members to post and discuss points. Average estimates are automatically calculated and high/low estimates are highlighted for discussion. Perfect for distributed scrum teams, as team members can join from any internet-connected device.
-			div.join
-				h2 Join Room
-				form(id="join", action="/roomJoin")
-					.field
-						label(for='room-id') Room ID*
-						input(type='text')#room-id
-					.field
-						label(for='user') Name
-						input(type='text')#user
-					.field
-						label(for='email') Gravatar Email
-						input(type='text')#email
-					input(type='submit', value='Join Room')#join-room
-			div.create
-				h2 Create Room
-				form(id="create", action="/create")
-					.field
-						label(for='title') Room Title
-						input(type='text')#title
-					input(type='submit', value='Create A BitPoint Room')#join-room
-
 		footer
 			| Proudly made in DC 
 			a(href="http://proudlymadeindc.com/", target="_blank").dcBadge
@@ -45,5 +37,4 @@ block content
 			a(href="http://www.spaceforaname.com/", target="_blank") Jack</a>
 			| , &amp; 
 			a(href="http://nickswider.com/", target="_blank") Nick</a>
-
-		script(src='/javascripts/home.js')
+	script(src='/javascripts/home.js')

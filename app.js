@@ -15,8 +15,9 @@ var
 	config = require('./config.js').config;
 
 // Load Mongoose models.
+app.locals.models = {};
 var
-	models = {},
+	models = app.locals.models,
 	modelsDir = __dirname + '/models';
 
 // Set up utility methods
@@ -91,6 +92,7 @@ app.get('/create', routes.create);
 app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
 app.get('/roomJoin/:id', routes.roomJoin);
 app.get('/kick', routes.kick);
+app.get(/^\/([0-9a-z]+)$/, routes.invite);
 
 app.get('/addTicketCookie', routes.ticketing.addTicketCookie);
 

@@ -29,12 +29,10 @@ block content
 		label Color
 			input(title='Select card color', type='color', value='#{cardColor}')#color
 
-
 	script.
-		var bp = {
-			roomId: #{roomId},
-			avatar: "#{avatar}",
-			user: "#{user}"
-		}
+		bp.roomId = #{roomId};
+		bp.title = "#{title}";
+		bp.avatar = "#{avatar}";
+		bp.user = "#{user}";
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/clientVoter.js")

@@ -23,10 +23,10 @@ $(function(){
 			socket.emit('joinRoom', {roomId: roomId, avatar: avatar, user: user});
 		},
 		setCardAttr = function(attr,style) {
-			window.localStorage.setItem('bitpoints-'+user+'-card-'+attr,style);
+			bp.setLocalItem(user+'-card-'+attr,style);
 		},
 		getCardAttr = function(attr) {
-			return window.localStorage.getItem('bitpoints-'+user+'-card-'+attr);
+			return bp.getLocalItem(user+'-card-'+attr);
 		},
 		initCardStyle = function() {
 

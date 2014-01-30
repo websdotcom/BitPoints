@@ -17,8 +17,13 @@ var validateForm = function(form) {
 };
 
 $(function(){
+	var userData = bp.getLocalUserData();
 	$('#join').on('submit', function(e) {
 		if(validateForm($(this))) {
+			bp.setLocalItem('user-data',{
+				user:$('#user').val(),
+				email:$('#email').val()
+			});
 			document.location = '/roomJoin/' + $('#room-id').val() + '?user=' + $('#user').val() + '&email=' + $('#email').val();
 		}
 		e.preventDefault();
@@ -29,4 +34,12 @@ $(function(){
 		}
 		e.preventDefault();
 	});
+	if(userData) {
+		$('#user').val(userData.user);
+		$('#email').val(userData.email);
+		// if room ID is hidden, just join the room
+		if($('#room-id').attr('type') === 'hidden') {
+			$('#join').trigger('submit');
+		}
+	}
 });

@@ -22,6 +22,13 @@
 @serif: Georgia, Cambria, "Times New Roman", Times, serif;
 @title: "Alegreya Sans SC", sans-serif;
 
+.fa {
+	color: @link;
+	&:hover {
+		color: @hover;
+	}
+}
+
 
 /* ---------------------
 				 RESET
@@ -176,6 +183,28 @@ html {
 			#stats {
 				text-align: right;
 				font-size: 80%;
+			}
+		}
+	}
+
+	&.invite {
+		#mainContent {
+			position: static;
+			width: 800px;
+			margin: 0 auto;
+
+			header {
+				h1 {
+					background-position: center center;
+				}
+			}
+			#actions {
+				p {
+					text-align: center;
+				}
+				.join {
+					margin: 50px auto;
+				}
 			}
 		}
 	}
@@ -477,21 +506,63 @@ body { perspective: 1000; }
 	float: left;
 }
 
-#deckTypes {
+#settings {
 	position: absolute;
 	top: 30px;
-	right: 0;
-	width: 380px;
+	right: 30px;
 
-	.title {
-		font-weight: bold;
-	}
-	.option {
-		float: right;
-		span {
-			display: inline-block;
-			margin-left: 6px;
-			margin-right: 30px;
+	li {
+		position: relative;
+		.fa {
+			cursor: pointer;
+		}
+		.drop {
+			display: none;
+			position: absolute;
+			top: 42px;
+			right: -12px;
+			z-index: 10;
+			width: 300px;
+			padding: 12px;
+			background: white;
+			.border-radius(12px);
+			color: @darktext;
+
+			&:before {
+				content: '';
+				position: absolute;
+				top: -6px;
+				right: 20px;
+				display: block;
+				height: 12px;
+				width: 12px;
+				.rotate(45deg);
+				background: white;
+			}
+
+			&.active {
+				display: block;
+			}
+
+			.title {
+				font-weight: bold;
+				width: 150px;
+				display: inline-block;
+				vertical-align: top;
+				line-height: 2em;
+			}
+			.control {
+				display: inline-block;
+				vertical-align: top;
+			}
+			.fa {
+				padding-left: 6px;
+				color: @darktext;
+				cursor: pointer;
+				&:hover {
+					color: darken(@darktext,15%);
+				}
+			}
 		}
 	}
 }
@@ -588,6 +659,44 @@ ul#users {
 	}
 }
 
+.bp-modal-cover {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 3000;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.5);
+}
+.bp-modal-container {
+	position: absolute;
+	top: 300px;
+	left: 50%;
+	z-index: 3001;
+	.box-sizing();
+	width: 500px;
+	padding: 50px;
+	margin-left: -250px;
+	background: white;
+	.border-radius(20px);
+	.box-shadow(0 0 10px 10px rgba(0,0,0,0.5));
+	color: @darktext;
+	font-size: 3em;
+	line-height: 1em;
+	text-align: center;
+
+	.bp-modal-close {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 20px;
+		height: 20px;
+		font-size: 20px;
+		line-height: 20px;
+		cursor: pointer;
+	}
+}
+
 @media(max-width:1100px) {
 	#homepage {
 		margin: 50px 50px 0;
@@ -646,6 +755,13 @@ ul#users {
 				}
 			}
 		}
+
+		&.invite {
+			#mainContent {
+				width: 100%;
+			}
+		}
+
 		#supplementalContent {
 			margin-left: 0;
 			padding: 10px;

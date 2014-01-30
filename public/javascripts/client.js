@@ -139,6 +139,16 @@ $('#users').on('click','.kickVoter',function() {
 	socket.emit('kickVoter',{roomId:roomId,user:$(this).parent().data('user')});
 });
 
+$('#settings').on('click','.fa',function() {
+	$(this).siblings().find('.drop').removeClass('active');
+	$(this).next('.drop').toggleClass('active');
+});
+
+$('#showLink').on('click', function() {
+	var link = $(this).data('link');
+	bp.showModal(link);
+});
+
 $('#toggleRound').on('click', function(e){
 	roundStatus = (roundStatus%2)+1;
 	if(roundStatus === 1){ // Start a new round

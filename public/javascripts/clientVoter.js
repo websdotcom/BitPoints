@@ -13,7 +13,7 @@ $(function(){
 
 			for(var i = 0; i < deck.length; i++) {
 				if((i+1)%3 === 1) { deckString += '<tr>'; openRow = true; }
-				deckString += '<td data-value="'+deck[i].value+'"'+(deck[i].estimate==='coffee'?' class="coffee"':'')+'>'+deck[i].estimate+'</td>';
+				deckString += '<td data-value="'+deck[i].value+'">'+deck[i].estimate+'</td>';
 				if((i+1)%3 === 0) { deckString += '</tr>'; openRow = false; }
 			}
 			if(openRow) { deckString += '</tr>'; }

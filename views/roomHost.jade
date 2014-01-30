@@ -8,20 +8,22 @@ block content
 			li
 				i.fa.fa-cog.fa-2x
 				.drop
-					span.title Deck Type:
-					.control
-						.option
-							label(for="standard")
-								input(type="radio", value="standard", name="deckType", id="standard", checked="checked")
-								span Standard
-						.option
-							label(for="fibonacci")
-								input(type="radio", value="fibonacci", name="deckType", id="fibonacci")
-								span Fibonacci
-					span.title Invite URL:
-					.control
-						span bitpoints.io/#{inviteId}
-							i.fa.fa-share-square-o#showLink(data-link="bitpoints.io/#{inviteId}")
+					.dropItem
+						span.title Deck Type:
+						.control
+							.option
+								label(for="standard")
+									input(type="radio", value="standard", name="deckType", id="standard", checked="checked")
+									span Standard
+							.option
+								label(for="fibonacci")
+									input(type="radio", value="fibonacci", name="deckType", id="fibonacci")
+									span Fibonacci
+					.dropItem
+						span.title Invite URL:
+						.control
+							span #{appHost}/#{inviteId}
+								i.fa.fa-share-square-o#showLink(data-link="#{appHost}/#{inviteId}")
 
 		button#toggleRound Begin Estimating
 

@@ -56,6 +56,8 @@ exports.invite = function(req, res) {
 			res.render('invite',{
 				room: room
 			});
+		} else {
+			exports.notFound(req,res);
 		}
 	});
 };
@@ -89,5 +91,13 @@ exports.kick = function(req, res) {
 		roomId: req.query.roomId,
 		user: req.query.user
 	});
+};
+
+/**
+ * GET 404 Page
+ */
+exports.notFound = function(req, res) {
+	res.status(404);
+	res.render('httpError',{ status: 404 });
 };
 

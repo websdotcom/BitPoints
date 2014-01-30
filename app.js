@@ -93,9 +93,9 @@ app.get('/create', routes.create);
 app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
 app.get('/roomJoin/:id', routes.roomJoin);
 app.get('/kick', routes.kick);
-app.get(/^\/([0-9a-z]+)$/, routes.invite);
-
+app.get(/^\/([0-9a-z]{1,5})$/, routes.invite);
 app.get('/addTicketCookie', routes.ticketing.addTicketCookie);
+
 
 // Listen on the port.
 server.listen(app.get('port'));
@@ -145,6 +145,26 @@ io.sockets.on('connection', function (socket) {
 		'newVote','newRound','roundEnd','deckChange','kickVoter'
 	]);
 
+});
+
+// Handle 404 errors
+app.use(function(req, res, next){
+	res.status(404);
+
+	// respond with html page
+	if (req.accepts('html')) {
+		res.render('httpError', { status: 404 });
+		return;
+	}
+
+	// respond with json
+	if (req.accepts('json')) {
+		res.send({ error: 'Not found' });
+		return;
+	}
+
+	// default to plain-text. send()
+	res.type('txt').send('Not found');
 });
 
 console.log('BitPoints is ready to go at http://localhost:' + config.port);

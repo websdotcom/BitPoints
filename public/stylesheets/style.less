@@ -243,8 +243,8 @@ html {
 --------------------- */
 .cardStyle(@size: 1) {
 	position: absolute;
-	width: 200px;
-	height: 270px;
+	width: 200px * @size;
+	height: 270px * @size;
 	left: 0;
 	top: 9999px;
 	&.visible { top: 180px; }
@@ -316,13 +316,19 @@ html {
 		.cardValue {
 			text-align: center;
 			position: relative;
-			font: normal 6em/2.4em @sans;
+			font-size: 6em * @size;
+			font-weight: normal;
+			line-height: 250px * @size;
+			font-family: @sans;
 			&.min { color: #000fd2; }
 			&.max { color: #d21900; }
 		}
 		.cornerValue {
 			position: absolute;
-			font: normal 1.25em/1em @sans;
+			font-size: 1.25em * @size;
+			font-weight: normal;
+			line-height: 1em;
+			font-family: @sans;
 			width: 50px;
 			text-align: left;
 
@@ -380,8 +386,6 @@ html {
 			position: relative;
 			top: auto; left: auto;
 			.box-sizing(border-box);
-			width: 90px;
-			height: 120px;
 		}
 	}
 }
@@ -656,6 +660,17 @@ ul#users {
 		font-size: 20px;
 		line-height: 20px;
 		cursor: pointer;
+	}
+}
+
+#error {
+	margin: 50px;
+	.errorCard {
+		.cardStyle(1.5);
+		.rotate(30deg);
+		position: static;
+		float: left;
+		margin-right: 30px;
 	}
 }
 

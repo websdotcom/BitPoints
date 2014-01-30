@@ -367,7 +367,8 @@ html {
 }
 #voterInfo {
 	position: relative;
-	margin: 10px 10px 10px 20px;
+	margin: 10px auto;
+	max-width: 500px;
 
 	.voterName,.voterImage {
 		margin-left: 0;
@@ -382,7 +383,7 @@ html {
 			text-align: center;
 		}
 		#cardPreview {
-			.cardStyle(.5);
+			.cardStyle(.45);
 			position: relative;
 			top: auto; left: auto;
 			.box-sizing(border-box);
@@ -395,7 +396,7 @@ table#estimateOptions {
 	border-spacing: 10px;
 	td {
 		width: 33%;
-		font: normal 2em/1.5em @sans;
+		font: normal 2.5em/2.5em @sans;
 		text-align: center;
 		color: @darktext;
 		border-radius: 3px;
@@ -746,6 +747,12 @@ ul#users {
 			ul {
 				display: none;
 			}
+		}
+	}
+	table#estimateOptions {
+		td {
+			font-size: 2em;
+			line-height: 1.5em;
 		}
 	}
 }

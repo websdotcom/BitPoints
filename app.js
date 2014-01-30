@@ -14,6 +14,7 @@ var
 	routes = require('./routes'),
 	config = require('./config.js').config;
 
+app.config = config;
 // Load Mongoose models.
 app.locals.models = {};
 var

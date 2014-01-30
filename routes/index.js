@@ -37,7 +37,8 @@ exports.roomHost = function(req, res) {
 	res.render('roomHost', {
 		roomId: id,
 		inviteId: (+id).toString(36),
-		title: title
+		title: title,
+		appHost: req.app.config.appHost
 	});
 };
 

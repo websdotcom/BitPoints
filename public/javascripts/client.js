@@ -14,7 +14,7 @@ var
 			{ value: 40, estimate: '40' },
 			{ value: 100, estimate: '100' },
 			{ value: NaN, estimate: '&infin;' },
-			{ value: NaN, estimate: 'coffee' }
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
 		],
 		'fibonacci': [
 			{ value: NaN, estimate: '?' },
@@ -30,7 +30,7 @@ var
 			{ value: 55, estimate: '55' },
 			{ value: 89, estimate: '89' },
 			{ value: NaN, estimate: '&infin;' },
-			{ value: NaN, estimate: 'coffee' }
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
 		]
 	},
 	socket = io.connect('http://'+window.location.host),

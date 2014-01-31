@@ -155,6 +155,7 @@ app.use(function(req, res, next){
 	if (req.accepts('html')) {
 		res.render('httpError', {
 			status: 404,
+			url: req.url,
 			bodyClass: 'one-column'
 		});
 		return;

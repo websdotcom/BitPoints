@@ -48,9 +48,15 @@ var
 	updateVoterDecks = function() {
 		socket.emit('deckChange',getDeck());
 	},
-	getVoteFromCardValue = function(val) {
-		if(val === '&frac12;') { return 0.5; }
-		return parseFloat(val);
+	getValueFromEstimate = function(estimate) {
+		var deck = getDeck(),
+			ret = NaN;
+
+		for(var i = 0; i < deck.length; i++) {
+			if(deck[i].estimate === estimate) {
+				return deck[i].value;
+			}
+		}
 	},
 	processVotes = function() {
 		voteData = {
@@ -69,7 +75,7 @@ var
 
 		for(var user in votes) {
 			if(votes.hasOwnProperty(user)) {
-				vote = getVoteFromCardValue(votes[user]);
+				vote = getValueFromEstimate(votes[user]);
 				if(!isNaN(vote)) {
 					voteData.total += vote;
 					if(voteData.lastVote === -1){
@@ -96,104 +102,112 @@ var
 		var key = document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 	};
 
-socket.emit('createRoom', {roomId: roomId, title: title});
+$(function(){
 
-socket.on('newVoter', function(data) {
-	$(tim(userTemp, data)).appendTo('#users');
-	updateVoterDecks();
-});
+	socket.emit('createRoom', {roomId: roomId, title: title});
 
-socket.on('voterLeave', function(data) {
-	$('li[data-user="' + data.name + '"]').remove();
-});
+	socket.on('newVoter', function(data) {
+		$(tim(userTemp, data)).appendTo('#users');
+		updateVoterDecks();
+	});
 
-socket.on('updateTicket', function(data) {
-	bp.currentTicket = data;
-	$('#ticket').html(tim(ticketTemp, data));
-});
+	socket.on('voterLeave', function(data) {
+		$('li[data-user="' + data.name + '"]').remove();
+	});
 
-socket.on('newVote', function(data) {
-	if(roundStatus === 1){
-		var $card = $('li[data-user="'+data.user+'"] .card'),
-			$mainValue = $card.find('.cardValue'),
-			$cornerValues = $card.find('.cornerValue'),
-			$cardBack = $card.find('.cardBack');
+	socket.on('updateTicket', function(data) {
+		bp.currentTicket = data;
+		$('#ticket').html(tim(ticketTemp, data));
+	});
 
-		$mainValue.html(data.cardValue);
-		$cornerValues.html(data.cardValue);
-		if(data.cardValue === 'coffee') {
-			$mainValue.addClass('coffee');
-			$cornerValues.addClass('coffee');
+	socket.on('newVote', function(data) {
+		if(roundStatus === 1){
+			var $card = $('li[data-user="'+data.user+'"] .card'),
+				$mainValue = $card.find('.cardValue'),
+				$cornerValues = $card.find('.cornerValue'),
+				$cardBack = $card.find('.cardBack');
+
+			$mainValue.html(data.cardValue);
+			$cornerValues.html(data.cardValue);
+			if(data.cardValue === 'coffee') {
+				$mainValue.addClass('coffee');
+				$cornerValues.addClass('coffee');
+			}
+			$cardBack.css('background-color', data.color).removeClass('argile denim graphpaper paisley wood goat').addClass(data.pattern);
+			$card.addClass('visible');
+			votes[data.user] = data.estimate;
 		}
-		$cardBack.css('background-color', data.color).removeClass('argile denim graphpaper paisley wood goat').addClass(data.pattern);
-		$card.addClass('visible');
-		votes[data.user] = data.estimate;
-	}
-});
+	});
 
-$('input[name=deckType]').on('change', function(e) {
-	updateVoterDecks();
-});
+	$('input[name=deckType]').on('change', function(e) {
+		updateVoterDecks();
+	});
 
-$('#users').on('click','.kickVoter',function() {
-	socket.emit('kickVoter',{roomId:roomId,user:$(this).parent().data('user')});
-});
+	$('#users').on('click','.kickVoter',function() {
+		socket.emit('kickVoter',{roomId:roomId,user:$(this).parent().data('user')});
+	});
 
-$('#settings').on('click','.fa',function() {
-	$(this).siblings().find('.drop').removeClass('active');
-	$(this).next('.drop').toggleClass('active');
-});
+	$('#settings').on('click','.fa',function() {
+		$(this).siblings().find('.drop').removeClass('active');
+		$(this).next('.drop').toggleClass('active');
+	});
 
-$('#showLink').on('click', function() {
-	var link = $(this).data('link');
-	bp.showModal(link);
-});
+	$('#showLink').on('click', function() {
+		var link = $(this).data('link');
+		bp.showModal(link);
+	});
 
-$('#toggleRound').on('click', function(e){
-	roundStatus = (roundStatus%2)+1;
-	if(roundStatus === 1){ // Start a new round
-		$('#average').hide().find('.val').empty();
-		$('#largeSpread').hide();
-		$(this).text('Stop Estimating');
-		$('.card').removeClass('visible showValue spin');
-		// wait until cards are fully hidden to rmeove classes and emit events
-		window.setTimeout(function(){
-			$('.cardValue').removeClass('coffee min max');
-			$('.cornerValue').removeClass('coffee');
-			socket.emit('newRound', {roomId: roomId, ticket: bp.currentTicket});
-		},600);
-		votes = {};
-	}else if(roundStatus === 2){ // Show cards
-		$(this).text('Begin Estimating');
-		$('.card').addClass('showValue');
-		processVotes();
-		
-		// If there's only one person, vote data is useless
-		if(voteData.numVotes > 1) {
+	$('#toggleRound').on('click', function(e){
+		roundStatus = (roundStatus%2)+1;
 
-			// Only show average if there is less than a three-card gap between lowest and highest votes
-			if(voteData.spread < 3) {
-				$('#average').show().find('.val').text(voteData.average);
-			} else {
-				$('#largeSpread').show();
+		if(roundStatus === 1){ // Start a new round
+
+			$('#average').hide().find('.val').empty();
+			$('#largeSpread').hide();
+			$(this).text('Stop Estimating');
+			$('.card').removeClass('visible showValue spin');
+
+			// wait until cards are fully hidden to rmeove classes and emit events
+			window.setTimeout(function(){
+				$('.cardValue').removeClass('coffee min max');
+				$('.cornerValue').removeClass('coffee');
+				socket.emit('newRound', {roomId: roomId, ticket: bp.currentTicket});
+			},600);
+			votes = {};
+
+		}else if(roundStatus === 2){ // Show cards
+
+			$(this).text('Begin Estimating');
+			$('.card').addClass('showValue');
+			processVotes();
+			
+			// If there's only one person, vote data is useless
+			if(voteData.numVotes > 1) {
+
+				// Only show average if there is less than a three-card gap between lowest and highest votes
+				if(voteData.spread < 3) {
+					$('#average').show().find('.val').text(voteData.average);
+				} else {
+					$('#largeSpread').show();
+				}
+				// Animate fun-times if everyone votes the same
+				if(voteData.numVotes > 3 && voteData.allVotesEqual){
+					$('.card').addClass('spin');
+				}
 			}
-			// Animate fun-times if everyone votes the same
-			if(voteData.numVotes > 3 && voteData.allVotesEqual){
-				$('.card').addClass('spin');
-			}
+
+			$('.card .cardValue').each(function(i, el){
+				var
+					$card = $(el),
+					vote = $card.text();
+				if(voteData.min === vote) {
+					$card.addClass('min');
+				}
+				if(voteData.max === vote) {
+					$card.addClass('max');
+				}
+			});
+			socket.emit('roundEnd',{roomId: roomId});
 		}
-
-		$('.card .cardValue').each(function(i, el){
-			var
-				$card = $(el),
-				vote = $card.text();
-			if(voteData.min === vote) {
-				$card.addClass('min');
-			}
-			if(voteData.max === vote) {
-				$card.addClass('max');
-			}
-		});
-		socket.emit('roundEnd',{roomId: roomId});
-	}
+	});
 });

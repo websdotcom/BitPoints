@@ -1,41 +1,28 @@
-extends layout
+extends external
 
-block content
-	#homepage
-		#mainContent
-			header
-				h1 BitPoints
-			section#actions
-				div.join
-					h2
-						span Join a Room In Progress
-					form(id="join", action="/roomJoin")
-						input#room-id.halfwidth(name='room-id',type='text',placeholder='Room ID*',data-required='true')
-						input#user.halfwidth(name='user',type='text',placeholder='Name',data-required='true')
-						input#email(name='email',type='text',placeholder='Gravatar Email')
-						input(type='submit', value='Join a Room')#join-room
-				div#stats.
-					#{voterString} estimating stories in #{roomString}
-				div.create
-					h2
-						span Create a new BitPoints Room
-					form(id="create", action="/create")
-						input#title.halfwidth(name='title',type='text',placeholder='Room Title*',data-required='true')
-						input#join-room.halfwidth(type='submit',value='Create a Room')
-		#supplementalContent
-			ul
-				li Estimate Anywhere
-				li Ditch the Decks
-				li Go Faster
-			p.description.
-				BitPoints helps scrum teams estimate stories by getting rid of physical <em>scrum poker</em> decks and creating a more visible platform for team members to post and discuss points. Average estimates are automatically calculated and high/low estimates are highlighted for discussion. Perfect for distributed scrum teams, as team members can join from any internet-connected device.
-		footer
-			| Proudly made in DC 
-			a(href="http://proudlymadeindc.com/", target="_blank").dcBadge
-			|  by 
-			a(href="http://i.ammichael.com/", target="_blank") Michael
-			| , 
-			a(href="http://www.spaceforaname.com/", target="_blank") Jack</a>
-			| , &amp; 
-			a(href="http://nickswider.com/", target="_blank") Nick</a>
-	script(src='/javascripts/home.js')
+block mainContent
+	section#actions
+		div.join
+			h2
+				span Join a Room In Progress
+			form(id="join", action="/roomJoin")
+				input#room-id.halfwidth(name='room-id',type='text',placeholder='Room ID*',data-required='true')
+				input#user.halfwidth(name='user',type='text',placeholder='Name',data-required='true')
+				input#email(name='email',type='text',placeholder='Gravatar Email')
+				input(type='submit', value='Join a Room')#join-room
+		div#stats.
+			#{voterString} estimating stories in #{roomString}
+		div.create
+			h2
+				span Create a new BitPoints Room
+			form(id="create", action="/create")
+				input#title.halfwidth(name='title',type='text',placeholder='Room Title*',data-required='true')
+				input#join-room.halfwidth(type='submit',value='Create a Room')
+
+block supplementalContent
+	ul
+		li Estimate Anywhere
+		li Ditch the Decks
+		li Go Faster
+	p.description.
+		BitPoints helps scrum teams estimate stories by getting rid of physical <em>scrum poker</em> decks and creating a more visible platform for team members to post and discuss points. Average estimates are automatically calculated and high/low estimates are highlighted for discussion. Perfect for distributed scrum teams, as team members can join from any internet-connected device.

@@ -1,26 +1,12 @@
-extends layout
+extends external
 
-block content
-	#homepage.invite
-		#mainContent
-			header
-				h1 BitPoints
-			section#actions
-				p You've been invited to play planning poker in the room: "#{room.title}"
-				div.join
-					form(id="join", action="/roomJoin")
-						input#room-id(name='room-id',type='hidden',value='#{room.roomId}')
-						input#user(name='user',type='text',placeholder='Name',data-required='true')
-						input#email(name='email',type='text',placeholder='Gravatar Email')
-						input(type='submit', value='Join Room')#join-room
-				p or, go to <a href="/">bitpoints.io</a>
-		footer
-			| Proudly made in DC 
-			a(href="http://proudlymadeindc.com/", target="_blank").dcBadge
-			|  by 
-			a(href="http://i.ammichael.com/", target="_blank") Michael
-			| , 
-			a(href="http://www.spaceforaname.com/", target="_blank") Jack</a>
-			| , &amp; 
-			a(href="http://nickswider.com/", target="_blank") Nick</a>
-	script(src='/javascripts/home.js')
+block mainContent
+	section#actions
+		p You've been invited to play planning poker in the room: "#{room.title}"
+		div.join
+			form(id="join", action="/roomJoin")
+				input#room-id(name='room-id',type='hidden',value='#{room.roomId}')
+				input#user(name='user',type='text',placeholder='Name',data-required='true')
+				input#email(name='email',type='text',placeholder='Gravatar Email')
+				input(type='submit', value='Join Room')#join-room
+		p or, go to <a href="/">bitpoints.io</a>

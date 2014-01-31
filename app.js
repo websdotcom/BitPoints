@@ -153,7 +153,10 @@ app.use(function(req, res, next){
 
 	// respond with html page
 	if (req.accepts('html')) {
-		res.render('httpError', { status: 404 });
+		res.render('httpError', {
+			status: 404,
+			bodyClass: 'one-column'
+		});
 		return;
 	}
 

@@ -2,9 +2,10 @@ extends external
 
 block mainContent
 	#error
-		p Is this your card?
+		p Hmm, looks like <strong>#{url}</strong> isn't available.
 		.errorCard.visible.showValue
 			.cardInner
 				.cardValue #{status}
 				.cornerValue.topleft #{status}
 				.cornerValue.bottomright #{status}
+		p Head back to <a href="/">bitpoints.io</a>

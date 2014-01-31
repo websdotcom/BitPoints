@@ -101,6 +101,7 @@ exports.notFound = function(req, res) {
 	res.status(404);
 	res.render('httpError',{
 		status: 404,
+		url: req.url,
 		bodyClass: 'one-column'
 	});
 };

@@ -1,29 +1,27 @@
-// Module dependencies
+
 var
+	// Module dependencies
 	express = require('express'),
 	http = require('http'),
 	path = require('path'),
 	mongoose = require('mongoose'),
 	fs = require('fs'),
 	_ = require('lodash'),
+	routes = require('./routes'),
+	config = require('./config.js').config,
 
+	// Initialize express app, server, and sockets
 	app = express(),
 	server = http.createServer(app),
 	io = require('socket.io').listen(server),
+	models = {},
+	modelsDir = __dirname + '/models',
 
-	routes = require('./routes'),
-	config = require('./config.js').config;
-
-app.config = config;
-// Load Mongoose models.
-app.locals.models = {};
-var
-	models = app.locals.models,
-	modelsDir = __dirname + '/models';
-
-// Set up utility methods
-var
-	// method for passing events between host and clients
+	/**
+	 * Method for passing events between host and clients
+	 * Use this method only when incoming event name matches
+	 * outgoing event name and no data massaging is necessary
+	 */
 	setupRoomEvents = function(socket,room,events) {
 		var emitFn = function(eventName) {
 				return function(data) {
@@ -36,17 +34,32 @@ var
 		}
 	},
 
+	/**
+	 * Get a list of rooms with activity within a specific timespan
+	 */
 	getActiveRooms = function(daysBack,callback) {
 		var limit = new Date();
 		limit.setDate(limit.getDate()-daysBack);
 		models.Room.find({'lastActivity':{$gte:limit.toISOString()}},callback);
 	},
 
-	// convenience methods for returning rooms active in the past X days
+	// Convenience methods for returning rooms active in the past X days
 	getRoomsPastDay = _.curry(getActiveRooms)(1),
 	getRoomsPastWeek = _.curry(getActiveRooms)(7);
 
-require('fs').readdirSync(modelsDir).forEach(function(file) {
+
+// Attach properties to app for use elsewhere
+app.config = config;
+app.locals.models = models;
+app.utils = {
+	setupRoomEvents: setupRoomEvents,
+	getActiveRooms: getActiveRooms,
+	getRoomsPastDay: getRoomsPastDay,
+	getRoomsPastWeek: getRoomsPastWeek
+};
+
+
+fs.readdirSync(modelsDir).forEach(function(file) {
 	if (file.match(/.+\.js/g) !== null && file !== 'index.js') {
 		_.merge(models, require(modelsDir + '/' + file));
 	}
@@ -77,37 +90,26 @@ if (config.debug) {
 }
 
 // Routes.
-app.get('/', function(req, res){
-	getRoomsPastDay(function (err, rooms){
-		var numRooms = err ? 0 : rooms.length,
-			numVoters = err ? 0 :_.reduce(_.pluck(rooms,'members'), function(memo, num){ return memo + num; }, 0);
-		res.render('index', {
-			numRooms: numRooms,
-			numVoters: numVoters,
-			roomString: numRooms + (numRooms === 1 ? ' room' : ' rooms'),
-			voterString: numVoters + (numVoters === 1 ? ' person' : ' people')
-		});
-	});
-});
+app.get('/', routes.index);
 app.get('/create', routes.create);
-app.get(/^\/roomHost\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.roomHost);
-app.get('/roomJoin/:id', routes.roomJoin);
+app.get(/^\/host\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.host);
+app.get('/join/:id', routes.join);
 app.get('/kick', routes.kick);
 app.get(/^\/([0-9a-z]{1,5})$/, routes.invite);
 app.get('/addTicketCookie', routes.ticketing.addTicketCookie);
-
 
 // Listen on the port.
 server.listen(app.get('port'));
 
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
-	var inRoom = '';
-	var host = false;
-	var myName;
+	var inRoom = '',
+		host = false,
+		myName;
 
 	socket.on('createRoom', function (data) {
 		var room = new models.Room();
+
 		console.log('Room', data.roomId, 'created.');
 		socket.join(data.roomId);
 		room.roomId = data.roomId;
@@ -151,7 +153,7 @@ io.sockets.on('connection', function (socket) {
 app.use(function(req, res, next){
 	res.status(404);
 
-	// respond with html page
+	// Respond with html page
 	if (req.accepts('html')) {
 		res.render('httpError', {
 			status: 404,
@@ -161,13 +163,13 @@ app.use(function(req, res, next){
 		return;
 	}
 
-	// respond with json
+	// Respond with json
 	if (req.accepts('json')) {
 		res.send({ error: 'Not found' });
 		return;
 	}
 
-	// default to plain-text. send()
+	// Default to plain-text. send()
 	res.type('txt').send('Not found');
 });
 

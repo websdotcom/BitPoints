@@ -4,7 +4,7 @@ block mainContent
 	section#actions
 		p You've been invited to play planning poker in the room: "#{room.title}"
 		div.join
-			form(id="join", action="/roomJoin")
+			form(id="join", action="/join")
 				input#room-id(name='room-id',type='hidden',value='#{room.roomId}')
 				input#user(name='user',type='text',placeholder='Name',data-required='true')
 				input#email(name='email',type='text',placeholder='Gravatar Email')

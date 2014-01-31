@@ -83,6 +83,13 @@
 	transition: @prop @time @style;
 }
 
+.backface-visibility(@val) {
+	-webkit-backface-visibility: @val;
+	-moz-backface-visibility: @val;
+	-ms-backface-visibility: @val;
+	backface-visibility: @val;
+}
+
 .border-image(@val) {
 	-webkit-border-image: @val;
 	-moz-border-image: @val;

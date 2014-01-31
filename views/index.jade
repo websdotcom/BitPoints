@@ -5,7 +5,7 @@ block mainContent
 		div.join
 			h2
 				span Join a Room In Progress
-			form(id="join", action="/roomJoin")
+			form(id="join", action="/join")
 				input#room-id.halfwidth(name='room-id',type='text',placeholder='Room ID*',data-required='true')
 				input#user.halfwidth(name='user',type='text',placeholder='Name*',data-required='true')
 				input#email(name='email',type='text',placeholder='Gravatar Email')

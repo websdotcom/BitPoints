@@ -13,6 +13,7 @@ bp.setLocalItem = function(key,value) {
 
 bp.getLocalItem = function(key) {
 	var item = window.localStorage.getItem('bitpoints-'+key);
+
 	try {
 		item = JSON.parse(item);
 	} catch(e) {
@@ -45,6 +46,7 @@ bp.showModal = function(content) {
 		modal.hide();
 		cover.hide();
 	});
+	
 	modalContent.html(content);
 
 	cover.show();

@@ -153,6 +153,7 @@ $('#toggleRound').on('click', function(e){
 	roundStatus = (roundStatus%2)+1;
 	if(roundStatus === 1){ // Start a new round
 		$('#average').hide().find('.val').empty();
+		$('#largeSpread').hide();
 		$(this).text('Stop Estimating');
 		$('.card').removeClass('visible showValue spin');
 		// wait until cards are fully hidden to rmeove classes and emit events
@@ -173,6 +174,8 @@ $('#toggleRound').on('click', function(e){
 			// Only show average if there is less than a three-card gap between lowest and highest votes
 			if(voteData.spread < 3) {
 				$('#average').show().find('.val').text(voteData.average);
+			} else {
+				$('#largeSpread').show();
 			}
 			// Animate fun-times if everyone votes the same
 			if(voteData.numVotes > 3 && voteData.allVotesEqual){

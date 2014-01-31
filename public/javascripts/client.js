@@ -14,7 +14,7 @@ var
 			{ value: 40, estimate: '40' },
 			{ value: 100, estimate: '100' },
 			{ value: NaN, estimate: '&infin;' },
-			{ value: NaN, estimate: 'coffee' }
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
 		],
 		'fibonacci': [
 			{ value: NaN, estimate: '?' },
@@ -30,7 +30,7 @@ var
 			{ value: 55, estimate: '55' },
 			{ value: 89, estimate: '89' },
 			{ value: NaN, estimate: '&infin;' },
-			{ value: NaN, estimate: 'coffee' }
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
 		]
 	},
 	socket = io.connect('http://'+window.location.host),
@@ -139,10 +139,21 @@ $('#users').on('click','.kickVoter',function() {
 	socket.emit('kickVoter',{roomId:roomId,user:$(this).parent().data('user')});
 });
 
+$('#settings').on('click','.fa',function() {
+	$(this).siblings().find('.drop').removeClass('active');
+	$(this).next('.drop').toggleClass('active');
+});
+
+$('#showLink').on('click', function() {
+	var link = $(this).data('link');
+	bp.showModal(link);
+});
+
 $('#toggleRound').on('click', function(e){
 	roundStatus = (roundStatus%2)+1;
 	if(roundStatus === 1){ // Start a new round
 		$('#average').hide().find('.val').empty();
+		$('#largeSpread').hide();
 		$(this).text('Stop Estimating');
 		$('.card').removeClass('visible showValue spin');
 		// wait until cards are fully hidden to rmeove classes and emit events
@@ -163,6 +174,8 @@ $('#toggleRound').on('click', function(e){
 			// Only show average if there is less than a three-card gap between lowest and highest votes
 			if(voteData.spread < 3) {
 				$('#average').show().find('.val').text(voteData.average);
+			} else {
+				$('#largeSpread').show();
 			}
 			// Animate fun-times if everyone votes the same
 			if(voteData.numVotes > 3 && voteData.allVotesEqual){

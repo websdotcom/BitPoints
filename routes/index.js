@@ -36,7 +36,30 @@ exports.roomHost = function(req, res) {
 	res.cookie('roomID', id, { maxAge: 900000 });
 	res.render('roomHost', {
 		roomId: id,
-		title: title
+		inviteId: (+id).toString(36),
+		title: title,
+		appHost: req.app.config.appHost
+	});
+};
+
+/**
+ * GET invite processing
+ * @param  id  invite id in url 
+ */
+exports.invite = function(req, res) {
+	var id = req.params[0],
+		roomId = parseInt(id,36);
+
+	req.app.locals.models.Room.findOne({roomId:roomId}, function(err, room) {
+		if(room && !err) {
+			req.params.id = roomId;
+			res.render('invite',{
+				room: room,
+				bodyClass: 'one-column'
+			});
+		} else {
+			exports.notFound(req,res);
+		}
 	});
 };
 
@@ -68,6 +91,18 @@ exports.kick = function(req, res) {
 	res.render('kick', {
 		roomId: req.query.roomId,
 		user: req.query.user
+	});
+};
+
+/**
+ * GET 404 Page
+ */
+exports.notFound = function(req, res) {
+	res.status(404);
+	res.render('httpError',{
+		status: 404,
+		url: req.url,
+		bodyClass: 'one-column'
 	});
 };
 

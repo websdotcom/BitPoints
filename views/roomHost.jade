@@ -4,30 +4,39 @@ block content
 	#room
 		h1 Welcome to #{title} (#{roomId})
 
-		#deckTypes
-			span.title Deck Type:
-			.option
-				label(for="fibonacci")
-					input(type="radio", value="fibonacci", name="deckType", id="fibonacci")
-					span Fibonacci
-			.option
-				label(for="standard")
-					input(type="radio", value="standard", name="deckType", id="standard", checked="checked")
-					span Standard
+		ul#settings
+			li
+				i.fa.fa-cog.fa-2x
+				.drop
+					.dropItem
+						span.title Deck Type:
+						.control
+							.option
+								label(for="standard")
+									input(type="radio", value="standard", name="deckType", id="standard", checked="checked")
+									span Standard
+							.option
+								label(for="fibonacci")
+									input(type="radio", value="fibonacci", name="deckType", id="fibonacci")
+									span Fibonacci
+					.dropItem
+						span.title Invite URL:
+						.control
+							span #{appHost}/#{inviteId}
+								i.fa.fa-share-square-o#showLink(data-link="#{appHost}/#{inviteId}")
 
 		button#toggleRound Begin Estimating
 
 		#average The average estimate is 
 			span.val
+		#largeSpread Looks like there's some uncertainty about this estimate...
 
 		#ticket
 
 		ul#users
 
 	script.
-		var bp = {
-			roomId: #{roomId},
-			title: "#{title}"
-		}
+		bp.roomId = #{roomId};
+		bp.title = "#{title}";
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/client.js")

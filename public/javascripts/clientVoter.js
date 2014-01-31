@@ -13,7 +13,7 @@ $(function(){
 
 			for(var i = 0; i < deck.length; i++) {
 				if((i+1)%3 === 1) { deckString += '<tr>'; openRow = true; }
-				deckString += '<td data-value="'+deck[i].value+'"'+(deck[i].estimate==='coffee'?' class="coffee"':'')+'>'+deck[i].estimate+'</td>';
+				deckString += '<td data-value="'+deck[i].value+'">'+deck[i].estimate+'</td>';
 				if((i+1)%3 === 0) { deckString += '</tr>'; openRow = false; }
 			}
 			if(openRow) { deckString += '</tr>'; }
@@ -23,10 +23,10 @@ $(function(){
 			socket.emit('joinRoom', {roomId: roomId, avatar: avatar, user: user});
 		},
 		setCardAttr = function(attr,style) {
-			window.localStorage.setItem('bitpoints-'+user+'-card-'+attr,style);
+			bp.setLocalItem(user+'-card-'+attr,style);
 		},
 		getCardAttr = function(attr) {
-			return window.localStorage.getItem('bitpoints-'+user+'-card-'+attr);
+			return bp.getLocalItem(user+'-card-'+attr);
 		},
 		initCardStyle = function() {
 

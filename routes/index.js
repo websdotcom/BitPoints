@@ -54,7 +54,8 @@ exports.invite = function(req, res) {
 		if(room && !err) {
 			req.params.id = roomId;
 			res.render('invite',{
-				room: room
+				room: room,
+				bodyClass: 'one-column'
 			});
 		} else {
 			exports.notFound(req,res);
@@ -98,6 +99,9 @@ exports.kick = function(req, res) {
  */
 exports.notFound = function(req, res) {
 	res.status(404);
-	res.render('httpError',{ status: 404 });
+	res.render('httpError',{
+		status: 404,
+		bodyClass: 'one-column'
+	});
 };
 

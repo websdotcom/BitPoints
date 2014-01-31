@@ -1,0 +1,20 @@
+extends layout
+
+block content
+	#external
+		#mainContent
+			header
+				h1 BitPoints
+			block mainContent
+		#supplementalContent
+			block supplementalContent
+		footer
+			| Proudly made in DC 
+			a(href="http://proudlymadeindc.com/", target="_blank").dcBadge
+			|  by 
+			a(href="http://i.ammichael.com/", target="_blank") Michael
+			| , 
+			a(href="http://www.spaceforaname.com/", target="_blank") Jack</a>
+			| , &amp; 
+			a(href="http://nickswider.com/", target="_blank") Nick</a>
+	script(src='/javascripts/home.js')

@@ -87,7 +87,7 @@ html {
 /* ---------------------
 				HOMEPAGE
 --------------------- */
-#homepage {
+#external {
 	position: relative;
 	margin: 120px 120px 0;
 
@@ -187,7 +187,37 @@ html {
 		}
 	}
 
-	&.invite {
+	#supplementalContent {
+		margin-left: 500px;
+		padding-top: 50px;
+		ul {
+			margin-bottom: 30px;
+			li {
+				font: 200 2em/2em @sans;
+				letter-spacing: 1px;
+			}
+		}
+	}
+
+	footer {
+		clear: both;
+		margin-top: 50px;
+		text-align: center;
+		.dcBadge {
+			display: inline-block;
+			width: 17px;
+			height: 13px;
+			background: url('/images/dc-badge.png') no-repeat 0 0;
+			background-size: contain;
+		}
+		a {
+			font-weight: bold;
+		}
+	}
+}
+
+body.one-column {
+	#external {
 		#mainContent {
 			position: static;
 			width: 800px;
@@ -206,33 +236,6 @@ html {
 					margin: 50px auto;
 				}
 			}
-		}
-	}
-
-	#supplementalContent {
-		margin-left: 500px;
-		padding-top: 50px;
-		ul {
-			margin-bottom: 30px;
-			li {
-				font: 200 2em/2em @sans;
-				letter-spacing: 1px;
-			}
-		}
-	}
-
-	footer {
-		margin-top: 50px;
-		text-align: center;
-		.dcBadge {
-			display: inline-block;
-			width: 17px;
-			height: 13px;
-			background: url('/images/dc-badge.png') no-repeat 0 0;
-			background-size: contain;
-		}
-		a {
-			font-weight: bold;
 		}
 	}
 }
@@ -665,24 +668,28 @@ ul#users {
 }
 
 #error {
-	margin: 50px;
+	padding-top: 80px;
+	overflow: hidden;
 	.errorCard {
 		.cardStyle(1.5);
 		.rotate(30deg);
 		position: static;
-		float: left;
-		margin-right: 30px;
+		margin: 0 auto;
+	}
+	p {
+		margin: 10px 0;
+		text-align: center;
 	}
 }
 
 @media(max-width:1100px) {
-	#homepage {
+	#external {
 		margin: 50px 50px 0;
 	}
 }
 
 @media(max-width:960px) {
-	#homepage {
+	#external {
 		#supplementalContent {
 			margin-left: 450px;
 
@@ -695,7 +702,7 @@ ul#users {
 
 
 @media(max-width: 800px) {
-	#homepage {
+	#external {
 		margin: 0px;
 		#mainContent {
 			position: static;
@@ -734,12 +741,6 @@ ul#users {
 			}
 		}
 
-		&.invite {
-			#mainContent {
-				width: 100%;
-			}
-		}
-
 		#supplementalContent {
 			margin-left: 0;
 			padding: 10px;
@@ -749,10 +750,19 @@ ul#users {
 			}
 		}
 	}
+
 	table#estimateOptions {
 		td {
 			font-size: 2em;
 			line-height: 1.5em;
+		}
+	}
+
+	body.one-column {
+		#external {
+			#mainContent {
+				width: 100%;
+			}
 		}
 	}
 }

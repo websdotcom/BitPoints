@@ -1,10 +1,10 @@
-extends layout
+extends external
 
-block content
+block mainContent
 	#error
+		p Is this your card?
 		.errorCard.visible.showValue
 			.cardInner
 				.cardValue #{status}
 				.cornerValue.topleft #{status}
 				.cornerValue.bottomright #{status}
-		p Is this your card?

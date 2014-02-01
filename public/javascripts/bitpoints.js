@@ -38,6 +38,33 @@ BP.extend =  function(obj) {
 };
 
 /**
+ * Simple template function
+ */
+BP.template = (function(){
+	var d = '{{',
+		a = '}}',
+		e = '[a-z0-9_][\\.a-z0-9_]*',
+		c = new RegExp(d+'('+e+')'+a,'gim'),
+		b;
+
+	return function(f,g) {
+		return f.replace(c,function(j,l) {
+			var n = l.split('.'),
+				h = n.length,
+				m = g,
+				k = 0;
+
+			for(;k < h;k++){
+				if(m === b || m === null) { break; }
+				m = m[n[k]];
+				if(k === h - 1) { return m; }
+			}
+		});
+	};
+}());
+
+
+/**
  * custom localStorage object that sets BitPoint-specific data
  *
  * set: if value is not a string, attempt to stringify it, then save it
@@ -75,6 +102,7 @@ BP.localStorage = {
  *   - content: html to be dropped into the modal's content area
  */
 BP.Modal = function(options) {
+	var self = this;
 
 	this.defaults = {
 		id: randomString(),
@@ -83,23 +111,22 @@ BP.Modal = function(options) {
 
 	BP.extend(this, this.defaults, options);
 
-	var cover = $('#'+this.id+'-modal-cover.bp-modal-cover').hide(),
-		modal = $('#'+this.id+'-modal-container.bp-modal-container').hide(),
+	var cover = $('#'+this.id+'-modal-cover.bp-modal-cover'),
+		modal = $('#'+this.id+'-modal-container.bp-modal-container'),
 		modalContent, modalClose;
 
 	if(cover.length === 0) {
 		cover = $('<div id="'+this.id+'-modal-cover" class="bp-modal-cover"/>').appendTo('body');
 	}
 	if(modal.length === 0) {
-		modal = $('<div id="'+this.id+'-modal-cover" class="bp-modal-container bp-modal-'+this.size+'"><div class="bp-modal-close">&times;</div><div class="bp-modal-content"/></div>').appendTo('body');
+		modal = $('<div id="'+this.id+'-modal-container" class="bp-modal-container bp-modal-'+this.size+'"><div class="bp-modal-close">&times;</div><div class="bp-modal-content"/></div>').appendTo('body');
 	}
 
 	modalContent = modal.find('.bp-modal-content');
 	modalClose = modal.find('.bp-modal-close');
 
 	modalClose.off().on('click',function() {
-		modal.hide();
-		cover.hide();
+		self.hide();
 	});
 	
 	modalContent.html(this.content);
@@ -114,7 +141,7 @@ BP.Modal = function(options) {
 	};
 	this.toggle = function() {
 		cover.toggleClass('visible');
-		cover.removeClass('visible');
+		modal.toggleClass('visible');
 	};
 };
 
@@ -165,7 +192,7 @@ BP.Page = function(options) {
 		var self = this,
 			handleDomEvent = function(fn) {
 				return function(e) {
-					fn.call(self,e, $(this));
+					fn.call(self, e, $(this));
 				};
 			};
 

@@ -15,24 +15,12 @@ block content
 				div.cardBack.argyle(style='background-color:#{cardColor}')
 
 		table#estimateOptions
-
-	div#cardStylePop
-		div#closePopover.close X
-		label Pattern
-		select#pattern
-			option argyle
-			option denim
-			option graphpaper
-			option paisley
-			option wood
-			option goat
-		label Color
-			input(title='Select card color', type='color', value='#{cardColor}')#color
-
+		
 	script.
 		BP.roomId = #{roomId};
 		BP.title = "#{title}";
 		BP.avatar = "#{avatar}";
 		BP.user = "#{user}";
+		BP.cardColor = "#{cardColor}";
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/join.js")

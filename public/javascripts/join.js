@@ -3,6 +3,19 @@ var
 	roomId = BP.roomId,
 	user = BP.user,
 	avatar = BP.avatar,
+	cardStyleTemp = '<label for="pattern">Pattern'+
+						'<select id="pattern">'+
+							'<option value="argyle">Argyle</option>'+
+							'<option value="denim">Denim</option>'+
+							'<option value="graphpaper">Graph Paper</option>'+
+							'<option value="paisley">Paisley</option>'+
+							'<option value="wood">Wood</option>'+
+							'<option value="goat">Goat</option>'+
+						'</select>'+
+					'</label>'+
+					'<label for="color">Color'+
+						'<input title="Select card color" type="color" value="{{cardColor}}" id="color"/>'+
+					'</label>',
 	setCardAttr = function(attr,style) {
 		BP.localStorage.set(user+'-card-'+attr,style);
 	},
@@ -45,13 +58,20 @@ var page = new BP.Page({
 
 	domEvents: {
 		'click #cardStyle': 'toggleCardPopover',
-		'click #closePopover': 'toggleCardPopover',
 		'change #pattern': 'changeCardPattern',
 		'change #color': 'changeCardColor',
 		'click .estimate': 'submitEstimate'
 	},
 
 	initialize: function() {
+		var html = BP.template(cardStyleTemp, { cardColor: BP.cardColor });
+		
+		this.cardStyleModal = new BP.Modal({
+			id: 'cardStylePop',
+			content: html,
+			size: 'small'
+		});
+
 		this.joinRoom();
 		initCardStyle();
 	},
@@ -92,7 +112,7 @@ var page = new BP.Page({
 	},
 
 	toggleCardPopover: function(e, $el) {
-		$('#cardStylePop').toggle();
+		this.cardStyleModal.toggle();
 	},
 
 	changeCardPattern: function(e, $el) {

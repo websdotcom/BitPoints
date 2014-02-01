@@ -44,9 +44,20 @@ var
 
 	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
 
-	// TODO: Swap out with a legit templating setup?
-	tim = (function(){var d='{{',a='}}',e='[a-z0-9_][\\.a-z0-9_]*',c=new RegExp(d+'('+e+')'+a,'gim'),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split('.'),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}()),
-	userTemp = '<li data-user="{{user}}"><div title="Remove this voter from room" class="kickVoter">&times;</div><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div><div class="cornerValue topleft"></div><div class="cornerValue bottomright"></div></div></div></li>',
+	userTemp =  '<li data-user="{{user}}">'+
+					'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
+					'<img class="voterImage" src="{{avatar}}" />'+
+					'<h3 class="voterName">{{user}}</h3>'+
+					'<div class="card">'+
+						'<div class="cardBack"></div>'+
+						'<div class="cardInner">'+
+							'<div class="cardValue"></div>'+
+							'<div class="cornerValue topleft"></div>'+
+							'<div class="cornerValue bottomright"></div>'+
+						'</div>'+
+					'</div>'+
+				'</li>',
+				
 	ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>',
 	
 	getDeck = function() {
@@ -130,7 +141,8 @@ var page = new BP.Page({
 	},
 
 	addVoter: function(data) {
-		$(tim(userTemp, data)).appendTo('#users');
+		var html = BP.template(userTemp, data);
+		$(html).appendTo('#users');
 		this.updateVoterDecks();
 	},
 
@@ -140,7 +152,7 @@ var page = new BP.Page({
 
 	updateTicket: function(data) {
 		BP.currentTicket = data;
-		$('#ticket').html(tim(ticketTemp, data));
+		$('#ticket').html(BP.template(ticketTemp, data));
 	},
 
 	acceptVote: function(data) {

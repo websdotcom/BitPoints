@@ -6,7 +6,7 @@ block content
 
 		ul#settings
 			li
-				i.fa.fa-cog.fa-2x
+				i.setting.fa.fa-cog.fa-2x
 				.drop
 					.dropItem
 						span.title Deck Type:
@@ -36,7 +36,7 @@ block content
 		ul#users
 
 	script.
-		bp.roomId = #{roomId};
-		bp.title = "#{title}";
+		BP.roomId = #{roomId};
+		BP.title = "#{title}";
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/host.js")

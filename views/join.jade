@@ -12,15 +12,15 @@ block content
 		#cardStyle
 			h4 Card Style
 			div#cardPreview
-				div.cardBack.argile(style='background-color:#{cardColor}')
+				div.cardBack.argyle(style='background-color:#{cardColor}')
 
 		table#estimateOptions
 
 	div#cardStylePop
-		div.close X
+		div#closePopover.close X
 		label Pattern
 		select#pattern
-			option argile
+			option argyle
 			option denim
 			option graphpaper
 			option paisley
@@ -30,9 +30,9 @@ block content
 			input(title='Select card color', type='color', value='#{cardColor}')#color
 
 	script.
-		bp.roomId = #{roomId};
-		bp.title = "#{title}";
-		bp.avatar = "#{avatar}";
-		bp.user = "#{user}";
+		BP.roomId = #{roomId};
+		BP.title = "#{title}";
+		BP.avatar = "#{avatar}";
+		BP.user = "#{user}";
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/join.js")

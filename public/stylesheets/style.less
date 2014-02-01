@@ -87,7 +87,7 @@
 	.cardBack {
 		background-repeat: repeat;
 		background-position: 50% 50%;
-		&.argile {
+		&.argyle {
 			background-image: -webkit-repeating-linear-gradient(-30deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px), -webkit-repeating-linear-gradient(30deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px), -webkit-linear-gradient(30deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1)), -webkit-linear-gradient(-30deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1));
 			background-size: 70px*@size 120px*@size;
 		}
@@ -650,16 +650,15 @@ ul#users {
 	left: 50%;
 	z-index: 3001;
 	.box-sizing();
-	width: 500px;
-	padding: 50px;
-	margin-left: -250px;
+	width: 300px;
+	padding: 30px;
+	margin-left: -150px;
 	background: white;
 	.border-radius(20px);
 	.box-shadow(0 0 10px 10px rgba(0,0,0,0.5));
 	color: @darktext;
-	font-size: 3em;
+	font-size: 1.5em;
 	line-height: 1em;
-	text-align: center;
 
 	.bp-modal-close {
 		position: absolute;
@@ -670,6 +669,23 @@ ul#users {
 		font-size: 20px;
 		line-height: 20px;
 		cursor: pointer;
+	}
+
+	&.bp-modal-large {
+		padding: 50px;
+		width: 700px;
+		margin-left: -350px;
+		font-size: 3em;
+		line-height: 1em;
+		text-align: center;
+	}
+
+	&.bp-modal-small {
+		padding: 10px;
+		width: 250px;
+		margin-left: -125px;
+		font-size: 1em;
+		line-height: 1em;
 	}
 }
 

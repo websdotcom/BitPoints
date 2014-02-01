@@ -63,6 +63,14 @@ var page = new BP.Page({
 		'click .estimate': 'submitEstimate'
 	},
 
+	DOM: {
+		cardBack: '.cardBack',
+		lastVote: '.lastVote',
+		ticketInfo: '#ticketInfo',
+		status: '.status',
+		estimateTable: '#estimateOptions'
+	},
+
 	initialize: function() {
 		var html = BP.template(cardStyleTemp, { cardColor: BP.cardColor });
 		
@@ -74,6 +82,11 @@ var page = new BP.Page({
 
 		this.joinRoom();
 		initCardStyle();
+
+		this.addDOM({
+			pattern: '#pattern',
+			color: '#color'
+		});
 	},
 
 	joinRoom: function(data) {
@@ -81,13 +94,13 @@ var page = new BP.Page({
 	},
 
 	reset: function(data) {
-		$('.lastVote').removeClass('lastVote');
-		if(data.ticket){ $('#ticketInfo').html(': <a href="'+data.ticket.url+'" target="_blank">'+data.ticket.key+'</a>'); }
-		$('.status').hide().filter('.newRound').show();
+		this.$lastVote.removeClass('lastVote');
+		if(data.ticket){ this.$ticketInfo.html(': <a href="'+data.ticket.url+'" target="_blank">'+data.ticket.key+'</a>'); }
+		this.$status.hide().filter('.newRound').show();
 	},
 
 	endRound: function(data) {
-		$('.status').hide().filter('.roundEnd').show();
+		this.$status.hide().filter('.roundEnd').show();
 	},
 
 	processKick: function(data) {
@@ -98,7 +111,7 @@ var page = new BP.Page({
 	},
 
 	renderDeck: function(deck) {
-		var deckTable = $('#estimateOptions'),
+		var deckTable = this.$estimateTable,
 			openRow = true,
 			deckString = '<tr>';
 
@@ -116,12 +129,12 @@ var page = new BP.Page({
 	},
 
 	changeCardPattern: function(e, $el) {
-		$('.cardBack').removeClass('argyle denim graphpaper paisley wood goat').addClass($el.val());
+		this.$cardBack.removeClass('argyle denim graphpaper paisley wood goat').addClass($el.val());
 		setCardAttr('pattern',$el.val());
 	},
 
 	changeCardColor: function(e, $el) {
-		$('.cardBack').css('background-color', $el.val());
+		this.$cardBack.css('background-color', $el.val());
 		setCardAttr('color',$el.val());
 	},
 
@@ -130,8 +143,8 @@ var page = new BP.Page({
 
 		var points = $el.addClass('lastVote').data('value'),
 			estimate = $el.html(),
-			pattern = $('#pattern').val(),
-			color = $('#color').val().length >= 4 ? $('#color').val() : '#032E63';
+			pattern = this.$pattern.val(),
+			color = this.$color.val().length >= 4 ? this.$color.val() : '#032E63';
 		socket.emit('newVote', {roomId: roomId, user: user, value: points, cardValue: estimate, pattern: pattern, color: color });
 	}
 });

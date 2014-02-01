@@ -57,7 +57,7 @@ var
 						'</div>'+
 					'</div>'+
 				'</li>',
-				
+
 	ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>',
 	
 	getDeck = function() {
@@ -136,28 +136,35 @@ var page = new BP.Page({
 		'click #toggleRound': 'toggleRound'
 	},
 
+	DOM: {
+		users: '#users',
+		ticket: '#ticket',
+		average: '#average',
+		largeSpread: '#largeSpread'
+	},
+
 	initialize: function() {
 		socket.emit('createRoom', {roomId: roomId, title: title});
 	},
 
 	addVoter: function(data) {
 		var html = BP.template(userTemp, data);
-		$(html).appendTo('#users');
+		$(html).appendTo(this.$users);
 		this.updateVoterDecks();
 	},
 
 	removeVoter: function(data) {
-		$('li[data-user="' + data.name + '"]').remove();
+		this.$('li[data-user="' + data.name + '"]').remove();
 	},
 
 	updateTicket: function(data) {
 		BP.currentTicket = data;
-		$('#ticket').html(BP.template(ticketTemp, data));
+		this.$ticket.html(BP.template(ticketTemp, data));
 	},
 
 	acceptVote: function(data) {
 		if(roundStatus === 1){
-			var $card = $('li[data-user="'+data.user+'"] .card'),
+			var $card = this.$('li[data-user="'+data.user+'"] .card'),
 				$mainValue = $card.find('.cardValue'),
 				$cornerValues = $card.find('.cornerValue'),
 				$cardBack = $card.find('.cardBack');
@@ -198,62 +205,62 @@ var page = new BP.Page({
 		modal.show();
 	},
 
+	startNewRound: function(e, $el) {
+		this.$average.hide().find('.val').empty();
+		this.$largeSpread.hide();
+		$el.text('Stop Estimating');
+		this.$('.card').removeClass('visible showValue spin');
+
+		// Clear out all votes
+		votes = {};
+
+		// wait until cards are fully hidden to remove classes and emit events
+		window.setTimeout(function(){
+			self.$('.cardValue').removeClass('coffee min max');
+			self.$('.cornerValue').removeClass('coffee');
+			socket.emit('newRound', {roomId: roomId, ticket: BP.currentTicket});
+		},1500);
+	},
+
+	endCurrentRound: function(e, $el) {
+		$el.text('Begin Estimating');
+		this.$('.card').addClass('showValue');
+
+		processVotes();
+		
+		// If there's only one person, vote data is useless
+		if(voteData.numVotes > 1) {
+
+			// Only show average if there is less than a three-card gap between lowest and highest votes
+			if(voteData.spread < 3) {
+				this.$average.show().find('.val').text(voteData.average);
+			} else {
+				this.$largeSpread.show();
+
+				this.$('.card .cardValue').each(function(i, el) {
+					// TODO: instead of highlighting low and high votes,
+					// highlight the outliers (cards that are not in the middle two vote values)
+					// e.g. for votes 1,3,8,13:  highlight 1 and 13
+				});
+			}
+
+			// Animate fun-times if everyone votes the same
+			if(voteData.numVotes > 3 && voteData.allVotesEqual){
+				this.$('.card').addClass('spin');
+			}
+		}
+
+		socket.emit('roundEnd',{roomId: roomId});
+	},
+
 	toggleRound: function(e, $el){
 
 		roundStatus = (roundStatus % 2) + 1;
 
-		if(roundStatus === 1) { // Start a new round
-
-			$('#average').hide().find('.val').empty();
-			$('#largeSpread').hide();
-			$el.text('Stop Estimating');
-			$('.card').removeClass('visible showValue spin');
-
-			// wait until cards are fully hidden to remove classes and emit events
-			window.setTimeout(function(){
-				$('.cardValue').removeClass('coffee min max');
-				$('.cornerValue').removeClass('coffee');
-				socket.emit('newRound', {roomId: roomId, ticket: BP.currentTicket});
-			},600);
-
-			// Clear out all votes
-			votes = {};
-
-		} else if(roundStatus === 2) { // Show cards
-
-			$el.text('Begin Estimating');
-			$('.card').addClass('showValue');
-
-			processVotes();
-			
-			// If there's only one person, vote data is useless
-			if(voteData.numVotes > 1) {
-
-				// Only show average if there is less than a three-card gap between lowest and highest votes
-				if(voteData.spread < 3) {
-					$('#average').show().find('.val').text(voteData.average);
-				} else {
-					$('#largeSpread').show();
-				}
-
-				// Animate fun-times if everyone votes the same
-				if(voteData.numVotes > 3 && voteData.allVotesEqual){
-					$('.card').addClass('spin');
-				}
-			}
-
-			$('.card .cardValue').each(function(i, el) {
-				var $card = $(el),
-					vote = $card.text();
-
-				if(voteData.min === vote) {
-					$card.addClass('min');
-				}
-				if(voteData.max === vote) {
-					$card.addClass('max');
-				}
-			});
-			socket.emit('roundEnd',{roomId: roomId});
+		if(roundStatus === 1) {
+			this.startNewRound(e, $el);
+		} else if(roundStatus === 2) {
+			this.endCurrentRound(e, $el);
 		}
 	}
 });

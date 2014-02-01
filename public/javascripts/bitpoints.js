@@ -169,6 +169,15 @@ BP.Page = function(options) {
 	// Attach event maps, initialize method, and any other properties to the page
 	BP.extend(this, this.defaults, options);
 
+	var $domRoot = $(this.domRoot);
+	
+	/**
+	 * Convenience $ call that limits results to children of the dom root for the page
+	 */
+	this.$ = function(selector) {
+		return $domRoot.find(selector);
+	};
+
 	var setupSocketEvents = function() {
 		var self = this,
 			handleSocketEvent = function(fn) {
@@ -201,8 +210,29 @@ BP.Page = function(options) {
 				eName = eArr[0],
 				eTarget = eArr[1];
 
-			$(self.domRoot).on(eName+'.bp',eTarget,handleDomEvent(self[handler]));
+			$domRoot.on(eName+'.bp',eTarget,handleDomEvent(self[handler]));
 		});
+	};
+
+	/**
+	 * Allow the user to define a list of elements they would like to have available on the page
+	 */
+	var setupDomElements = function(obj) {
+		var self = this;
+		BP.each(obj, function(selector, varName) {
+			self['$'+varName] = self.$(selector);
+		});
+	};
+
+	/**
+	 * Add additional DOM elements to the page. Accepts a single map or two strings: a variable name and a selector
+	 */
+	this.addDOM = function() {
+		if(arguments.length === 2 && typeof arguments[0] === 'string' && typeof arguments[1] === 'string') {
+			this['$'+arguments[0]] = this.$(arguments[1]);
+		} else if(typeof arguments[0] === 'object') {
+			setupDomElements.call(this,arguments[0]);
+		}
 	};
 
 	this.init = function() {
@@ -212,6 +242,7 @@ BP.Page = function(options) {
 
 		$(function(){
 			setupDomEvents.call(self);
+			setupDomElements.call(self, self.DOM);
 
 			if(typeof self.initialize === 'function') {
 				self.initialize.call(self);

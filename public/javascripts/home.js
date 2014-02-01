@@ -24,34 +24,42 @@ var page = new BP.Page({
 		'submit #create': 'createRoom'
 	},
 
+	DOM: {
+		user: '#user',
+		email: '#email',
+		roomId: '#room-id',
+		join: '#join',
+		title: '#title',
+		create: '#create'
+	},
+
 	initialize: function() {
 		var userData = BP.localStorage.get('user-data');
-
 		if(userData) {
-			$('#user').val(userData.user);
-			$('#email').val(userData.email);
+			this.$user.val(userData.user);
+			this.$email.val(userData.email);
 
 			// If room ID is hidden, just join the room
-			if($('#room-id').attr('type') === 'hidden') {
-				$('#join').trigger('submit');
+			if(this.$roomId.attr('type') === 'hidden') {
+				this.$join.trigger('submit');
 			}
 		}
 	},
 
-	joinRoom: function(e) {
-		if(validateForm($(this))) {
+	joinRoom: function(e, $el) {
+		if(validateForm($el)) {
 			BP.localStorage.set('user-data',{
-				user:$('#user').val(),
-				email:$('#email').val()
+				user: this.$user.val(),
+				email: this.$email.val()
 			});
-			document.location = '/join/' + $('#room-id').val() + '?user=' + $('#user').val() + '&email=' + $('#email').val();
+			document.location = '/join/' + this.$roomId.val() + '?user=' + this.$user.val() + '&email=' + this.$email.val();
 		}
 		e.preventDefault();
 	},
 
-	createRoom: function(e) {
-		if(validateForm($(this))) {
-			document.location = '/create/?title=' + $('#title').val();
+	createRoom: function(e, $el) {
+		if(validateForm($el)) {
+			document.location = '/create/?title=' + this.$title.val();
 		}
 		e.preventDefault();
 	}

@@ -2,7 +2,7 @@ extends layout
 
 block content
 	#room
-		h1 Welcome to #{title} (#{roomId})
+		h1 Welcome to #{room.title} (#{room.roomId})
 
 		ul#settings
 			li
@@ -36,9 +36,6 @@ block content
 		ul#users
 
 	script.
-		BP.room = {
-			id: #{roomId},
-			title: "#{title}"
-		};
+		BP.room = !{JSON.stringify(room)};
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/host.js")

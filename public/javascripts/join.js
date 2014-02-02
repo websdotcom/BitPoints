@@ -1,6 +1,6 @@
 var
 	socket = io.connect('http://'+window.location.host),
-	roomId = BP.room.id,
+	roomId = BP.room.roomId,
 	name = BP.user.name,
 	avatar = BP.user.avatar,
 	cardStyleTemp = '<label for="pattern">Pattern'+

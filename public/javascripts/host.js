@@ -36,7 +36,7 @@ var
 
 	socket = io.connect('http://'+window.location.host),
 
-	roomId = BP.room.id,
+	roomId = BP.room.roomId,
 	title = BP.room.title,
 
 	votes = {},

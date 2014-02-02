@@ -1,30 +1,23 @@
 extends layout
 
 block content
-	#voterRoomInfo Room: #{roomId} 
+	#voterRoomInfo Room: #{room.roomId} 
 		.status.newRound
 			| Choose a card
 			span#ticketInfo
 		.status.roundEnd Round is over
 	#voterInfo
-		img.voterImage#avatar(src='#{avatar}')
-		h3.voterName #{name}
+		img.voterImage#avatar(src='#{user.avatar}')
+		h3.voterName #{user.name}
 		#cardStyle
 			h4 Card Style
 			div#cardPreview
-				div.cardBack.argyle(style='background-color:#{cardColor}')
+				div.cardBack.argyle(style='background-color:#{user.cardColor}')
 
 		table#estimateOptions
 
 	script.
-		BP.room = {
-			id: #{roomId},
-			title: "#{title}"
-		};
-		BP.user = {
-			avatar: "#{avatar}",
-			name: "#{name}",
-			cardColor: "#{cardColor}"
-		};
+		BP.room = !{JSON.stringify(room)};
+		BP.user = !{JSON.stringify(user)};
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/join.js")

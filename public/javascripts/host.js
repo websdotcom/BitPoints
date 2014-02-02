@@ -36,18 +36,18 @@ var
 
 	socket = io.connect('http://'+window.location.host),
 
-	roomId = BP.roomId,
-	title = BP.title,
+	roomId = BP.room.id,
+	title = BP.room.title,
 
 	votes = {},
 	voteData = {},
 
 	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
 
-	userTemp =  '<li data-user="{{user}}">'+
+	userTemp =  '<li data-name="{{name}}">'+
 					'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
 					'<img class="voterImage" src="{{avatar}}" />'+
-					'<h3 class="voterName">{{user}}</h3>'+
+					'<h3 class="voterName">{{name}}</h3>'+
 					'<div class="card">'+
 						'<div class="cardBack"></div>'+
 						'<div class="cardInner">'+
@@ -90,7 +90,7 @@ var
 			deck = getDeck(),
 			minCardIdx = 0, maxCardIdx = 0;
 
-		BP.each(votes, function(vote, user) {
+		BP.each(votes, function(vote, name) {
 			if(!isNaN(vote)) {
 				voteData.total += vote;
 				if(voteData.lastVote === -1){
@@ -154,7 +154,7 @@ var page = new BP.Page({
 	},
 
 	removeVoter: function(data) {
-		this.$('li[data-user="' + data.name + '"]').remove();
+		this.$('li[data-name="' + data.name + '"]').remove();
 	},
 
 	updateTicket: function(data) {
@@ -164,7 +164,7 @@ var page = new BP.Page({
 
 	acceptVote: function(data) {
 		if(roundStatus === 1){
-			var $card = this.$('li[data-user="'+data.user+'"] .card'),
+			var $card = this.$('li[data-name="'+data.name+'"] .card'),
 				$mainValue = $card.find('.cardValue'),
 				$cornerValues = $card.find('.cornerValue'),
 				$cardBack = $card.find('.cardBack');
@@ -177,7 +177,7 @@ var page = new BP.Page({
 			}
 			$cardBack.css('background-color', data.color).removeClass('argyle denim graphpaper paisley wood goat').addClass(data.pattern);
 			$card.addClass('visible');
-			votes[data.user] = data.value;
+			votes[data.name] = data.value;
 		}
 	},
 
@@ -186,7 +186,7 @@ var page = new BP.Page({
 	},
 
 	kickVoter: function(e, $el) {
-		socket.emit('kickVoter',{roomId:roomId,user:$el.parent().data('user')});
+		socket.emit('kickVoter',{roomId:roomId,name:$el.parent().data('name')});
 	},
 
 	toggleSettingMenu: function(e, $el) {

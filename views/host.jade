@@ -36,7 +36,9 @@ block content
 		ul#users
 
 	script.
-		BP.roomId = #{roomId};
-		BP.title = "#{title}";
+		BP.room = {
+			id: #{roomId},
+			title: "#{title}"
+		};
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/host.js")

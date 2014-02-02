@@ -88,7 +88,7 @@ exports.invite = function(req, res) {
 /**
  * GET voter UI
  * @param	id	BitPoint RoomID
- * @param	user	Display name of user
+ * @param	name	Display name of user
  * @param	email	Email address used for Gravatar
  */
 exports.join = function(req, res) {
@@ -98,7 +98,7 @@ exports.join = function(req, res) {
 
 	res.render('join', {
 		roomId: req.params.id,
-		user: req.query.user || generateName(),
+		name: req.query.name || generateName(),
 		avatar: gravatar.url(req.query.email ? req.query.email : Math.random()*1000+'', {s: '100', d: 'monsterid'}),
 		cardColor: '#'+paddedColor
 	});
@@ -107,12 +107,12 @@ exports.join = function(req, res) {
 /**
  * GET as a host, force a user out of your room
  * @param	roomId	BitPoint RoomID
- * @param	user	Display name of user to kick
+ * @param	name	Display name of user to kick
  */
 exports.kick = function(req, res) {
 	res.render('kick', {
 		roomId: req.query.roomId,
-		user: req.query.user
+		name: req.query.name
 	});
 };
 

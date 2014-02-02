@@ -8,19 +8,23 @@ block content
 		.status.roundEnd Round is over
 	#voterInfo
 		img.voterImage#avatar(src='#{avatar}')
-		h3.voterName #{user}
+		h3.voterName #{name}
 		#cardStyle
 			h4 Card Style
 			div#cardPreview
 				div.cardBack.argyle(style='background-color:#{cardColor}')
 
 		table#estimateOptions
-		
+
 	script.
-		BP.roomId = #{roomId};
-		BP.title = "#{title}";
-		BP.avatar = "#{avatar}";
-		BP.user = "#{user}";
-		BP.cardColor = "#{cardColor}";
+		BP.room = {
+			id: #{roomId},
+			title: "#{title}"
+		};
+		BP.user = {
+			avatar: "#{avatar}",
+			name: "#{name}",
+			cardColor: "#{cardColor}"
+		};
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/join.js")

@@ -1,8 +1,8 @@
 var
 	socket = io.connect('http://'+window.location.host),
-	roomId = BP.roomId,
-	user = BP.user,
-	avatar = BP.avatar,
+	roomId = BP.room.id,
+	name = BP.user.name,
+	avatar = BP.user.avatar,
 	cardStyleTemp = '<label for="pattern">Pattern'+
 						'<select id="pattern">'+
 							'<option value="argyle">Argyle</option>'+
@@ -15,34 +15,7 @@ var
 					'</label>'+
 					'<label for="color">Color'+
 						'<input title="Select card color" type="color" value="{{cardColor}}" id="color"/>'+
-					'</label>',
-	setCardAttr = function(attr,style) {
-		BP.localStorage.set(user+'-card-'+attr,style);
-	},
-	getCardAttr = function(attr) {
-		return BP.localStorage.get(user+'-card-'+attr);
-	},
-	initCardStyle = function() {
-
-		// Noah is special
-		if(user === 'Noah'){
-			$('#pattern').val('goat').change();
-			$('#color').val('#EFC725').change();
-		}
-		
-		// Set any data that's in local storage
-		if(getCardAttr('pattern')) {
-			$('#pattern').val(getCardAttr('pattern')).change();
-		}
-
-		if(getCardAttr('color')) {
-			$('#color').val(getCardAttr('color')).change();
-		}
-
-		// update local storage
-		setCardAttr('pattern',$('#pattern').val());
-		setCardAttr('color',$('#color').val());
-	};
+					'</label>';
 
 var page = new BP.Page({
 
@@ -80,17 +53,47 @@ var page = new BP.Page({
 			size: 'small'
 		});
 
-		this.joinRoom();
-		initCardStyle();
-
 		this.addDOM({
 			pattern: '#pattern',
 			color: '#color'
 		});
+
+		this.joinRoom();
+		this.initCardStyle();
+	},
+
+	setCardAttr: function(attr,style) {
+		BP.localStorage.set(name+'-card-'+attr,style);
+	},
+
+	getCardAttr: function(attr) {
+		return BP.localStorage.get(name+'-card-'+attr);
+	},
+
+	initCardStyle: function() {
+
+		// Noah is special
+		if(name === 'Noah'){
+			this.$pattern.val('goat').change();
+			this.$color.val('#EFC725').change();
+		}
+		
+		// Set any data that's in local storage
+		if(this.getCardAttr('pattern')) {
+			this.$pattern.val(this.getCardAttr('pattern')).change();
+		}
+
+		if(this.getCardAttr('color')) {
+			this.$color.val(this.getCardAttr('color')).change();
+		}
+
+		// update local storage
+		this.setCardAttr('pattern',this.$pattern.val());
+		this.setCardAttr('color',this.$color.val());
 	},
 
 	joinRoom: function(data) {
-		socket.emit('joinRoom', {roomId: roomId, avatar: avatar, user: user});
+		socket.emit('joinRoom', {roomId: roomId, avatar: avatar, name: name});
 	},
 
 	reset: function(data) {
@@ -104,9 +107,9 @@ var page = new BP.Page({
 	},
 
 	processKick: function(data) {
-		if(user === data.user) {
+		if(name === data.name) {
 			socket.disconnect();
-			document.location = '/kick/?roomId=' + roomId + '&user=' + user;
+			document.location = '/kick/?roomId=' + roomId + '&name=' + name;
 		}
 	},
 
@@ -130,12 +133,12 @@ var page = new BP.Page({
 
 	changeCardPattern: function(e, $el) {
 		this.$cardBack.removeClass('argyle denim graphpaper paisley wood goat').addClass($el.val());
-		setCardAttr('pattern',$el.val());
+		this.setCardAttr('pattern',$el.val());
 	},
 
 	changeCardColor: function(e, $el) {
 		this.$cardBack.css('background-color', $el.val());
-		setCardAttr('color',$el.val());
+		this.setCardAttr('color',$el.val());
 	},
 
 	submitEstimate: function(e, $el) {
@@ -145,7 +148,7 @@ var page = new BP.Page({
 			estimate = $el.html(),
 			pattern = this.$pattern.val(),
 			color = this.$color.val().length >= 4 ? this.$color.val() : '#032E63';
-		socket.emit('newVote', {roomId: roomId, user: user, value: points, cardValue: estimate, pattern: pattern, color: color });
+		socket.emit('newVote', {roomId: roomId, name: name, value: points, cardValue: estimate, pattern: pattern, color: color });
 	}
 });
 

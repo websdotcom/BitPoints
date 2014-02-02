@@ -125,7 +125,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('joinRoom', function (data) {
-		myName = data.user;
+		myName = data.name;
 		console.log(myName+' joined '+data.roomId);
 		socket.join(data.roomId);
 		inRoom = data.roomId;

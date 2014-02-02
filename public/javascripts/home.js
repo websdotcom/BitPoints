@@ -25,7 +25,7 @@ var page = new BP.Page({
 	},
 
 	DOM: {
-		user: '#user',
+		name: '#name',
 		email: '#email',
 		roomId: '#room-id',
 		join: '#join',
@@ -36,7 +36,7 @@ var page = new BP.Page({
 	initialize: function() {
 		var userData = BP.localStorage.get('user-data');
 		if(userData) {
-			this.$user.val(userData.user);
+			this.$name.val(userData.name);
 			this.$email.val(userData.email);
 
 			// If room ID is hidden, just join the room
@@ -49,10 +49,10 @@ var page = new BP.Page({
 	joinRoom: function(e, $el) {
 		if(validateForm($el)) {
 			BP.localStorage.set('user-data',{
-				user: this.$user.val(),
+				name: this.$name.val(),
 				email: this.$email.val()
 			});
-			document.location = '/join/' + this.$roomId.val() + '?user=' + this.$user.val() + '&email=' + this.$email.val();
+			document.location = '/join/' + this.$roomId.val() + '?name=' + this.$name.val() + '&email=' + this.$email.val();
 		}
 		e.preventDefault();
 	},

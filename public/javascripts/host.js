@@ -33,21 +33,37 @@ var
 			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
 		]
 	},
+
 	socket = io.connect('http://'+window.location.host),
-	roomId = bp.roomId,
-	title = bp.title,
+
+	roomId = BP.room.roomId,
+	title = BP.room.title,
+
 	votes = {},
-	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
-	tim = (function(){var d='{{',a='}}',e='[a-z0-9_][\\.a-z0-9_]*',c=new RegExp(d+'('+e+')'+a,'gim'),b;return function(f,g){return f.replace(c,function(j,l){var n=l.split('.'),h=n.length,m=g,k=0;for(;k<h;k++){if(m===b||m===null){break;}m=m[n[k]];if(k===h-1){return m;}}});};}()),
-	userTemp = '<li data-user="{{user}}"><div title="Remove this voter from room" class="kickVoter">&times;</div><img class="voterImage" src="{{avatar}}" /><h3 class="voterName">{{user}}</h3><div class="card"><div class="cardBack"></div><div class="cardInner"><div class="cardValue"></div><div class="cornerValue topleft"></div><div class="cornerValue bottomright"></div></div></div></li>',
-	ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>',
 	voteData = {},
+
+	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
+
+	userTemp =  '<li data-name="{{name}}">'+
+					'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
+					'<img class="voterImage" src="{{avatar}}" />'+
+					'<h3 class="voterName">{{name}}</h3>'+
+					'<div class="card">'+
+						'<div class="cardBack"></div>'+
+						'<div class="cardInner">'+
+							'<div class="cardValue"></div>'+
+							'<div class="cornerValue topleft"></div>'+
+							'<div class="cornerValue bottomright"></div>'+
+						'</div>'+
+					'</div>'+
+				'</li>',
+
+	ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>',
+	
 	getDeck = function() {
 		return decks[$('input[name=deckType]:checked').val() || 'standard'];
 	},
-	updateVoterDecks = function() {
-		socket.emit('deckChange',getDeck());
-	},
+
 	getValueFromEstimate = function(estimate) {
 		var deck = getDeck(),
 			ret = NaN;
@@ -58,6 +74,7 @@ var
 			}
 		}
 	},
+
 	processVotes = function() {
 		voteData = {
 			average: -1,
@@ -73,56 +90,81 @@ var
 			deck = getDeck(),
 			minCardIdx = 0, maxCardIdx = 0;
 
-		for(var user in votes) {
-			if(votes.hasOwnProperty(user)) {
-				vote = getValueFromEstimate(votes[user]);
-				if(!isNaN(vote)) {
-					voteData.total += vote;
-					if(voteData.lastVote === -1){
-						voteData.lastVote = vote;
-						voteData.min = vote;
-						voteData.max = vote;
-					}
-					if(voteData.lastVote !== vote){ voteData.allVotesEqual = false; }
-					if(voteData.max < vote){ voteData.max = vote; }
-					if(voteData.min > vote){ voteData.min = vote; }
-					voteData.numVotes++;
+		BP.each(votes, function(vote, name) {
+			if(!isNaN(vote)) {
+				voteData.total += vote;
+				if(voteData.lastVote === -1){
+					voteData.lastVote = vote;
+					voteData.min = vote;
+					voteData.max = vote;
 				}
+				if(voteData.lastVote !== vote){ voteData.allVotesEqual = false; }
+				if(voteData.max < vote){ voteData.max = vote; }
+				if(voteData.min > vote){ voteData.min = vote; }
+				voteData.numVotes++;
 			}
-		}
-		for(var i = 0; i < deck.length; i++) {
-			if(deck[i].value === voteData.min) { minCardIdx = i; }
-			if(deck[i].value === voteData.max) { maxCardIdx = i; }
-		}
+		});
+
+		BP.each(deck, function(card, i) {
+			if(card.value === voteData.min) { minCardIdx = i; }
+			if(card.value === voteData.max) { maxCardIdx = i; }
+		});
+
 		voteData.spread = maxCardIdx - minCardIdx;
 		voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
 		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
-	},
-	updateTicketInfo = function() {
-		var key = document.cookie.replace(/(?:(?:^|.*;\s*)ticketID\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 	};
 
-$(function(){
+var page = new BP.Page({
+	
+	socket: socket,
 
-	socket.emit('createRoom', {roomId: roomId, title: title});
+	domRoot: '#room',
+	
+	socketEvents: {
+		'newVoter': 'addVoter',
+		'voterLeave': 'removeVoter',
+		'updateTicket': 'updateTicket',
+		'newVote': 'acceptVote'
+	},
 
-	socket.on('newVoter', function(data) {
-		$(tim(userTemp, data)).appendTo('#users');
-		updateVoterDecks();
-	});
+	domEvents: {
+		'change input[name=deckType]': 'updateVoterDecks',
+		'click .kickVoter': 'kickVoter',
+		'click .setting': 'toggleSettingMenu',
+		'click #showLink': 'showShareLink',
+		'click #toggleRound': 'toggleRound'
+	},
 
-	socket.on('voterLeave', function(data) {
-		$('li[data-user="' + data.name + '"]').remove();
-	});
+	DOM: {
+		users: '#users',
+		ticket: '#ticket',
+		average: '#average',
+		largeSpread: '#largeSpread'
+	},
 
-	socket.on('updateTicket', function(data) {
-		bp.currentTicket = data;
-		$('#ticket').html(tim(ticketTemp, data));
-	});
+	initialize: function() {
+		socket.emit('createRoom', {roomId: roomId, title: title});
+	},
 
-	socket.on('newVote', function(data) {
+	addVoter: function(data) {
+		var html = BP.template(userTemp, data);
+		$(html).appendTo(this.$users);
+		this.updateVoterDecks();
+	},
+
+	removeVoter: function(data) {
+		this.$('li[data-name="' + data.name + '"]').remove();
+	},
+
+	updateTicket: function(data) {
+		BP.currentTicket = data;
+		this.$ticket.html(BP.template(ticketTemp, data));
+	},
+
+	acceptVote: function(data) {
 		if(roundStatus === 1){
-			var $card = $('li[data-user="'+data.user+'"] .card'),
+			var $card = this.$('li[data-name="'+data.name+'"] .card'),
 				$mainValue = $card.find('.cardValue'),
 				$cornerValues = $card.find('.cornerValue'),
 				$cardBack = $card.find('.cardBack');
@@ -133,81 +175,94 @@ $(function(){
 				$mainValue.addClass('coffee');
 				$cornerValues.addClass('coffee');
 			}
-			$cardBack.css('background-color', data.color).removeClass('argile denim graphpaper paisley wood goat').addClass(data.pattern);
+			$cardBack.css('background-color', data.color).removeClass('argyle denim graphpaper paisley wood goat').addClass(data.pattern);
 			$card.addClass('visible');
-			votes[data.user] = data.estimate;
+			votes[data.name] = data.value;
 		}
-	});
+	},
 
-	$('input[name=deckType]').on('change', function(e) {
-		updateVoterDecks();
-	});
+	updateVoterDecks: function(e, $el) {
+		socket.emit('deckChange',getDeck());
+	},
 
-	$('#users').on('click','.kickVoter',function() {
-		socket.emit('kickVoter',{roomId:roomId,user:$(this).parent().data('user')});
-	});
+	kickVoter: function(e, $el) {
+		socket.emit('kickVoter',{roomId:roomId,name:$el.parent().data('name')});
+	},
 
-	$('#settings').on('click','.fa',function() {
-		$(this).siblings().find('.drop').removeClass('active');
-		$(this).next('.drop').toggleClass('active');
-	});
+	toggleSettingMenu: function(e, $el) {
+		$el.siblings().find('.drop').removeClass('active');
+		$el.next('.drop').toggleClass('active');
+	},
 
-	$('#showLink').on('click', function() {
-		var link = $(this).data('link');
-		bp.showModal(link);
-	});
+	showShareLink: function(e, $el) {
+		var link = $el.data('link'),
+			modal = new BP.Modal({
+				id: 'inviteLink',
+				content: link,
+				size: 'large'
+			});
 
-	$('#toggleRound').on('click', function(e){
-		roundStatus = (roundStatus%2)+1;
+		modal.show();
+	},
 
-		if(roundStatus === 1){ // Start a new round
+	startNewRound: function(e, $el) {
+		this.$average.hide().find('.val').empty();
+		this.$largeSpread.hide();
+		$el.text('Stop Estimating');
+		this.$('.card').removeClass('visible showValue spin');
 
-			$('#average').hide().find('.val').empty();
-			$('#largeSpread').hide();
-			$(this).text('Stop Estimating');
-			$('.card').removeClass('visible showValue spin');
+		// Clear out all votes
+		votes = {};
 
-			// wait until cards are fully hidden to rmeove classes and emit events
-			window.setTimeout(function(){
-				$('.cardValue').removeClass('coffee min max');
-				$('.cornerValue').removeClass('coffee');
-				socket.emit('newRound', {roomId: roomId, ticket: bp.currentTicket});
-			},600);
-			votes = {};
+		// wait until cards are fully hidden to remove classes and emit events
+		window.setTimeout(function(){
+			self.$('.cardValue').removeClass('coffee min max');
+			self.$('.cornerValue').removeClass('coffee');
+			socket.emit('newRound', {roomId: roomId, ticket: BP.currentTicket});
+		},1500);
+	},
 
-		}else if(roundStatus === 2){ // Show cards
+	endCurrentRound: function(e, $el) {
+		$el.text('Begin Estimating');
+		this.$('.card').addClass('showValue');
 
-			$(this).text('Begin Estimating');
-			$('.card').addClass('showValue');
-			processVotes();
-			
-			// If there's only one person, vote data is useless
-			if(voteData.numVotes > 1) {
+		processVotes();
+		
+		// If there's only one person, vote data is useless
+		if(voteData.numVotes > 1) {
 
-				// Only show average if there is less than a three-card gap between lowest and highest votes
-				if(voteData.spread < 3) {
-					$('#average').show().find('.val').text(voteData.average);
-				} else {
-					$('#largeSpread').show();
-				}
-				// Animate fun-times if everyone votes the same
-				if(voteData.numVotes > 3 && voteData.allVotesEqual){
-					$('.card').addClass('spin');
-				}
+			// Only show average if there is less than a three-card gap between lowest and highest votes
+			if(voteData.spread < 3) {
+				this.$average.show().find('.val').text(voteData.average);
+			} else {
+				this.$largeSpread.show();
+
+				this.$('.card .cardValue').each(function(i, el) {
+					// TODO: instead of highlighting low and high votes,
+					// highlight the outliers (cards that are not in the middle two vote values)
+					// e.g. for votes 1,3,8,13:  highlight 1 and 13
+				});
 			}
 
-			$('.card .cardValue').each(function(i, el){
-				var
-					$card = $(el),
-					vote = $card.text();
-				if(voteData.min === vote) {
-					$card.addClass('min');
-				}
-				if(voteData.max === vote) {
-					$card.addClass('max');
-				}
-			});
-			socket.emit('roundEnd',{roomId: roomId});
+			// Animate fun-times if everyone votes the same
+			if(voteData.numVotes > 3 && voteData.allVotesEqual){
+				this.$('.card').addClass('spin');
+			}
 		}
-	});
+
+		socket.emit('roundEnd',{roomId: roomId});
+	},
+
+	toggleRound: function(e, $el){
+
+		roundStatus = (roundStatus % 2) + 1;
+
+		if(roundStatus === 1) {
+			this.startNewRound(e, $el);
+		} else if(roundStatus === 2) {
+			this.endCurrentRound(e, $el);
+		}
+	}
 });
+
+page.init();

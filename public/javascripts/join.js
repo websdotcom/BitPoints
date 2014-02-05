@@ -1,108 +1,155 @@
 var
 	socket = io.connect('http://'+window.location.host),
-	roomId = bp.roomId,
-	user = bp.user,
-	avatar = bp.avatar;
+	roomId = BP.room.roomId,
+	name = BP.user.name,
+	avatar = BP.user.avatar,
+	cardStyleTemp = '<label for="pattern">Pattern'+
+						'<select id="pattern">'+
+							'<option value="argyle">Argyle</option>'+
+							'<option value="denim">Denim</option>'+
+							'<option value="graphpaper">Graph Paper</option>'+
+							'<option value="paisley">Paisley</option>'+
+							'<option value="wood">Wood</option>'+
+							'<option value="goat">Goat</option>'+
+						'</select>'+
+					'</label>'+
+					'<label for="color">Color'+
+						'<input title="Select card color" type="color" value="{{cardColor}}" id="color"/>'+
+					'</label>';
 
-$(function(){
+var page = new BP.Page({
 
-	var renderDeck = function(deck) {
-			var deckTable = $('#estimateOptions'),
-				openRow = true,
-				deckString = '<tr>';
+	socket: socket,
 
-			for(var i = 0; i < deck.length; i++) {
-				if((i+1)%3 === 1) { deckString += '<tr>'; openRow = true; }
-				deckString += '<td data-value="'+deck[i].value+'">'+deck[i].estimate+'</td>';
-				if((i+1)%3 === 0) { deckString += '</tr>'; openRow = false; }
-			}
-			if(openRow) { deckString += '</tr>'; }
-			deckTable.empty().append(deckString);
-		},
-		joinRoom = function(roomId) {
-			socket.emit('joinRoom', {roomId: roomId, avatar: avatar, user: user});
-		},
-		setCardAttr = function(attr,style) {
-			bp.setLocalItem(user+'-card-'+attr,style);
-		},
-		getCardAttr = function(attr) {
-			return bp.getLocalItem(user+'-card-'+attr);
-		},
-		initCardStyle = function() {
+	socketEvents: {
+		'roomRefresh': 'joinRoom',
+		'newRound': 'reset',
+		'roundEnd': 'endRound',
+		'deckChange': 'renderDeck',
+		'kickVoter': 'processKick'
+	},
 
-			// Noah is special
-			if(user === 'Noah'){
-				$('#pattern').val('goat').change();
-				$('#color').val('#EFC725').change();
-			}
-			
-			// Set any data that's in local storage
-			if(getCardAttr('pattern')) {
-				$('#pattern').val(getCardAttr('pattern')).change();
-			}
+	domEvents: {
+		'click #cardStyle': 'toggleCardPopover',
+		'change #pattern': 'changeCardPattern',
+		'change #color': 'changeCardColor',
+		'click .estimate': 'submitEstimate'
+	},
 
-			if(getCardAttr('color')) {
-				$('#color').val(getCardAttr('color')).change();
-			}
+	DOM: {
+		cardBack: '.cardBack',
+		lastVote: '.lastVote',
+		ticketInfo: '#ticketInfo',
+		status: '.status',
+		estimateTable: '#estimateOptions'
+	},
 
-			// update local storage
-			setCardAttr('pattern',$('#pattern').val());
-			setCardAttr('color',$('#color').val());
-		};
+	initialize: function() {
+		var html = BP.template(cardStyleTemp, { cardColor: BP.cardColor });
+		
+		this.cardStyleModal = new BP.Modal({
+			id: 'cardStylePop',
+			content: html,
+			size: 'small'
+		});
 
-	$('#cardStyle, #cardStylePop .close').on('click', function(e){
-		$('#cardStylePop').toggle();
-	});
+		this.addDOM({
+			pattern: '#pattern',
+			color: '#color'
+		});
 
-	$('#pattern').on('change', function(e){
-		$('.cardBack').removeClass('argile denim graphpaper paisley wood goat').addClass($(this).val());
-		setCardAttr('pattern',$(this).val());
-	});
+		this.joinRoom();
+		this.initCardStyle();
+	},
 
-	$('#color').on('change', function(e){
-		$('.cardBack').css('background-color', $(this).val());
-		setCardAttr('color',$(this).val());
-	});
+	setCardAttr: function(attr,style) {
+		BP.localStorage.set(name+'-card-'+attr,style);
+	},
 
+	getCardAttr: function(attr) {
+		return BP.localStorage.get(name+'-card-'+attr);
+	},
 
-	joinRoom(roomId);
+	initCardStyle: function() {
 
-	// Re-join room if it gets refreshed
-	socket.on('roomRefresh', function(data) {
-		joinRoom(roomId);
-	});
-
-	$('#estimateOptions').on('click', 'td', function(e){
-		$('.lastVote').removeClass('lastVote');
-		var
-			points = $(this).addClass('lastVote').data('value'),
-			value = $(this).html(),
-			pattern = $('#pattern').val(),
-			color = $('#color').val().length >= 4 ? $('#color').val() : '#032E63';
-		socket.emit('newVote', {roomId: roomId, user: user, estimate: points, cardValue: value, pattern: pattern, color: color });
-	});
-
-	socket.on('newRound', function(data) {
-		$('.lastVote').removeClass('lastVote');
-		if(data.ticket){ $('#ticketInfo').html(': <a href="'+data.ticket.url+'" target="_blank">'+data.ticket.key+'</a>'); }
-		$('.status').hide().filter('.newRound').show();
-	});
-
-	socket.on('roundEnd', function(data) {
-		$('.status').hide().filter('.roundEnd').show();
-	});
-
-	socket.on('kickVoter', function(data) {
-		if(user === data.user) {
-			socket.disconnect();
-			document.location = '/kick/?roomId=' + roomId + '&user=' + user;
+		// Noah is special
+		if(name === 'Noah'){
+			this.$pattern.val('goat').change();
+			this.$color.val('#EFC725').change();
 		}
-	});
+		
+		// Set any data that's in local storage
+		if(this.getCardAttr('pattern')) {
+			this.$pattern.val(this.getCardAttr('pattern')).change();
+		}
 
-	initCardStyle();
+		if(this.getCardAttr('color')) {
+			this.$color.val(this.getCardAttr('color')).change();
+		}
 
-	socket.on('deckChange', function(data) {
-		renderDeck(data);
-	});
+		// update local storage
+		this.setCardAttr('pattern',this.$pattern.val());
+		this.setCardAttr('color',this.$color.val());
+	},
 
+	joinRoom: function(data) {
+		socket.emit('joinRoom', {roomId: roomId, avatar: avatar, name: name});
+	},
+
+	reset: function(data) {
+		this.$lastVote.removeClass('lastVote');
+		if(data.ticket){ this.$ticketInfo.html(': <a href="'+data.ticket.url+'" target="_blank">'+data.ticket.key+'</a>'); }
+		this.$status.hide().filter('.newRound').show();
+	},
+
+	endRound: function(data) {
+		this.$status.hide().filter('.roundEnd').show();
+	},
+
+	processKick: function(data) {
+		if(name === data.name) {
+			socket.disconnect();
+			document.location = '/kick/?roomId=' + roomId + '&name=' + name;
+		}
+	},
+
+	renderDeck: function(deck) {
+		var deckTable = this.$estimateTable,
+			openRow = true,
+			deckString = '<tr>';
+
+		for(var i = 0; i < deck.length; i++) {
+			if((i+1)%3 === 1) { deckString += '<tr>'; openRow = true; }
+			deckString += '<td class="estimate" data-value="'+deck[i].value+'">'+deck[i].estimate+'</td>';
+			if((i+1)%3 === 0) { deckString += '</tr>'; openRow = false; }
+		}
+		if(openRow) { deckString += '</tr>'; }
+		deckTable.empty().append(deckString);
+	},
+
+	toggleCardPopover: function(e, $el) {
+		this.cardStyleModal.toggle();
+	},
+
+	changeCardPattern: function(e, $el) {
+		this.$cardBack.removeClass('argyle denim graphpaper paisley wood goat').addClass($el.val());
+		this.setCardAttr('pattern',$el.val());
+	},
+
+	changeCardColor: function(e, $el) {
+		this.$cardBack.css('background-color', $el.val());
+		this.setCardAttr('color',$el.val());
+	},
+
+	submitEstimate: function(e, $el) {
+		$('.lastVote').removeClass('lastVote');
+
+		var points = $el.addClass('lastVote').data('value'),
+			estimate = $el.html(),
+			pattern = this.$pattern.val(),
+			color = this.$color.val().length >= 4 ? this.$color.val() : '#032E63';
+		socket.emit('newVote', {roomId: roomId, name: name, value: points, cardValue: estimate, pattern: pattern, color: color });
+	}
 });
+
+page.init();

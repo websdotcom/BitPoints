@@ -57,9 +57,11 @@ exports.host = function(req, res) {
 
 	res.cookie('roomID', id, { maxAge: 900000 });
 	res.render('host', {
-		roomId: id,
+		room: {
+			roomId: id,
+			title: title
+		},
 		inviteId: (+id).toString(36),
-		title: title,
 		appHost: req.app.config.appHost
 	});
 };
@@ -88,31 +90,34 @@ exports.invite = function(req, res) {
 /**
  * GET voter UI
  * @param	id	BitPoint RoomID
- * @param	user	Display name of user
+ * @param	name	Display name of user
  * @param	email	Email address used for Gravatar
  */
 exports.join = function(req, res) {
 	var colorPad = '000000',
 		color = Math.floor(Math.random()*16777215).toString(16),
 		paddedColor = colorPad.substring(0,6-color.length)+color;
-
 	res.render('join', {
-		roomId: req.params.id,
-		user: req.query.user || generateName(),
-		avatar: gravatar.url(req.query.email ? req.query.email : Math.random()*1000+'', {s: '100', d: 'monsterid'}),
-		cardColor: '#'+paddedColor
+		room: {
+			roomId: req.params.id
+		},
+		user: {
+			name: req.query.name || generateName(),
+			avatar: gravatar.url(req.query.email ? req.query.email : Math.random()*1000+'', {s: '100', d: 'monsterid'}),
+			cardColor: '#'+paddedColor
+		}
 	});
 };
 
 /**
  * GET as a host, force a user out of your room
  * @param	roomId	BitPoint RoomID
- * @param	user	Display name of user to kick
+ * @param	name	Display name of user to kick
  */
 exports.kick = function(req, res) {
 	res.render('kick', {
 		roomId: req.query.roomId,
-		user: req.query.user
+		name: req.query.name
 	});
 };
 

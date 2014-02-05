@@ -17,34 +17,52 @@ var validateForm = function(form) {
 	return !form.hasClass('error');
 };
 
-$(function(){
-	var userData = bp.getLocalUserData();
+var page = new BP.Page({
 
-	$('#join').on('submit', function(e) {
-		if(validateForm($(this))) {
-			bp.setLocalItem('user-data',{
-				user:$('#user').val(),
-				email:$('#email').val()
+	domEvents: {
+		'submit #join': 'joinRoom',
+		'submit #create': 'createRoom'
+	},
+
+	DOM: {
+		name: '#name',
+		email: '#email',
+		roomId: '#room-id',
+		join: '#join',
+		title: '#title',
+		create: '#create'
+	},
+
+	initialize: function() {
+		var userData = BP.localStorage.get('user-data');
+		if(userData) {
+			this.$name.val(userData.name);
+			this.$email.val(userData.email);
+
+			// If room ID is hidden, just join the room
+			if(this.$roomId.attr('type') === 'hidden') {
+				this.$join.trigger('submit');
+			}
+		}
+	},
+
+	joinRoom: function(e, $el) {
+		if(validateForm($el)) {
+			BP.localStorage.set('user-data',{
+				name: this.$name.val(),
+				email: this.$email.val()
 			});
-			document.location = '/join/' + $('#room-id').val() + '?user=' + $('#user').val() + '&email=' + $('#email').val();
+			document.location = '/join/' + this.$roomId.val() + '?name=' + this.$name.val() + '&email=' + this.$email.val();
 		}
 		e.preventDefault();
-	});
+	},
 
-	$('#create').on('submit', function(e) {
-		if(validateForm($(this))) {
-			document.location = '/create/?title=' + $('#title').val();
+	createRoom: function(e, $el) {
+		if(validateForm($el)) {
+			document.location = '/create/?title=' + this.$title.val();
 		}
 		e.preventDefault();
-	});
-
-	if(userData) {
-		$('#user').val(userData.user);
-		$('#email').val(userData.email);
-
-		// If room ID is hidden, just join the room
-		if($('#room-id').attr('type') === 'hidden') {
-			$('#join').trigger('submit');
-		}
 	}
 });
+
+page.init();

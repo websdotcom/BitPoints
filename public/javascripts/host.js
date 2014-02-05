@@ -44,7 +44,7 @@ var
 
 	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
 
-	userTemp =  '<li data-name="{{name}}">'+
+	userTemp =  '<li data-name="{{name}}" data-uid="{{uid}}">'+
 					'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
 					'<img class="voterImage" src="{{avatar}}" />'+
 					'<h3 class="voterName">{{name}}</h3>'+
@@ -154,7 +154,7 @@ var page = new BP.Page({
 	},
 
 	removeVoter: function(data) {
-		this.$('li[data-name="' + data.name + '"]').remove();
+		this.$('li[data-uid="' + data.uid + '"]').remove();
 	},
 
 	updateTicket: function(data) {
@@ -164,7 +164,7 @@ var page = new BP.Page({
 
 	acceptVote: function(data) {
 		if(roundStatus === 1){
-			var $card = this.$('li[data-name="'+data.name+'"] .card'),
+			var $card = this.$('li[data-uid="'+data.uid+'"] .card'),
 				$mainValue = $card.find('.cardValue'),
 				$cornerValues = $card.find('.cornerValue'),
 				$cardBack = $card.find('.cardBack');
@@ -186,7 +186,7 @@ var page = new BP.Page({
 	},
 
 	kickVoter: function(e, $el) {
-		socket.emit('kickVoter',{roomId:roomId,name:$el.parent().data('name')});
+		socket.emit('kickVoter',{roomId:roomId,uid:$el.parent().data('uid')});
 	},
 
 	toggleSettingMenu: function(e, $el) {

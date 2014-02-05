@@ -105,7 +105,8 @@ server.listen(app.get('port'));
 io.sockets.on('connection', function (socket) {
 	var inRoom = '',
 		host = false,
-		myName;
+		myName,
+		uid;
 
 	socket.on('createRoom', function (data) {
 		var room = new models.Room();
@@ -125,11 +126,21 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('joinRoom', function (data) {
+
+		// Set client socket metadata.
 		myName = data.name;
-		console.log(myName+' joined '+data.roomId);
-		socket.join(data.roomId);
 		inRoom = data.roomId;
+		uid = myName + new Date().getTime();
+		data.uid = uid;
+
+		// Join the room.
+		socket.join(data.roomId);
 		io.sockets.in(inRoom).emit('newVoter', data);
+
+		// Send the user their uid.
+		socket.emit('uidAssignment', {uid: uid});
+
+		// Update mongo with the room join count.
 		models.Room.findOne({ roomId: inRoom }, function(err, room){
 			if(err || !room){ console.error('Couldn\'t find room '+inRoom); return; }
 			room.addUser(data);
@@ -138,7 +149,7 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('disconnect', function(data) {
 		if (!host) {
-			io.sockets.in(inRoom).emit('voterLeave', {name: myName});
+			io.sockets.in(inRoom).emit('voterLeave', {uid: uid});
 		}
 	});
 

@@ -3,6 +3,7 @@ var
 	roomId = BP.room.roomId,
 	name = BP.user.name,
 	avatar = BP.user.avatar,
+	uid,
 	cardStyleTemp = '<label for="pattern">Pattern'+
 						'<select id="pattern">'+
 							'<option value="argyle">Argyle</option>'+
@@ -26,7 +27,8 @@ var page = new BP.Page({
 		'newRound': 'reset',
 		'roundEnd': 'endRound',
 		'deckChange': 'renderDeck',
-		'kickVoter': 'processKick'
+		'kickVoter': 'processKick',
+		'uidAssignment': 'saveUid'
 	},
 
 	domEvents: {
@@ -107,10 +109,15 @@ var page = new BP.Page({
 	},
 
 	processKick: function(data) {
-		if(name === data.name) {
+		if(uid === data.uid) {
 			socket.disconnect();
 			document.location = '/kick/?roomId=' + roomId + '&name=' + name;
 		}
+	},
+
+	saveUid: function(data) {
+		console.log(data);
+		uid = data.uid;
 	},
 
 	renderDeck: function(deck) {
@@ -148,7 +155,7 @@ var page = new BP.Page({
 			estimate = $el.html(),
 			pattern = this.$pattern.val(),
 			color = this.$color.val().length >= 4 ? this.$color.val() : '#032E63';
-		socket.emit('newVote', {roomId: roomId, name: name, value: points, cardValue: estimate, pattern: pattern, color: color });
+		socket.emit('newVote', {uid: uid, roomId: roomId, name: name, value: points, cardValue: estimate, pattern: pattern, color: color });
 	}
 });
 

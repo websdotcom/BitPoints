@@ -1,6 +1,6 @@
 {
 	"port": 3000,
-	"mongoHost": "localhost",
+	"mongoHost": "localhost:17017",
 	"debug": true,
 	"ioLogLevel": 2,
 	"appHost": "localhost:3000"

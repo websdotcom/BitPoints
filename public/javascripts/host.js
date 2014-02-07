@@ -75,6 +75,14 @@ var
 		}
 	},
 
+	getNumVotes = function() {
+		var count = 0;
+		BP.each(votes,function() {
+			count++;
+		});
+		return count;
+	},
+
 	processVotes = function() {
 		voteData = {
 			average: -1,
@@ -145,6 +153,7 @@ var page = new BP.Page({
 
 	initialize: function() {
 		socket.emit('createRoom', {roomId: roomId, title: title});
+		this.useNotifications = BP.localStorage.get('useNotifications');
 	},
 
 	addVoter: function(data) {
@@ -178,6 +187,13 @@ var page = new BP.Page({
 			$cardBack.css('background-color', data.color).removeClass('argyle denim graphpaper paisley wood goat').addClass(data.pattern);
 			$card.addClass('visible');
 			votes[data.name] = data.value;
+
+			if(this.useNotifications && getNumVotes() === this.$users.find('li').length) {
+				BP.Notification.send({
+					title: 'BitPoints - '+BP.room.title,
+					body: 'All votes are in!'
+				});
+			}
 		}
 	},
 

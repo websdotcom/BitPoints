@@ -18,6 +18,10 @@ block mainContent
 			form(id="create", action="/create")
 				input#title.halfwidth(name='title',type='text',placeholder='Room Title*',data-required='true')
 				input#join-room.halfwidth(type='submit',value='Create a Room')
+				.roomOptions
+					label(for='notifications')
+						input#notifications(name='notifications',type='checkbox',value='yes')
+						span Get Room Notifications
 
 block supplementalContent
 	ul

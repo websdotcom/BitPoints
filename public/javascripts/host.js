@@ -45,6 +45,7 @@ var
 	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
 
 	userTemp =  '<li data-name="{{name}}" data-uid="{{uid}}">'+
+					'<div title="Don\'t count this voter\'s estimates" class="toggleProbation">P</div>'+
 					'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
 					'<img class="voterImage" src="{{avatar}}" />'+
 					'<h3 class="voterName">{{name}}</h3>'+
@@ -138,6 +139,7 @@ var page = new BP.Page({
 
 	domEvents: {
 		'change input[name=deckType]': 'updateVoterDecks',
+		'click .toggleProbation': 'toggleProbation',
 		'click .kickVoter': 'kickVoter',
 		'click .setting': 'toggleSettingMenu',
 		'click #showLink': 'showShareLink',
@@ -173,7 +175,9 @@ var page = new BP.Page({
 
 	acceptVote: function(data) {
 		if(roundStatus === 1){
-			var $card = this.$('li[data-uid="'+data.uid+'"] .card'),
+			var
+				$voter = this.$('li[data-uid="'+data.uid+'"]'),
+				$card = $voter.find('.card'),
 				$mainValue = $card.find('.cardValue'),
 				$cornerValues = $card.find('.cornerValue'),
 				$cardBack = $card.find('.cardBack');
@@ -186,19 +190,26 @@ var page = new BP.Page({
 			}
 			$cardBack.css('background-color', data.color).removeClass('argyle denim graphpaper paisley wood goat').addClass(data.pattern);
 			$card.addClass('visible');
-			votes[data.name] = data.value;
 
-			if(this.useNotifications && getNumVotes() === this.$users.find('li').length) {
+			if(!$voter.data('probation'))
+				votes[data.uid] = data.value;
+
+			if(this.useNotifications && getNumVotes() === this.$users.find('li:not([data-probation=true])').length) {
 				BP.Notification.send({
 					title: 'BitPoints - '+BP.room.title,
 					body: 'All votes are in!'
 				});
 			}
+
 		}
 	},
 
 	updateVoterDecks: function(e, $el) {
 		socket.emit('deckChange',getDeck());
+	},
+
+	toggleProbation: function(e, $el) {
+		$el.parent().attr('data-probation', !$el.parent().data('probation'));
 	},
 
 	kickVoter: function(e, $el) {

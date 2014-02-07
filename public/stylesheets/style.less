@@ -605,12 +605,10 @@ ul#users {
 		.card {
 			.cardStyle();
 		}
-		.kickVoter {
+		.kickVoter, .toggleProbation {
 			display: none;
 			position: absolute;
-			top: 66px;
 			right: 3px;
-			background: rgb(211, 39, 39);
 			width: 20px;
 			height: 40px;
 			line-height: 38px;
@@ -618,12 +616,33 @@ ul#users {
 			color: white;
 			border: solid rgba(255,255,255,0.5);
 			border-width: 1px 1px 1px 0;
-			.border-radius(0 5px 5px 0);
 			cursor: pointer;
 		}
+		.toggleProbation {
+			top: 34px;
+			.border-radius-tr(5px);
+			background: #ff9500;
+			&:hover {
+				background: darken(#ff9500, 2);
+			}
+		}
+		.kickVoter {
+			top: 76px;
+			.border-radius-br(5px);
+			background: rgb(211, 39, 39);
+			&:hover {
+				background: darken(rgb(211, 39, 39), 2);
+			}
+		}
 
-		&:hover .kickVoter {
-			display: block;
+		&:hover {
+			.kickVoter, .toggleProbation {
+				display: block;
+			}
+		}
+
+		&[data-probation="true"] {
+			opacity: .6;
 		}
 	}
 }

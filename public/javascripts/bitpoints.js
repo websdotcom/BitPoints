@@ -145,6 +145,58 @@ BP.Modal = function(options) {
 	};
 };
 
+BP.Notification = (function(){
+	var hasPermission,
+		requestPermission,
+		send,
+		supported = false;
+
+	if('Notification' in window) {
+
+		hasPermission = function() {
+			return window.Notification.permission === 'granted';
+		};
+		requestPermission = function() {
+			window.Notification.requestPermission(function(permission) {
+				window.Notification.permission = permission;
+			});
+		};
+		send = function(options) {
+			var title = options.title;
+			delete options.title;
+			options.icon = '/images/notification.png';
+			new window.Notification(title,options);
+		};
+		supported = true;
+
+	} else if('webkitNotifications' in window) {
+
+		hasPermission = function() {
+			return window.webkitNotifications.checkPermission() === 0;
+		};
+		requestPermission = function() {
+			window.webkitNotifications.requestPermission();
+		};
+		send = function(options) {
+			var n = window.webkitNotifications.createNotification(
+				'/images/notification.png',
+				options.title,
+				options.body
+			);
+			n.show();
+		};
+		supported = true;
+	}
+
+	return {
+		hasPermission: hasPermission,
+		requestPermission: requestPermission,
+		send: send,
+		supported: supported
+	};
+
+}());
+
 /**
  * An encapsulation of the events and functionality necessary for a page
  * within our app

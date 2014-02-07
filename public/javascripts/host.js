@@ -188,7 +188,7 @@ var page = new BP.Page({
 			$card.addClass('visible');
 			votes[data.name] = data.value;
 
-			if(getNumVotes() === this.$users.find('li').length) {
+			if(this.useNotifications && getNumVotes() === this.$users.find('li').length) {
 				BP.Notification.send({
 					title: 'BitPoints - '+BP.room.title,
 					body: 'All votes are in!'

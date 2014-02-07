@@ -145,12 +145,24 @@ BP.Modal = function(options) {
 	};
 };
 
+/**
+ * A memoized cross-browser Notification utility for sending desktop notifications.
+ * If no Notification API is available, create no-op methods to prevent exceptions.
+ * I avoided using mozNotification because I think MDN may hunt me down if I use it.
+ *
+ * Supported Browsers:
+ *  - Chrome 5+
+ *  - Firefox 22+
+ *  - Safari 6+ (OS 10.8+ only, because Apple)
+ *
+ */
 BP.Notification = (function(){
 	var hasPermission,
 		requestPermission,
 		send,
-		supported = false;
+		supported;
 
+	// Safari 6+, Chrome 22+, Firefox 22+
 	if('Notification' in window) {
 
 		hasPermission = function() {
@@ -169,6 +181,7 @@ BP.Notification = (function(){
 		};
 		supported = true;
 
+	// Chrome 5+
 	} else if('webkitNotifications' in window) {
 
 		hasPermission = function() {
@@ -186,6 +199,13 @@ BP.Notification = (function(){
 			n.show();
 		};
 		supported = true;
+
+	// Unsupported browser
+	} else {
+		hasPermission = function() { return false; },
+		requestPermission = function() {},
+		send = function() {},
+		supported = false;
 	}
 
 	return {

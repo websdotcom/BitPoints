@@ -47,7 +47,7 @@ var page = new BP.Page({
 	},
 
 	initialize: function() {
-		var html = BP.template(cardStyleTemp, { cardColor: BP.cardColor });
+		var html = BP.template(cardStyleTemp, { cardColor: BP.user.cardColor });
 		
 		this.cardStyleModal = new BP.Modal({
 			id: 'cardStylePop',

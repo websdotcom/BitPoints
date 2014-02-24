@@ -7,7 +7,7 @@ Effortlessly point tickets visually and collaboratively over the internet in rea
 * NodeJS
 
 ## Install it
-`git clone https://github.com/twisterghost/BitPoints.git`
+`git clone https://github.com/websdotcom/BitPoints.git`
 
 `npm install`
 

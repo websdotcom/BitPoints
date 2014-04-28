@@ -228,6 +228,15 @@ var page = new BP.Page({
 				content: link,
 				size: 'large'
 			});
+		if (!window.welcomed && window.SpeechSynthesisUtterance) {
+			var chars = link.substring(link.lastIndexOf("/")+1),
+				letters = chars.split('').join(' '),
+				text = 'Today\'s BitPoints is brought to you by the letters '+letters,
+				speach= new window.SpeechSynthesisUtterance();
+			speach.text = text;
+			window.speachSynthesis.speak(speach);
+			window.welcomed = true;
+		}
 
 		modal.show();
 	},

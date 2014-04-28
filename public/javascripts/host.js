@@ -231,10 +231,10 @@ var page = new BP.Page({
 		if (!window.welcomed && window.SpeechSynthesisUtterance) {
 			var chars = link.substring(link.lastIndexOf("/")+1),
 				letters = chars.split('').join(' '),
-				text = 'Today\'s BitPoints is brought to you by the letters '+letters,
+				text = 'Today\'s BitPoints are brought to you by the letters '+letters,
 				speach= new window.SpeechSynthesisUtterance();
 			speach.text = text;
-			window.speachSynthesis.speak(speach);
+			window.speechSynthesis.speak(speach);
 			window.welcomed = true;
 		}
 

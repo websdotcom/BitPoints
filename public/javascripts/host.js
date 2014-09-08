@@ -13,8 +13,9 @@ var
 			{ value: 20, estimate: '20' },
 			{ value: 40, estimate: '40' },
 			{ value: 100, estimate: '100' },
-			{ value: NaN, estimate: '&infin;' },
-			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
+			{ value: Infinity, estimate: '&infin;' },
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' },
+			{ value: NaN, estimate: 'ಠ_ಠ'}
 		],
 		'fibonacci': [
 			{ value: NaN, estimate: '?' },
@@ -29,8 +30,9 @@ var
 			{ value: 34, estimate: '34' },
 			{ value: 55, estimate: '55' },
 			{ value: 89, estimate: '89' },
-			{ value: NaN, estimate: '&infin;' },
-			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
+			{ value: Infinity, estimate: '&infin;' },
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' },
+			{ value: NaN, estimate: 'ಠ_ಠ'}
 		]
 	},
 
@@ -60,7 +62,7 @@ var
 				'</li>',
 
 	ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>',
-	
+
 	getDeck = function() {
 		return decks[$('input[name=deckType]:checked').val() || 'standard'];
 	},
@@ -125,11 +127,11 @@ var
 	};
 
 var page = new BP.Page({
-	
+
 	socket: socket,
 
 	domRoot: '#room',
-	
+
 	socketEvents: {
 		'newVoter': 'addVoter',
 		'voterLeave': 'removeVoter',
@@ -254,7 +256,7 @@ var page = new BP.Page({
 		this.$('.card').addClass('showValue');
 
 		processVotes();
-		
+
 		// If there's only one person, vote data is useless
 		if(voteData.numVotes > 1) {
 

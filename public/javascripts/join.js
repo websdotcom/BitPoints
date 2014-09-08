@@ -3,6 +3,7 @@ var
 	roomId = BP.room.roomId,
 	name = BP.user.name,
 	avatar = BP.user.avatar,
+	roomName = 'BitPoints',
 	uid,
 	cardStyleTemp = '<label for="pattern">Pattern'+
 						'<select id="pattern">'+
@@ -28,7 +29,8 @@ var page = new BP.Page({
 		'roundEnd': 'endRound',
 		'deckChange': 'renderDeck',
 		'kickVoter': 'processKick',
-		'uidAssignment': 'saveUid'
+		'uidAssignment': 'saveUid',
+		'roomName': 'updateRoomName'
 	},
 
 	domEvents: {
@@ -43,12 +45,13 @@ var page = new BP.Page({
 		lastVote: '.lastVote',
 		ticketInfo: '#ticketInfo',
 		status: '.status',
-		estimateTable: '#estimateOptions'
+		estimateTable: '#estimateOptions',
+		roomName: '#roomName'
 	},
 
 	initialize: function() {
 		var html = BP.template(cardStyleTemp, { cardColor: BP.user.cardColor });
-		
+
 		this.cardStyleModal = new BP.Modal({
 			id: 'cardStylePop',
 			content: html,
@@ -62,6 +65,10 @@ var page = new BP.Page({
 
 		this.joinRoom();
 		this.initCardStyle();
+	},
+
+	updateRoomName: function(data) {
+		this.$roomName.text(data.name);
 	},
 
 	setCardAttr: function(attr,style) {
@@ -79,7 +86,7 @@ var page = new BP.Page({
 			this.$pattern.val('goat').change();
 			this.$color.val('#EFC725').change();
 		}
-		
+
 		// Set any data that's in local storage
 		if(this.getCardAttr('pattern')) {
 			this.$pattern.val(this.getCardAttr('pattern')).change();

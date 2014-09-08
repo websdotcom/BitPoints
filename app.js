@@ -144,6 +144,7 @@ io.sockets.on('connection', function (socket) {
 		models.Room.findOne({ roomId: inRoom }, function(err, room){
 			if(err || !room){ console.error('Couldn\'t find room '+inRoom); return; }
 			room.addUser(data);
+			socket.emit('roomName', {name: room.title});
 		});
 	});
 

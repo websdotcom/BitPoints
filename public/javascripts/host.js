@@ -158,6 +158,9 @@ var page = new BP.Page({
 	initialize: function() {
 		socket.emit('createRoom', {roomId: roomId, title: title});
 		this.useNotifications = BP.localStorage.get('useNotifications');
+		var inviteId = $("#showLink").attr('data-link');
+		$("#showLink").attr('data-link', document.location.host + '/' + inviteId);
+		$("#inviteUrl").text(document.location.host + '/' + inviteId);
 	},
 
 	addVoter: function(data) {

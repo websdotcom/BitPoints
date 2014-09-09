@@ -22,12 +22,13 @@ block content
 					.dropItem
 						span.title Invite URL:
 						.control
-							span #{appHost}/#{inviteId}
-								i.fa.fa-share-square-o#showLink(data-link="#{appHost}/#{inviteId}")
+							span
+								span#inviteUrl #{inviteId}
+								i.fa.fa-share-square-o#showLink(data-link="#{inviteId}")
 
 		button#toggleRound Begin Estimating
 
-		#average The average estimate is 
+		#average The average estimate is
 			span.val
 		#largeSpread Looks like there's some uncertainty about this estimate...
 

@@ -19,6 +19,10 @@ block content
 								label(for="fibonacci")
 									input(type="radio", value="fibonacci", name="deckType", id="fibonacci")
 									span Fibonacci
+							.option
+								label(for="letters")
+									input(type="radio", value="letters", name="deckType", id="letters")
+									span Letters
 					.dropItem
 						span.title Invite URL:
 						.control
@@ -28,7 +32,7 @@ block content
 
 		button#toggleRound Begin Estimating
 
-		#average The average estimate is
+		#average The average estimate is&nbsp;
 			span.val
 		#largeSpread Looks like there's some uncertainty about this estimate...
 

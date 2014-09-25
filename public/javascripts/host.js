@@ -33,6 +33,16 @@ var
 			{ value: Infinity, estimate: '&infin;' },
 			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' },
 			{ value: NaN, estimate: 'ಠ_ಠ'}
+		],
+		'letters': [
+			{ value: 0, estimate: 'A' },
+			{ value: 0, estimate: 'B' },
+			{ value: 0, estimate: 'C' },
+			{ value: 0, estimate: 'D' },
+			{ value: 0, estimate: 'E' },
+			{ value: 0, estimate: 'F' },
+			{ value: 0, estimate: '?' },
+			{ value: 0, estimate: '<i class="fa fa-coffee"></i>' }
 		]
 	},
 

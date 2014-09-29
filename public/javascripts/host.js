@@ -36,13 +36,23 @@ var
 		],
 		'letters': [
 			{ value: 0, estimate: 'A' },
-			{ value: 0, estimate: 'B' },
-			{ value: 0, estimate: 'C' },
-			{ value: 0, estimate: 'D' },
-			{ value: 0, estimate: 'E' },
-			{ value: 0, estimate: 'F' },
-			{ value: 0, estimate: '?' },
-			{ value: 0, estimate: '<i class="fa fa-coffee"></i>' }
+			{ value: 1, estimate: 'B' },
+			{ value: 2, estimate: 'C' },
+			{ value: 3, estimate: 'D' },
+			{ value: 4, estimate: 'E' },
+			{ value: 5, estimate: 'F' },
+			{ value: NaN, estimate: '?' },
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
+		],
+		'tshirt': [
+			{ value: 0, estimate: 'XS' },
+			{ value: 1, estimate: 'S' },
+			{ value: 2, estimate: 'M' },
+			{ value: 3, estimate: 'L' },
+			{ value: 4, estimate: 'XL' },
+			{ value: NaN, estimate: '?' },
+			{ value: Infinity, estimate: '&infin;' },
+			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
 		]
 	},
 

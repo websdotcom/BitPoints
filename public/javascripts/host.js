@@ -263,6 +263,7 @@ var page = new BP.Page({
 		this.$largeSpread.hide();
 		$el.text('Stop Estimating');
 		this.$('.card').removeClass('visible showValue spin');
+		$('html').css('backgroundColor', '#A4CC09');
 
 		// Clear out all votes
 		votes = {};
@@ -278,6 +279,7 @@ var page = new BP.Page({
 	endCurrentRound: function(e, $el) {
 		$el.text('Begin Estimating');
 		this.$('.card').addClass('showValue');
+		$('html').css('backgroundColor', '#2581FF');
 
 		processVotes();
 

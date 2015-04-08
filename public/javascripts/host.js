@@ -184,6 +184,7 @@ var page = new BP.Page({
 	},
 
 	addVoter: function(data) {
+		data.name = escape(data.name);
 		var html = BP.template(userTemp, data);
 		$(html).appendTo(this.$users);
 		this.updateVoterDecks();

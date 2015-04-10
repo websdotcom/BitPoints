@@ -14,7 +14,7 @@
 @link: #fff;
 @hover: darken(@link,15%);
 @primaryColor: #2581FF;
-@accentColor: #A4CC09;
+@accentColor: #E8800C;
 @errorColor: #FF4136;
 @selection: desaturate(darken(@primaryColor,5%),5%);
 @sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -24,17 +24,18 @@
 /**
  * LESS Mixins
  */
-.button(){
+.button(@color: @accentColor){
 	padding: 0 10px;
 	height: 1.875em;
 	border: none;
 	font: normal 1.2em/1.875em @title;
-	background: @accentColor;
+	background: @color;
 	color: @darktext;
 	cursor: pointer;
 	.border-radius(6px);
+	transition: background-color 0.3s ease;
 	&:hover {
-		background: desaturate(darken(@accentColor,5%),5%);
+		background: desaturate(darken(@color,5%),5%);
 	}
 }
 
@@ -175,6 +176,10 @@ ol, ul { list-style: none; }
 html {
 	padding-bottom: 40px;
 	background: @primaryColor;
+	transition: background-color 1.2s ease;
+	&.voting {
+		background-color: @accentColor;
+	}
 
 	body {
 		font: 400 16px/1.8em @sans;
@@ -240,23 +245,23 @@ html {
 
 
 						&:before, &:after {
-						  content: "";
-						  position: absolute;
-						  height: 1px;
-						  border-top: 1px solid white;
-						  top: 50%;
-						  width: 600px;
+							content: "";
+							position: absolute;
+							height: 1px;
+							border-top: 1px solid white;
+							top: 50%;
+							width: 600px;
 						}
 
 						&:before {
 							right: 100%;
-	  						margin-right: 10px;
-	  					}
+								margin-right: 10px;
+							}
 						&:after {
 							left: 100%;
-	  						margin-left: 10px;
-	  					}
-	  				}
+								margin-left: 10px;
+							}
+						}
 				}
 
 				input[type=text] {
@@ -482,8 +487,11 @@ body { perspective: 1000; }
 }
 
 #toggleRound {
-	.button();
+	.button(@accentColor);
 	float: left;
+	.voting & {
+		.button(@primaryColor);
+	}
 }
 
 #settings {
@@ -557,18 +565,26 @@ body { perspective: 1000; }
 #largeSpread {
 	display: none;
 	float: left;
-	margin-left: 2em;
-	line-height: 2em;
+	margin-left: 1.875em;
+	font-size: 1.2em;
+	line-height: 1.875em;
 
 	.val {
+		display: inline-block;
+		margin: -3px 0;
+		padding: 0 10px;
+		border: 1px solid rgba(255, 255, 255, 0.3);
 		font-weight: bold;
+		background: rgba(0, 0, 0, 0.25);
+		border-radius: 5px;
 	}
 }
 
 #ticket {
 	float: left;
-	margin-left: 2em;
-	line-height: 2em;
+	margin-left: 1.875em;
+	font-size: 1.2em;
+	line-height: 1.875em;
 	.key {
 		font-weight: bold;
 	}

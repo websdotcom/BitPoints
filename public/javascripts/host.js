@@ -184,7 +184,7 @@ var page = new BP.Page({
 	},
 
 	addVoter: function(data) {
-		data.name = escape(data.name);
+		data.name = $('<span></span>').html(data.name).text();
 		var html = BP.template(userTemp, data);
 		$(html).appendTo(this.$users);
 		this.updateVoterDecks();
@@ -263,8 +263,7 @@ var page = new BP.Page({
 		this.$largeSpread.hide();
 		$el.text('Stop Estimating');
 		this.$('.card').removeClass('visible showValue spin');
-		$el.css('backgroundColor', '#2581FF');
-		$('html').css('backgroundColor', '#A4CC09');
+		$('html').addClass('voting');
 
 		// Clear out all votes
 		votes = {};
@@ -280,8 +279,7 @@ var page = new BP.Page({
 	endCurrentRound: function(e, $el) {
 		$el.text('Begin Estimating');
 		this.$('.card').addClass('showValue');
-		$('html').css('backgroundColor', '#2581FF');
-		$el.css('backgroundColor', '#A4CC09');
+		$('html').removeClass('voting');
 
 		processVotes();
 

@@ -1,7 +1,7 @@
 exports.ticketing = require('./ticketing');
 
-var gravatar = require('gravatar'),
-	_ = require('lodash');
+var gravatar = require('gravatar');
+var _ = require('lodash');
 
 /**
  * GET homepage

@@ -1,5 +1,5 @@
-var mongoose = require('mongoose'),
-	Schema = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var RoomSchema = new Schema({
 	roomId: { type: Number, required: true, index: { unique: true } },

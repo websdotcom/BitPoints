@@ -1,51 +1,47 @@
 
-var
-	// Module dependencies
-	express = require('express'),
-	http = require('http'),
-	path = require('path'),
-	mongoose = require('mongoose'),
-	fs = require('fs'),
-	_ = require('lodash'),
-	routes = require('./routes'),
-	config = require('./config.js').config,
+var express = require('express');
+var http = require('http');
+var path = require('path');
+var mongoose = require('mongoose');
+var fs = require('fs');
+var _ = require('lodash');
+var routes = require('./routes');
+var config = require('./config.js').config;
+var app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+var models = {};
+var modelsDir = __dirname + '/models';
 
-	// Initialize express app, server, and sockets
-	app = express(),
-	server = http.createServer(app),
-	io = require('socket.io').listen(server),
-	models = {},
-	modelsDir = __dirname + '/models',
-
-	/**
-	 * Method for passing events between host and clients
-	 * Use this method only when incoming event name matches
-	 * outgoing event name and no data massaging is necessary
-	 */
-	setupRoomEvents = function(socket,room,events) {
-		var emitFn = function(eventName) {
-				return function(data) {
-					io.sockets.in(room).emit(eventName, data);
-				};
+/**
+ * Method for passing events between host and clients
+ * Use this method only when incoming event name matches
+ * outgoing event name and no data massaging is necessary
+ */
+var setupRoomEvents = function(socket,room,events) {
+	var emitFn = function(eventName) {
+			return function(data) {
+				io.sockets.in(room).emit(eventName, data);
 			};
+		};
 
-		for(var i = 0; i < events.length; i++) {
-			socket.on(events[i], emitFn(events[i]));
-		}
-	},
+	for(var i = 0; i < events.length; i++) {
+		socket.on(events[i], emitFn(events[i]));
+	}
+};
 
-	/**
-	 * Get a list of rooms with activity within a specific timespan
-	 */
-	getActiveRooms = function(daysBack,callback) {
-		var limit = new Date();
-		limit.setDate(limit.getDate()-daysBack);
-		models.Room.find({'lastActivity':{$gte:limit.toISOString()}},callback);
-	},
+/**
+ * Get a list of rooms with activity within a specific timespan
+ */
+var getActiveRooms = function(daysBack,callback) {
+	var limit = new Date();
+	limit.setDate(limit.getDate()-daysBack);
+	models.Room.find({'lastActivity':{$gte:limit.toISOString()}},callback);
+};
 
-	// Convenience methods for returning rooms active in the past X days
-	getRoomsPastDay = _.curry(getActiveRooms)(1),
-	getRoomsPastWeek = _.curry(getActiveRooms)(7);
+// Convenience methods for returning rooms active in the past X days
+var getRoomsPastDay = _.curry(getActiveRooms)(1);
+var getRoomsPastWeek = _.curry(getActiveRooms)(7);
 
 
 // Attach properties to app for use elsewhere

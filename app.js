@@ -2,7 +2,6 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var fs = require('fs');
 var _ = require('lodash');
 var routes = require('./routes');
 var config = require('./config.js').config;
@@ -10,7 +9,7 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-var roomCount = 0;
+var rooms = {};
 var userCount = 0;
 
 /**
@@ -34,24 +33,18 @@ var addUser = function() {
 	userCount++;
 };
 
-var addRoom = function() {
-	roomCount++;
-};
-
 var dropUser = function() {
 	if (userCount > 0) {
 		userCount--;
 	}
 };
 
-var dropRoom = function() {
-	if (roomCount > 0) {
-		roomCount--;
-	}
+var dropRoom = function(roomId) {
+	delete rooms[roomId];
 };
 
 var getRoomCount = function() {
-	return roomCount;
+	return _.keys(rooms).length;
 };
 
 var getUserCount = function() {
@@ -82,6 +75,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configure socket.io.
 io.set('log level', config.ioLogLevel);
 app.locals.io = io;
+app.locals.rooms = rooms;
 
 // Debugging for dev environments.
 if (config.debug) {
@@ -103,17 +97,19 @@ server.listen(app.get('port'));
 
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
-	var inRoom = '',
-		host = false,
-		myName,
-		uid;
+	var inRoom = '';
+	var host = false;
+	var myName;
+	var uid;
+	var hostRoomId;
 
 	socket.on('createRoom', function (data) {
 
 		console.log('Room', data.roomId, 'created.');
+		rooms[data.roomId] = data;
 		socket.join(data.roomId);
 		host = true;
-		addRoom();
+		hostRoomId = data.roomId;
 
 		// if there are any voters in the room that's just been created, prompt them to join
 		io.sockets.in(data.roomId).emit('roomRefresh', {});
@@ -143,7 +139,7 @@ io.sockets.on('connection', function (socket) {
 			dropUser();
 			io.sockets.in(inRoom).emit('voterLeave', {uid: uid});
 		} else {
-			dropRoom();
+			dropRoom(hostRoomId);
 		}
 	});
 

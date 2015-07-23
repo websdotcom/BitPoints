@@ -1,7 +1,6 @@
 exports.ticketing = require('./ticketing');
-
-var gravatar = require('gravatar');
 var _ = require('lodash');
+var gravatar = require('gravatar');
 
 /**
  * GET homepage
@@ -54,11 +53,12 @@ exports.host = function(req, res) {
  */
 exports.invite = function(req, res) {
 	var id = req.params[0];
-	var roomId = parseInt(id,36)
+	var roomId = parseInt(id, 36);
+	var roomTitle = _.get(req, 'app.locals.rooms[roomId].title', 'A BitPoints room');
 
 	var room = {
 		roomId: roomId,
-		title: roomId
+		title: roomTitle
 	};
 	req.params.id = roomId;
 	res.render('invite',{

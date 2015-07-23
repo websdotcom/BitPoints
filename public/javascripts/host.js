@@ -1,150 +1,137 @@
-var
-	decks = {
-		'standard': [
-			{ value: NaN, estimate: '?' },
-			{ value: 0, estimate: '0' },
-			{ value: 0.5, estimate: '&frac12;' },
-			{ value: 1, estimate: '1' },
-			{ value: 2, estimate: '2' },
-			{ value: 3, estimate: '3' },
-			{ value: 5, estimate: '5' },
-			{ value: 8, estimate: '8' },
-			{ value: 13, estimate: '13' },
-			{ value: 20, estimate: '20' },
-			{ value: 40, estimate: '40' },
-			{ value: 100, estimate: '100' },
-			{ value: Infinity, estimate: '&infin;' },
-			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' },
-			{ value: NaN, estimate: 'ಠ_ಠ'}
-		],
-		'fibonacci': [
-			{ value: NaN, estimate: '?' },
-			{ value: 0, estimate: '0' },
-			{ value: 1, estimate: '1' },
-			{ value: 2, estimate: '2' },
-			{ value: 3, estimate: '3' },
-			{ value: 5, estimate: '5' },
-			{ value: 8, estimate: '8' },
-			{ value: 13, estimate: '13' },
-			{ value: 21, estimate: '21' },
-			{ value: 34, estimate: '34' },
-			{ value: 55, estimate: '55' },
-			{ value: 89, estimate: '89' },
-			{ value: Infinity, estimate: '&infin;' },
-			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' },
-			{ value: NaN, estimate: 'ಠ_ಠ'}
-		],
-		'letters': [
-			{ value: 0, estimate: 'A' },
-			{ value: 1, estimate: 'B' },
-			{ value: 2, estimate: 'C' },
-			{ value: 3, estimate: 'D' },
-			{ value: 4, estimate: 'E' },
-			{ value: 5, estimate: 'F' },
-			{ value: NaN, estimate: '?' },
-			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
-		],
-		'tshirt': [
-			{ value: 0, estimate: 'XS' },
-			{ value: 1, estimate: 'S' },
-			{ value: 2, estimate: 'M' },
-			{ value: 3, estimate: 'L' },
-			{ value: 4, estimate: 'XL' },
-			{ value: NaN, estimate: '?' },
-			{ value: Infinity, estimate: '&infin;' },
-			{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
-		]
-	},
+var decks = {
+	'standard': [
+		{ value: NaN, estimate: '?' },
+		{ value: 0, estimate: '0' },
+		{ value: 0.5, estimate: '&frac12;' },
+		{ value: 1, estimate: '1' },
+		{ value: 2, estimate: '2' },
+		{ value: 3, estimate: '3' },
+		{ value: 5, estimate: '5' },
+		{ value: 8, estimate: '8' },
+		{ value: 13, estimate: '13' },
+		{ value: 20, estimate: '20' },
+		{ value: 40, estimate: '40' },
+		{ value: 100, estimate: '100' },
+		{ value: Infinity, estimate: '&infin;' },
+		{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' },
+		{ value: NaN, estimate: 'ಠ_ಠ'}
+	],
+	'fibonacci': [
+		{ value: NaN, estimate: '?' },
+		{ value: 0, estimate: '0' },
+		{ value: 1, estimate: '1' },
+		{ value: 2, estimate: '2' },
+		{ value: 3, estimate: '3' },
+		{ value: 5, estimate: '5' },
+		{ value: 8, estimate: '8' },
+		{ value: 13, estimate: '13' },
+		{ value: 21, estimate: '21' },
+		{ value: 34, estimate: '34' },
+		{ value: 55, estimate: '55' },
+		{ value: 89, estimate: '89' },
+		{ value: Infinity, estimate: '&infin;' },
+		{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' },
+		{ value: NaN, estimate: 'ಠ_ಠ'}
+	],
+	'letters': [
+		{ value: 0, estimate: 'A' },
+		{ value: 1, estimate: 'B' },
+		{ value: 2, estimate: 'C' },
+		{ value: 3, estimate: 'D' },
+		{ value: 4, estimate: 'E' },
+		{ value: 5, estimate: 'F' },
+		{ value: NaN, estimate: '?' },
+		{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
+	],
+	'tshirt': [
+		{ value: 0, estimate: 'XS' },
+		{ value: 1, estimate: 'S' },
+		{ value: 2, estimate: 'M' },
+		{ value: 3, estimate: 'L' },
+		{ value: 4, estimate: 'XL' },
+		{ value: NaN, estimate: '?' },
+		{ value: Infinity, estimate: '&infin;' },
+		{ value: NaN, estimate: '<i class="fa fa-coffee"></i>' }
+	]
+};
 
-	socket = io.connect('http://'+window.location.host),
+var socket = io.connect('http://'+window.location.host);
+var roomId = BP.room.roomId;
+var title = BP.room.title;
+var votes = {};
+var voteData = {};
 
-	roomId = BP.room.roomId,
-	title = BP.room.title,
+// 0 - start, 1 - betting open, 2 - reveal
+var roundStatus = 0;
 
-	votes = {},
-	voteData = {},
-
-	roundStatus = 0, // 0 - start, 1 - betting open, 2 - reveal
-
-	userTemp =  '<li data-name="{{name}}" data-uid="{{uid}}">'+
-					'<div title="Don\'t count this voter\'s estimates" class="ಠ_ಠ"><i class="fa fa-eye"></i></div>'+
-					'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
-					'<img class="voterImage" src="{{avatar}}" />'+
-					'<h3 class="voterName">{{name}}</h3>'+
-					'<div class="card">'+
-						'<div class="cardBack"></div>'+
-						'<div class="cardInner">'+
-							'<div class="cardValue"></div>'+
-							'<div class="cornerValue topleft"></div>'+
-							'<div class="cornerValue bottomright"></div>'+
-						'</div>'+
+var userTemp =  '<li data-name="{{name}}" data-uid="{{uid}}">'+
+				'<div title="Don\'t count this voter\'s estimates" class="ಠ_ಠ"><i class="fa fa-eye"></i></div>'+
+				'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
+				'<img class="voterImage" src="{{avatar}}" />'+
+				'<h3 class="voterName">{{name}}</h3>'+
+				'<div class="card">'+
+					'<div class="cardBack"></div>'+
+					'<div class="cardInner">'+
+						'<div class="cardValue"></div>'+
+						'<div class="cornerValue topleft"></div>'+
+						'<div class="cornerValue bottomright"></div>'+
 					'</div>'+
-				'</li>',
+				'</div>'+
+			'</li>';
 
-	ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>',
+var ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>';
 
-	getDeck = function() {
-		return decks[$('input[name=deckType]:checked').val() || 'standard'];
-	},
+var getDeck = function() {
+	return decks[$('input[name=deckType]:checked').val() || 'standard'];
+};
 
-	getValueFromEstimate = function(estimate) {
-		var deck = getDeck(),
-			ret = NaN;
+var getNumVotes = function() {
+	var count = 0;
+	BP.each(votes,function() {
+		count++;
+	});
+	return count;
+};
 
-		for(var i = 0; i < deck.length; i++) {
-			if(deck[i].estimate === estimate) {
-				return deck[i].value;
-			}
-		}
-	},
-
-	getNumVotes = function() {
-		var count = 0;
-		BP.each(votes,function() {
-			count++;
-		});
-		return count;
-	},
-
-	processVotes = function() {
-		voteData = {
-			average: -1,
-			min: -1,
-			max: -1,
-			allVotesEqual: true,
-			lastVote: -1,
-			total: 0,
-			numVotes: 0,
-			spread: 0
-		};
-		var vote,
-			deck = getDeck(),
-			minCardIdx = 0, maxCardIdx = 0;
-
-		BP.each(votes, function(vote, name) {
-			if(!isNaN(vote)) {
-				voteData.total += vote;
-				if(voteData.lastVote === -1){
-					voteData.lastVote = vote;
-					voteData.min = vote;
-					voteData.max = vote;
-				}
-				if(voteData.lastVote !== vote){ voteData.allVotesEqual = false; }
-				if(voteData.max < vote){ voteData.max = vote; }
-				if(voteData.min > vote){ voteData.min = vote; }
-				voteData.numVotes++;
-			}
-		});
-
-		BP.each(deck, function(card, i) {
-			if(card.value === voteData.min) { minCardIdx = i; }
-			if(card.value === voteData.max) { maxCardIdx = i; }
-		});
-
-		voteData.spread = maxCardIdx - minCardIdx;
-		voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
-		if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
+var processVotes = function() {
+	voteData = {
+		average: -1,
+		min: -1,
+		max: -1,
+		allVotesEqual: true,
+		lastVote: -1,
+		total: 0,
+		numVotes: 0,
+		spread: 0
 	};
+
+	var deck = getDeck();
+	var minCardIdx = 0, maxCardIdx = 0;
+
+	BP.each(votes, function(vote) {
+		if(!isNaN(vote)) {
+			voteData.total += vote;
+			if(voteData.lastVote === -1){
+				voteData.lastVote = vote;
+				voteData.min = vote;
+				voteData.max = vote;
+			}
+			if(voteData.lastVote !== vote){ voteData.allVotesEqual = false; }
+			if(voteData.max < vote){ voteData.max = vote; }
+			if(voteData.min > vote){ voteData.min = vote; }
+			voteData.numVotes++;
+		}
+	});
+
+	BP.each(deck, function(card, i) {
+		if(card.value === voteData.min) { minCardIdx = i; }
+		if(card.value === voteData.max) { maxCardIdx = i; }
+	});
+
+	voteData.spread = maxCardIdx - minCardIdx;
+	voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
+	if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
+};
 
 var page = new BP.Page({
 
@@ -230,12 +217,12 @@ var page = new BP.Page({
 		}
 	},
 
-	updateVoterDecks: function(e, $el) {
+	updateVoterDecks: function() {
 		socket.emit('deckChange',getDeck());
 	},
 
 	ಠ_ಠ: function(e, $el) {
-		$el.parent().attr('data-observer', $el.parent().attr('data-observer') != 'true');
+		$el.parent().attr('data-observer', $el.parent().attr('data-observer') !== 'true');
 	},
 
 	kickVoter: function(e, $el) {
@@ -270,10 +257,10 @@ var page = new BP.Page({
 
 		// wait until cards are fully hidden to remove classes and emit events
 		window.setTimeout(function(){
-			self.$('.cardValue').removeClass('coffee min max');
-			self.$('.cornerValue').removeClass('coffee');
+			this.$('.cardValue').removeClass('coffee min max');
+			this.$('.cornerValue').removeClass('coffee');
 			socket.emit('newRound', {roomId: roomId, ticket: BP.currentTicket});
-		},1500);
+		}.bind(this), 1500);
 	},
 
 	endCurrentRound: function(e, $el) {
@@ -292,7 +279,7 @@ var page = new BP.Page({
 			} else {
 				this.$largeSpread.show();
 
-				this.$('.card .cardValue').each(function(i, el) {
+				this.$('.card .cardValue').each(function() {
 					// TODO: instead of highlighting low and high votes,
 					// highlight the outliers (cards that are not in the middle two vote values)
 					// e.g. for votes 1,3,8,13:  highlight 1 and 13

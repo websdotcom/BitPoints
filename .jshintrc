@@ -1,19 +1,26 @@
 {
-    "node": true,
-
     "bitwise": true,
-    "camelcase": true,
-    "curly": true,
     "eqeqeq": true,
     "forin": true,
+    "freeze": true,
     "immed": true,
-    "indent": 4,
-    "latedef": true,
-    "newcap": true,
+    "latedef": "nofunc",
     "noarg": true,
-    "quotmark": "single",
-    "trailing": true,
+    "nonbsp": true,
+    "undef": true,
+    "unused": true,
 
     "eqnull": true,
-    "smarttabs": true
+
+    "browser": true,
+    "node": true,
+    "devel": true,
+
+    "predef": ["-Promise", "-Document"],
+
+    "globals": {
+        "BP": true,
+        "$": true,
+        "io": true
+    }
 }

@@ -1,23 +1,21 @@
-var
-	socket = io.connect('http://'+window.location.host),
-	roomId = BP.room.roomId,
-	name = BP.user.name,
-	avatar = BP.user.avatar,
-	roomName = 'BitPoints',
-	uid,
-	cardStyleTemp = '<label for="pattern">Pattern'+
-						'<select id="pattern">'+
-							'<option value="argyle">Argyle</option>'+
-							'<option value="denim">Denim</option>'+
-							'<option value="graphpaper">Graph Paper</option>'+
-							'<option value="paisley">Paisley</option>'+
-							'<option value="wood">Wood</option>'+
-							'<option value="goat">Goat</option>'+
-						'</select>'+
-					'</label>'+
-					'<label for="color">Color'+
-						'<input title="Select card color" type="color" value="{{cardColor}}" id="color"/>'+
-					'</label>';
+var socket = io.connect('http://'+window.location.host);
+var roomId = BP.room.roomId;
+var username = BP.user.name;
+var avatar = BP.user.avatar;
+var uid;
+var cardStyleTemp = '<label for="pattern">Pattern'+
+		'<select id="pattern">'+
+			'<option value="argyle">Argyle</option>'+
+			'<option value="denim">Denim</option>'+
+			'<option value="graphpaper">Graph Paper</option>'+
+			'<option value="paisley">Paisley</option>'+
+			'<option value="wood">Wood</option>'+
+			'<option value="goat">Goat</option>'+
+		'</select>'+
+	'</label>'+
+	'<label for="color">Color'+
+		'<input title="Select card color" type="color" value="{{cardColor}}" id="color"/>'+
+	'</label>';
 
 var page = new BP.Page({
 
@@ -72,17 +70,17 @@ var page = new BP.Page({
 	},
 
 	setCardAttr: function(attr,style) {
-		BP.localStorage.set(name+'-card-'+attr,style);
+		BP.localStorage.set(username+'-card-'+attr,style);
 	},
 
 	getCardAttr: function(attr) {
-		return BP.localStorage.get(name+'-card-'+attr);
+		return BP.localStorage.get(username+'-card-'+attr);
 	},
 
 	initCardStyle: function() {
 
 		// Noah is special
-		if(name === 'Noah'){
+		if(username === 'Noah'){
 			this.$pattern.val('goat').change();
 			this.$color.val('#EFC725').change();
 		}
@@ -101,8 +99,8 @@ var page = new BP.Page({
 		this.setCardAttr('color',this.$color.val());
 	},
 
-	joinRoom: function(data) {
-		socket.emit('joinRoom', {roomId: roomId, avatar: avatar, name: name});
+	joinRoom: function() {
+		socket.emit('joinRoom', {roomId: roomId, avatar: avatar, name: username});
 	},
 
 	reset: function(data) {
@@ -111,14 +109,14 @@ var page = new BP.Page({
 		this.$status.hide().filter('.newRound').show();
 	},
 
-	endRound: function(data) {
+	endRound: function() {
 		this.$status.hide().filter('.roundEnd').show();
 	},
 
 	processKick: function(data) {
 		if(uid === data.uid) {
 			socket.disconnect();
-			document.location = '/kick/?roomId=' + roomId + '&name=' + name;
+			document.location = '/kick/?roomId=' + roomId + '&name=' + username;
 		}
 	},
 
@@ -141,7 +139,7 @@ var page = new BP.Page({
 		deckTable.empty().append(deckString);
 	},
 
-	toggleCardPopover: function(e, $el) {
+	toggleCardPopover: function() {
 		this.cardStyleModal.toggle();
 	},
 
@@ -162,7 +160,7 @@ var page = new BP.Page({
 			estimate = $el.html(),
 			pattern = this.$pattern.val(),
 			color = this.$color.val().length >= 4 ? this.$color.val() : '#032E63';
-		socket.emit('newVote', {uid: uid, roomId: roomId, name: name, value: points, cardValue: estimate, pattern: pattern, color: color });
+		socket.emit('newVote', {uid: uid, roomId: roomId, name: username, value: points, cardValue: estimate, pattern: pattern, color: color });
 	}
 });
 

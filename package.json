@@ -4,7 +4,7 @@
   "private": true,
   "description": "Agile Estimation with Sockets",
   "author": "Michael Barrett @twisterghost",
-  "contributors":[
+  "contributors": [
     "Nick Swider @swider",
     "Jack Anderson @jackwanders"
   ],
@@ -13,15 +13,20 @@
   },
   "engines": {
     "node": "0.8.*",
-    "npm":  "1.2.*"
+    "npm": "1.2.*"
   },
   "dependencies": {
     "express": "3.4.8",
-    "jade": "*",
-    "less-middleware": "*",
-    "socket.io": "~0.9.16",
-    "gravatar": "*",
-    "mongoose": "3.8.x",
-    "lodash": "*"
+    "jade": "1.6.0",
+    "less-middleware": "1.0.4",
+    "socket.io": "0.9.16",
+    "gravatar": "1.0.6",
+    "mongoose": "3.8.0",
+    "lodash": "3.10.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2",
+    "load-grunt-tasks": "^3.2.0"
   }
 }

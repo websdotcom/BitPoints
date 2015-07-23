@@ -9,10 +9,10 @@ window.BP = window.BP || {};
 
 BP.each = function(list, fn, context) {
 	var i, key, length;
-	
-	if (list == null) { return; }
 
-    if (list.length === +list.length) {
+	if (list === null) { return; }
+
+		if (list.length === +list.length) {
 		for (i = 0, length = list.length; i < length; i++) {
 			fn.call(context, list[i], i, list);
 		}
@@ -128,7 +128,7 @@ BP.Modal = function(options) {
 	modalClose.off().on('click',function() {
 		self.hide();
 	});
-	
+
 	modalContent.html(this.content);
 
 	this.show = function() {
@@ -202,9 +202,9 @@ BP.Notification = (function(){
 
 	// Unsupported browser
 	} else {
-		hasPermission = function() { return false; },
-		requestPermission = function() {},
-		send = function() {},
+		hasPermission = function() { return false; };
+		requestPermission = function() {};
+		send = function() {};
 		supported = false;
 	}
 
@@ -220,7 +220,7 @@ BP.Notification = (function(){
 /**
  * An encapsulation of the events and functionality necessary for a page
  * within our app
- * 
+ *
  * setupSocketEvents: bind provided methods to the associated socket events
  * setupDomEvents: bind provided methods to the associated dom events on the specified elements
  *
@@ -242,7 +242,7 @@ BP.Page = function(options) {
 	BP.extend(this, this.defaults, options);
 
 	var $domRoot = $(this.domRoot);
-	
+
 	/**
 	 * Convenience $ call that limits results to children of the dom root for the page
 	 */

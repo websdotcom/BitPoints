@@ -1,0 +1,100 @@
+/**
+ * Voter room styles
+ */
+#voterRoomInfo {
+	display: block;
+	height: 30px;
+	padding: 0 20px;
+	background: rgba(0,0,0,0.5);
+	line-height: 30px;
+	font-size: 14px;
+	font-weight: bold;
+
+	.status {
+		float: right;
+		display: none;
+	}
+}
+
+#voterInfo {
+	position: relative;
+	margin: 10px auto;
+	max-width: 500px;
+
+	.voterName,.voterImage {
+		margin-left: 0;
+	}
+
+	#cardStyle {
+		position: absolute;
+		top: 0;
+		left: 170px;
+		h4 {
+			height: 32px;
+			text-align: center;
+		}
+		#cardPreview {
+			.cardStyle(.45);
+			position: relative;
+			top: auto; left: auto;
+			.box-sizing();
+		}
+	}
+}
+
+table#estimateOptions {
+	width: 100%;
+	border-spacing: 10px;
+	td {
+		width: 33%;
+		font: normal 2.5em/2.5em @sans;
+		text-align: center;
+		color: @darktext;
+		border-radius: 3px;
+		cursor: pointer;
+		background: @link;
+		&:hover {
+			background: @hover;
+		}
+		&.lastVote {
+			background: darken(@link,20%);
+		}
+		&.blank {
+			background: none !important;
+		}
+		.fa {
+			.iconDark();
+		}
+	}
+}
+
+#cardStylePop-modal-container {
+	label {
+		display: block;
+		width: 150px;
+		color: @darktext;
+
+		select, input {
+			margin-top: 5px;
+		}
+	}
+	label + label {
+		margin-top: 10px;
+	}
+	select#pattern {
+		width: 150px;
+		text-transform: capitalize;
+	}
+	input#color {
+		width: 150px;
+	}
+	.close {
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		font-size: 1.4em;
+		cursor: pointer;
+	}
+}

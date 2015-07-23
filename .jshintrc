@@ -20,6 +20,7 @@
 
     "globals": {
         "BP": true,
-        "$": true
+        "$": true,
+        "io": true
     }
 }

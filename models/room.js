@@ -10,14 +10,14 @@ var RoomSchema = new Schema({
 });
 
 RoomSchema.methods = {
-	addUser: function(data){
+	addUser: function(){
 		this.update({$inc: {members:1}}, {}, function(err){
 			if(err){ console.error("Failed to addUser!"); }
 		});
 	}
 };
 
-RoomSchema.pre('save', function(next, done){
+RoomSchema.pre('save', function(next){
 	this.lastActivity = new Date().toISOString();
 	next();
 });

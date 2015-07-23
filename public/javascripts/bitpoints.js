@@ -10,7 +10,7 @@ window.BP = window.BP || {};
 BP.each = function(list, fn, context) {
 	var i, key, length;
 
-	if (list == null) { return; }
+	if (list === null) { return; }
 
 		if (list.length === +list.length) {
 		for (i = 0, length = list.length; i < length; i++) {
@@ -202,9 +202,9 @@ BP.Notification = (function(){
 
 	// Unsupported browser
 	} else {
-		hasPermission = function() { return false; },
-		requestPermission = function() {},
-		send = function() {},
+		hasPermission = function() { return false; };
+		requestPermission = function() {};
+		send = function() {};
 		supported = false;
 	}
 

@@ -75,7 +75,7 @@ var page = new BP.Page({
 		e.preventDefault();
 	},
 
-	showRoomOptions: function(e, $el) {
+	showRoomOptions: function() {
 		this.$roomOptions.addClass('visible');
 	},
 

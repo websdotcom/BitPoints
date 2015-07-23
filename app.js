@@ -116,7 +116,7 @@ io.sockets.on('connection', function (socket) {
 		// if there are any voters in the room that's just been created, prompt them to join
 		io.sockets.in(data.roomId).emit('roomRefresh', {});
 
-		room.save(function(err, room){
+		room.save(function(err){
 			if(err){ console.error('Failed to persist new room!'); return; }
 		});
 	});
@@ -144,7 +144,7 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 
-	socket.on('disconnect', function(data) {
+	socket.on('disconnect', function() {
 		if (!host) {
 			io.sockets.in(inRoom).emit('voterLeave', {uid: uid});
 		}
@@ -158,7 +158,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 // Handle 404 errors
-app.use(function(req, res, next){
+app.use(function(req, res){
 	res.status(404);
 
 	// Respond with html page

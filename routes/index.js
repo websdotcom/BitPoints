@@ -52,7 +52,7 @@ exports.host = function(req, res) {
 
 /**
  * GET invite processing
- * @param  id  invite id in url 
+ * @param  id  invite id in url
  */
 exports.invite = function(req, res) {
 	var id = req.params[0],

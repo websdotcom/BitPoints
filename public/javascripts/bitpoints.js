@@ -134,6 +134,12 @@ BP.Modal = function(options) {
 	this.show = function() {
 		cover.addClass('visible');
 		modal.addClass('visible');
+
+		document.addEventListener('keydown', function(e) {
+			if (e.keyCode === 27) {
+				this.hide();
+			}
+		}.bind(this));
 	};
 	this.hide = function() {
 		cover.removeClass('visible');

@@ -2,7 +2,6 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var mongoose = require('mongoose');
 var fs = require('fs');
 var _ = require('lodash');
 var routes = require('./routes');
@@ -10,8 +9,9 @@ var config = require('./config.js').config;
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-var models = {};
-var modelsDir = __dirname + '/models';
+
+var roomCount = 0;
+var userCount = 0;
 
 /**
  * Method for passing events between host and clients
@@ -30,36 +30,41 @@ var setupRoomEvents = function(socket,room,events) {
 	}
 };
 
-/**
- * Get a list of rooms with activity within a specific timespan
- */
-var getActiveRooms = function(daysBack,callback) {
-	var limit = new Date();
-	limit.setDate(limit.getDate()-daysBack);
-	models.Room.find({'lastActivity':{$gte:limit.toISOString()}},callback);
+var addUser = function() {
+	userCount++;
 };
 
-// Convenience methods for returning rooms active in the past X days
-var getRoomsPastDay = _.curry(getActiveRooms)(1);
-var getRoomsPastWeek = _.curry(getActiveRooms)(7);
+var addRoom = function() {
+	roomCount++;
+};
 
+var dropUser = function() {
+	if (userCount > 0) {
+		userCount--;
+	}
+};
+
+var dropRoom = function() {
+	if (roomCount > 0) {
+		roomCount--;
+	}
+};
+
+var getRoomCount = function() {
+	return roomCount;
+};
+
+var getUserCount = function() {
+	return userCount;
+};
 
 // Attach properties to app for use elsewhere
 app.config = config;
-app.locals.models = models;
 app.utils = {
 	setupRoomEvents: setupRoomEvents,
-	getActiveRooms: getActiveRooms,
-	getRoomsPastDay: getRoomsPastDay,
-	getRoomsPastWeek: getRoomsPastWeek
+	getRoomCount: getRoomCount,
+	getUserCount: getUserCount,
 };
-
-
-fs.readdirSync(modelsDir).forEach(function(file) {
-	if (file.match(/.+\.js/g) !== null && file !== 'index.js') {
-		_.merge(models, require(modelsDir + '/' + file));
-	}
-});
 
 // Configure the app for all environments.
 app.set('port', config.port);
@@ -73,7 +78,6 @@ app.use(express.cookieParser());
 app.use(app.router);
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-mongoose.connect('mongodb://'+config.mongoHost+'/BitPoints');
 
 // Configure socket.io.
 io.set('log level', config.ioLogLevel);
@@ -105,20 +109,15 @@ io.sockets.on('connection', function (socket) {
 		uid;
 
 	socket.on('createRoom', function (data) {
-		var room = new models.Room();
 
 		console.log('Room', data.roomId, 'created.');
 		socket.join(data.roomId);
-		room.roomId = data.roomId;
-		room.title = data.title;
 		host = true;
+		addRoom();
 
 		// if there are any voters in the room that's just been created, prompt them to join
 		io.sockets.in(data.roomId).emit('roomRefresh', {});
 
-		room.save(function(err){
-			if(err){ console.error('Failed to persist new room!'); return; }
-		});
 	});
 
 	socket.on('joinRoom', function (data) {
@@ -128,6 +127,7 @@ io.sockets.on('connection', function (socket) {
 		inRoom = data.roomId;
 		uid = myName + new Date().getTime();
 		data.uid = uid;
+		addUser();
 
 		// Join the room.
 		socket.join(data.roomId);
@@ -136,17 +136,14 @@ io.sockets.on('connection', function (socket) {
 		// Send the user their uid.
 		socket.emit('uidAssignment', {uid: uid});
 
-		// Update mongo with the room join count.
-		models.Room.findOne({ roomId: inRoom }, function(err, room){
-			if(err || !room){ console.error('Couldn\'t find room '+inRoom); return; }
-			room.addUser(data);
-			socket.emit('roomName', {name: room.title});
-		});
 	});
 
 	socket.on('disconnect', function() {
 		if (!host) {
+			dropUser();
 			io.sockets.in(inRoom).emit('voterLeave', {uid: uid});
+		} else {
+			dropRoom();
 		}
 	});
 

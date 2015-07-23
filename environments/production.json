@@ -1,6 +1,5 @@
 {
 	"port": 80,
-	"mongoHost": "localhost",
 	"debug": false,
 	"ioLogLevel": 0,
 	"appHost": "bitpoints.io"

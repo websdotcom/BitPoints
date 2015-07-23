@@ -7,16 +7,14 @@ var _ = require('lodash');
  * GET homepage
  */
 exports.index = function(req, res){
-	req.app.utils.getRoomsPastDay(function (err, rooms){
-		var numRooms = err ? 0 : rooms.length,
-			numVoters = err ? 0 :_.reduce(_.pluck(rooms,'members'), function(memo, num){ return memo + num; }, 0);
+	var numRooms = req.app.utils.getRoomCount();
+	var numVoters = req.app.utils.getUserCount();
 
-		res.render('index', {
-			numRooms: numRooms,
-			numVoters: numVoters,
-			roomString: numRooms + (numRooms === 1 ? ' room' : ' rooms'),
-			voterString: numVoters + (numVoters === 1 ? ' person' : ' people')
-		});
+	res.render('index', {
+		numRooms: numRooms,
+		numVoters: numVoters,
+		roomString: numRooms + (numRooms === 1 ? ' room' : ' rooms'),
+		voterString: numVoters + (numVoters === 1 ? ' person' : ' people')
 	});
 };
 
@@ -55,19 +53,17 @@ exports.host = function(req, res) {
  * @param  id  invite id in url
  */
 exports.invite = function(req, res) {
-	var id = req.params[0],
-		roomId = parseInt(id,36);
+	var id = req.params[0];
+	var roomId = parseInt(id,36)
 
-	req.app.locals.models.Room.findOne({roomId:roomId}, function(err, room) {
-		if(room && !err) {
-			req.params.id = roomId;
-			res.render('invite',{
-				room: room,
-				bodyClass: 'one-column'
-			});
-		} else {
-			exports.notFound(req,res);
-		}
+	var room = {
+		roomId: roomId,
+		title: roomId
+	};
+	req.params.id = roomId;
+	res.render('invite',{
+		room: room,
+		bodyClass: 'one-column'
 	});
 };
 

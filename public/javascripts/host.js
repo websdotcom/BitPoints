@@ -96,6 +96,7 @@ var getNumVotes = function() {
 var processVotes = function() {
 	voteData = {
 		average: -1,
+		trueAverage: -1,
 		min: -1,
 		max: -1,
 		allVotesEqual: true,
@@ -130,7 +131,10 @@ var processVotes = function() {
 
 	voteData.spread = maxCardIdx - minCardIdx;
 	voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
-	if(voteData.average > 0.5) { voteData.average = Math.ceil(voteData.average); }
+	if(voteData.average > 0.5) {
+		voteData.trueAverage = voteData.average;
+		voteData.average = Math.ceil(voteData.average);
+	}
 };
 
 var page = new BP.Page({
@@ -276,7 +280,15 @@ var page = new BP.Page({
 
 			// Only show average if there is less than a three-card gap between lowest and highest votes
 			if(voteData.spread < 3) {
+				var averageText;
+				if (voteData.trueAverage > -1 && voteData.average !== voteData.trueAverage) {
+					averageText = voteData.trueAverage.toFixed(2) + ', rounded up.';
+				} else {
+					averageText = voteData.average + ' on the dot.';
+				}
+
 				this.$average.show().find('.val').text(voteData.average);
+				this.$average.show().find('.val').attr('title', averageText);
 			} else {
 				this.$largeSpread.show();
 

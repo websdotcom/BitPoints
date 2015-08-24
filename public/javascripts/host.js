@@ -178,6 +178,7 @@ var page = new BP.Page({
 	},
 
 	removeVoter: function(data) {
+		delete votes[data.uid];
 		this.$('li[data-uid="' + data.uid + '"]').remove();
 	},
 

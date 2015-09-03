@@ -279,31 +279,26 @@ var page = new BP.Page({
 		// If there's only one person, vote data is useless
 		if(voteData.numVotes > 1) {
 
-			// Only show average if there is less than a three-card gap between lowest and highest votes
-			if(voteData.spread < 3) {
-				var averageText;
-				if (voteData.trueAverage > -1 && voteData.average !== voteData.trueAverage) {
-					averageText = voteData.trueAverage.toFixed(2);
-					if (voteData.average > voteData.trueAverage) {
-						averageText += ', rounded up';
-					} else if (voteData.average < voteData.trueAverage) {
-						averageText += ', rounded down';
-					}
-				} else {
-					averageText = voteData.average + ' on the money.';
+			var averageText;
+			if (voteData.trueAverage > -1 && voteData.average !== voteData.trueAverage) {
+				averageText = voteData.trueAverage.toFixed(2);
+				if (voteData.average > voteData.trueAverage) {
+					averageText += ', rounded up';
+				} else if (voteData.average < voteData.trueAverage) {
+					averageText += ', rounded down';
 				}
-
-				this.$average.show().find('.val').text(voteData.average);
-				this.$average.show().find('.val').attr('title', averageText);
 			} else {
-				this.$largeSpread.show();
-
-				this.$('.card .cardValue').each(function() {
-					// TODO: instead of highlighting low and high votes,
-					// highlight the outliers (cards that are not in the middle two vote values)
-					// e.g. for votes 1,3,8,13:  highlight 1 and 13
-				});
+				averageText = voteData.average + ' on the money';
 			}
+
+			var outcomeText = voteData.average;
+			if (voteData.spread > 3) {
+				outcomeText += '*';
+				averageText += ' - The vote spread is large';
+			}
+
+			this.$average.show().find('.val').text(outcomeText);
+			this.$average.show().find('.val').attr('title', averageText);
 
 			// Animate fun-times if everyone votes the same
 			if(voteData.numVotes > 3 && voteData.allVotesEqual){

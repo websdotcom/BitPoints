@@ -133,7 +133,7 @@ var processVotes = function() {
 	voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
 	if(voteData.average > 0.5) {
 		voteData.trueAverage = voteData.average;
-		voteData.average = Math.ceil(voteData.average);
+		voteData.average = Math.round(voteData.average);
 	}
 };
 
@@ -283,9 +283,14 @@ var page = new BP.Page({
 			if(voteData.spread < 3) {
 				var averageText;
 				if (voteData.trueAverage > -1 && voteData.average !== voteData.trueAverage) {
-					averageText = voteData.trueAverage.toFixed(2) + ', rounded up.';
+					averageText = voteData.trueAverage.toFixed(2);
+					if (voteData.average > voteData.trueAverage) {
+						averageText += ', rounded up';
+					} else if (voteData.average < voteData.trueAverage) {
+						averageText += ', rounded down';
+					}
 				} else {
-					averageText = voteData.average + ' on the dot.';
+					averageText = voteData.average + ' on the money.';
 				}
 
 				this.$average.show().find('.val').text(voteData.average);

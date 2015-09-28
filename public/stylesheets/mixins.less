@@ -62,26 +62,23 @@
 	.cardBack {
 		background-repeat: repeat;
 		background-position: 50% 50%;
-		&.argyle {
-			background-image: -webkit-repeating-linear-gradient(-30deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px), -webkit-repeating-linear-gradient(30deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px), -webkit-linear-gradient(30deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1)), -webkit-linear-gradient(-30deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1));
-			background-size: 70px*@size 120px*@size;
-		}
+		background-size: 100%;
 		&.denim {
-			background-image: url('/images/texture_denim.png');
+			background-size: auto;
+		}
+		&.biggie {
+			background-size: 100%;
 		}
 		&.graphpaper {
-			background-image: url('/images/texture_graphpaper.png');
+			background-size: auto;
 		}
 		&.paisley {
-			background-image: url('/images/texture_paisley.png');
 			background-size: 100%*@size;
 		}
 		&.wood {
-			background-image: url('/images/texture_wood.png');
 			background-size: 230px*@size;
 		}
 		&.goat {
-			background-image: url('/images/texture_goat.png');
 			background-repeat: no-repeat;
 			background-position: 95% 100%;
 			background-size: 150px*@size;

@@ -3,14 +3,34 @@ var roomId = BP.room.roomId;
 var username = BP.user.name;
 var avatar = BP.user.avatar;
 var uid;
+var avatarClicks = 0;
 var cardStyleTemp = '<label for="pattern">Pattern'+
 		'<select id="pattern">'+
-			'<option value="argyle">Argyle</option>'+
 			'<option value="denim">Denim</option>'+
 			'<option value="graphpaper">Graph Paper</option>'+
 			'<option value="paisley">Paisley</option>'+
 			'<option value="wood">Wood</option>'+
 			'<option value="goat">Goat</option>'+
+			'<option value="biggie">Biggie</option>'+
+			'<option value="goodEvil">Good vs. Evil</option>'+
+			'<option value="joker">Joker</option>'+
+			'<option value="kingClubs">King of Clubs</option>'+
+			'<option value="kittyHeart">Kitty Heart</option>'+
+			'<option value="littlePickle">Little Pickle</option>'+
+			'<option value="machoman">Macho Macho Man</option>'+
+			'<option value="meh">meh</option>'+
+			'<option value="metalhead">Metalhead</option>'+
+			'<option value="organHugs">Organ Hugs</option>'+
+			'<option value="retroGames">Retro Games</option>'+
+			'<option value="space">Space #1</option>'+
+			'<option value="space2">Space #2</option>'+
+			'<option value="squid">Squid</option>'+
+			'<option value="stormtrooper">Stormtrooper</option>'+
+			'<option value="sweepTheLeg">"Sweep the leg"</option>'+
+			'<option value="treeLungs">Tree Lungs</option>'+
+			'<option value="tribe">Tribe</option>'+
+			'<option value="trippy">Trippy</option>'+
+			'<option value="whaleMelon">Whale Melon</option>'+
 		'</select>'+
 	'</label>'+
 	'<label for="color">Color'+
@@ -63,6 +83,18 @@ var page = new BP.Page({
 
 		this.joinRoom();
 		this.initCardStyle();
+
+		var self = this;
+		$(".voterImage").click(function() {
+
+			avatarClicks++;
+
+			if (avatarClicks >= 8) {
+				self.$cardBack.attr('class', 'cardBack squirrel');
+				self.$cardBack.css('background-image', 'url(/images/cards/squirrel.png)');
+				self.setCardAttr('pattern', 'squirrel');
+			}
+		});
 	},
 
 	updateRoomName: function(data) {
@@ -70,7 +102,7 @@ var page = new BP.Page({
 	},
 
 	setCardAttr: function(attr,style) {
-		BP.localStorage.set(username+'-card-'+attr,style);
+		BP.localStorage.set(username+'-card-'+attr, style);
 	},
 
 	getCardAttr: function(attr) {
@@ -78,6 +110,10 @@ var page = new BP.Page({
 	},
 
 	initCardStyle: function() {
+		var patterns = $('#pattern option');
+
+		var randomPattern = Math.floor(patterns.length * Math.random());
+		this.$pattern.val(patterns[randomPattern].value).change();
 
 		// Noah is special
 		if(username === 'Noah'){
@@ -121,7 +157,6 @@ var page = new BP.Page({
 	},
 
 	saveUid: function(data) {
-		console.log(data);
 		uid = data.uid;
 	},
 
@@ -144,13 +179,14 @@ var page = new BP.Page({
 	},
 
 	changeCardPattern: function(e, $el) {
-		this.$cardBack.removeClass('argyle denim graphpaper paisley wood goat').addClass($el.val());
-		this.setCardAttr('pattern',$el.val());
+		this.$cardBack.attr('class', 'cardBack').addClass($el.val());
+		this.$cardBack.css('background-image', 'url(/images/cards/' + $el.val() + '.png)');
+		this.setCardAttr('pattern', $el.val());
 	},
 
 	changeCardColor: function(e, $el) {
 		this.$cardBack.css('background-color', $el.val());
-		this.setCardAttr('color',$el.val());
+		this.setCardAttr('color', $el.val());
 	},
 
 	submitEstimate: function(e, $el) {
@@ -158,7 +194,7 @@ var page = new BP.Page({
 
 		var points = $el.addClass('lastVote').data('value'),
 			estimate = $el.html(),
-			pattern = this.$pattern.val(),
+			pattern = this.$cardBack.attr('class').split(/\s+/)[1],
 			color = this.$color.val().length >= 4 ? this.$color.val() : '#032E63';
 		socket.emit('newVote', {uid: uid, roomId: roomId, name: username, value: points, cardValue: estimate, pattern: pattern, color: color });
 	}

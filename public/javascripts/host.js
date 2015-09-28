@@ -173,6 +173,7 @@ var page = new BP.Page({
 		var inviteLinkMarkup = document.location.host + '/<strong>' + inviteId + '</strong>';
 		$("#showLink").attr('data-link', inviteLinkMarkup);
 		$("#inviteUrl").html(inviteLinkMarkup);
+
 	},
 
 	addVoter: function(data) {
@@ -207,7 +208,8 @@ var page = new BP.Page({
 				$mainValue.addClass('coffee');
 				$cornerValues.addClass('coffee');
 			}
-			$cardBack.css('background-color', data.color).removeClass('argyle denim graphpaper paisley wood goat').addClass(data.pattern);
+			$cardBack.css('background-color', data.color).attr('class', 'cardBack').addClass(data.pattern);
+			$cardBack.css('background-image', 'url(/images/cards/' + data.pattern + '.png)')
 			$card.addClass('visible');
 
 			if(!$voter.data('observer'))

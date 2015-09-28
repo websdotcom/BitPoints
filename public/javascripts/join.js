@@ -113,7 +113,6 @@ var page = new BP.Page({
 		var patterns = $('#pattern option');
 
 		var randomPattern = Math.floor(patterns.length * Math.random());
-		console.log(patterns[randomPattern]);
 		this.$pattern.val(patterns[randomPattern].value).change();
 
 		// Noah is special
@@ -158,7 +157,6 @@ var page = new BP.Page({
 	},
 
 	saveUid: function(data) {
-		console.log(data);
 		uid = data.uid;
 	},
 

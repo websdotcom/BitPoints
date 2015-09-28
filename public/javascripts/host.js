@@ -194,8 +194,6 @@ var page = new BP.Page({
 	},
 
 	acceptVote: function(data) {
-		console.log(data);
-		console.log(data.pattern)
 		if(roundStatus === 1){
 			var
 				$voter = this.$('li[data-uid="'+data.uid+'"]'),

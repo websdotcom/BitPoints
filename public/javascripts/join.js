@@ -112,9 +112,6 @@ var page = new BP.Page({
 	initCardStyle: function() {
 		var patterns = $('#pattern option');
 
-		var randomPattern = Math.floor(patterns.length * Math.random());
-		this.$pattern.val(patterns[randomPattern].value).change();
-
 		// Noah is special
 		if(username === 'Noah'){
 			this.$pattern.val('goat').change();
@@ -124,6 +121,9 @@ var page = new BP.Page({
 		// Set any data that's in local storage
 		if(this.getCardAttr('pattern')) {
 			this.$pattern.val(this.getCardAttr('pattern')).change();
+		} else {
+			var randomPattern = Math.floor(patterns.length * Math.random());
+			this.$pattern.val(patterns[randomPattern].value).change();
 		}
 
 		if(this.getCardAttr('color')) {

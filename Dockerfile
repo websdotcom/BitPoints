@@ -1,6 +1,7 @@
 FROM node:0.10.40
 
-EXPOSE 3000
+EXPOSE 80
+ENV NODE_ENV production
 
 COPY package.json ./
 RUN npm install

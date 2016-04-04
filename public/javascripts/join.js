@@ -31,6 +31,11 @@ var cardStyleTemp = '<label for="pattern">Pattern'+
 			'<option value="tribe">Tribe</option>'+
 			'<option value="trippy">Trippy</option>'+
 			'<option value="whaleMelon">Whale Melon</option>'+
+			'<option value="architects">Architects</option>'+
+			'<option value="moonsharks">Moon Sharks</option>'+
+			'<option value="rebelAlliance">Rebel Alliance</option>'+
+			'<option value="spoon">Spoon</option>'+
+			'<option value="Watchmen">Watchmen</option>'+
 		'</select>'+
 	'</label>'+
 	'<label for="color">Color'+

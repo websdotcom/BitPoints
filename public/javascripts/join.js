@@ -88,18 +88,6 @@ var page = new BP.Page({
 
 		this.joinRoom();
 		this.initCardStyle();
-
-		var self = this;
-		$('.voterImage').click(function() {
-
-			avatarClicks++;
-
-			if (avatarClicks >= 8) {
-				self.$cardBack.attr('class', 'cardBack squirrel');
-				self.$cardBack.css('background-image', 'url(/images/cards/squirrel.png)');
-				self.setCardAttr('pattern', 'squirrel');
-			}
-		});
 	},
 
 	updateRoomName: function(data) {

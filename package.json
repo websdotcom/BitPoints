@@ -25,7 +25,7 @@
     "express-favicon": "^1.0.1",
     "gravatar": "1.5.2",
     "jade": "1.11.0",
-    "lodash": "3.10.0",
+    "lodash": "4.11.1",
     "morgan": "^1.7.0",
     "serve-static": "^1.10.2",
     "socket.io": "0.9.16"

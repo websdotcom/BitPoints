@@ -9,7 +9,8 @@
     "Jack Anderson @jackwanders"
   ],
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "build": "lessc --clean-css=advanced --source-map ./public/stylesheets/style.less ./public/stylesheets/style.css"
   },
   "engines": {
     "node": "4.2.*",
@@ -18,7 +19,6 @@
   "dependencies": {
     "express": "3.4.8",
     "jade": "1.11.0",
-    "less-middleware": "1.0.4",
     "socket.io": "0.9.16",
     "gravatar": "1.5.2",
     "lodash": "3.10.0"
@@ -27,6 +27,8 @@
     "eslint": "^2.8.0",
     "eslint-config-airbnb": "^8.0.0",
     "eslint-plugin-import": "^1.6.1",
-    "eslint-plugin-jsx-a11y": "^1.0.3"
+    "eslint-plugin-jsx-a11y": "^1.0.3",
+    "less": "^2.6.1",
+    "less-plugin-clean-css": "^1.5.1"
   }
 }

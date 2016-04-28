@@ -12,8 +12,8 @@
     "start": "node app.js"
   },
   "engines": {
-    "node": "0.8.*",
-    "npm": "1.2.*"
+    "node": "4.2.*",
+    "npm": "2.14.7"
   },
   "dependencies": {
     "express": "3.4.8",

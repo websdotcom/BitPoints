@@ -72,7 +72,6 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure socket.io.
-io.set('log level', config.ioLogLevel);
 app.locals.io = io;
 app.locals.rooms = rooms;
 
@@ -89,10 +88,11 @@ app.get(/^\/host\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.host);
 app.get('/join/:id', routes.join);
 app.get('/kick', routes.kick);
 app.get(/^\/([0-9a-z]{1,5})$/, routes.invite);
-app.get('/addTicketCookie', routes.ticketing.addTicketCookie);
 
 // Listen on the port.
-server.listen(app.get('port'));
+server.listen(app.get('port'), function() {
+	console.log('BitPoints is ready to go at http://localhost:' + config.port);
+});
 
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
@@ -173,4 +173,3 @@ app.use(function(req, res){
 	res.type('txt').send('Not found');
 });
 
-console.log('BitPoints is ready to go at http://localhost:' + config.port);

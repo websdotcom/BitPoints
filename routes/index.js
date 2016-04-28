@@ -1,4 +1,3 @@
-exports.ticketing = require('./ticketing');
 var _ = require('lodash');
 var gravatar = require('gravatar');
 

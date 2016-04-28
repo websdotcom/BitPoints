@@ -1,13 +1,13 @@
 function extendTicketInfo(ticket, req, res){
 	switch(ticket.system){
-		case 'jira': // assume v5/6 REST API enabled, we're not dealing with the SOAP interface
-			ticket.url = 'http://' + ticket.host + '/browse/' + ticket.key;
-			req.app.locals.io.sockets.in(req.cookies.roomID).emit('updateTicket', ticket);
-			res.send({ status: 'OK' });
-			break;
-		default:
-			console.error('Ticket system not recognized: '+ticket.ticketSystem);
-			res.send({ status: 'FAIL' });
+	case 'jira': // assume v5/6 REST API enabled, we're not dealing with the SOAP interface
+		ticket.url = 'http://' + ticket.host + '/browse/' + ticket.key;
+		req.app.locals.io.sockets.in(req.cookies.roomID).emit('updateTicket', ticket);
+		res.send({ status: 'OK' });
+		break;
+	default:
+		console.error('Ticket system not recognized: '+ticket.ticketSystem);
+		res.send({ status: 'FAIL' });
 	}
 }
 

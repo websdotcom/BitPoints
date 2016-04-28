@@ -82,7 +82,7 @@ exports.join = function(req, res) {
 			roomId: req.params.id
 		},
 		user: {
-			name: req.query.name || "A BitPointer",
+			name: req.query.name || 'A BitPointer',
 			avatar: gravatar.url(req.query.email ? req.query.email : Math.random()*1000+'', {s: '100', d: 'monsterid'}),
 			cardColor: '#'+paddedColor
 		}

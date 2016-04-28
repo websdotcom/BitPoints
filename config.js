@@ -6,7 +6,7 @@ var fs = require('fs');
  * @returns {Object|undefined} the config object, or undefined if the config file is not found
  */
 var getConfig = function(env) {
-	var environmentFile = "environments/" + env + ".json";
+	var environmentFile = 'environments/' + env + '.json';
 	var config;
 	if (fs.existsSync(environmentFile)) {
 		config = JSON.parse(fs.readFileSync(environmentFile));

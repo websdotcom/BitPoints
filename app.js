@@ -1,4 +1,3 @@
-
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -19,10 +18,10 @@ var userCount = 0;
  */
 var setupRoomEvents = function(socket,room,events) {
 	var emitFn = function(eventName) {
-			return function(data) {
-				io.sockets.in(room).emit(eventName, data);
-			};
+		return function(data) {
+			io.sockets.in(room).emit(eventName, data);
 		};
+	};
 
 	for(var i = 0; i < events.length; i++) {
 		socket.on(events[i], emitFn(events[i]));
@@ -56,7 +55,7 @@ app.config = config;
 app.utils = {
 	setupRoomEvents: setupRoomEvents,
 	getRoomCount: getRoomCount,
-	getUserCount: getUserCount,
+	getUserCount: getUserCount
 };
 
 // Configure the app for all environments.

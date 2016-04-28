@@ -90,7 +90,7 @@ var page = new BP.Page({
 		this.initCardStyle();
 
 		var self = this;
-		$(".voterImage").click(function() {
+		$('.voterImage').click(function() {
 
 			avatarClicks++;
 

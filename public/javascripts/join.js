@@ -3,7 +3,6 @@ var roomId = BP.room.roomId;
 var username = BP.user.name;
 var avatar = BP.user.avatar;
 var uid;
-var avatarClicks = 0;
 var cardStyleTemp = '<label for="pattern">Pattern'+
 		'<select id="pattern">'+
 			'<option value="denim">Denim</option>'+

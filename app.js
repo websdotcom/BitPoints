@@ -6,7 +6,7 @@ var routes = require('./routes');
 var config = require('./config.js').config;
 var app = express();
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, {log: false});
 
 var rooms = {};
 var userCount = 0;
@@ -62,13 +62,11 @@ app.utils = {
 app.set('port', config.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(express.favicon(path.join(__dirname, 'public/images/favicon.png')));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
-app.use(express.cookieParser());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(require('express-favicon')(path.join(__dirname, 'public/images/favicon.png')));
+app.use(require('body-parser').json());
+app.use(require('body-parser').urlencoded({extended: false}));
+app.use(require('cookie-parser')());
+app.use(require('serve-static')(path.join(__dirname, 'public')));
 
 // Configure socket.io.
 app.locals.io = io;
@@ -76,8 +74,8 @@ app.locals.rooms = rooms;
 
 // Debugging for dev environments.
 if (config.debug) {
-	app.use(express.logger('dev'));
-	app.use(express.errorHandler());
+	app.use(require('morgan')('dev'));
+	app.use(require('errorhandler')());
 }
 
 // Routes.

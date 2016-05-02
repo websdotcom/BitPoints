@@ -281,6 +281,10 @@ var page = new BP.Page({
 		// If there's only one person, vote data is useless
 		if(voteData.numVotes > 1) {
 
+			// Log info for advanced users
+			console.log(votes);
+			console.log(voteData);
+
 			var averageText;
 			if (voteData.trueAverage > -1 && voteData.average !== voteData.trueAverage) {
 				averageText = voteData.trueAverage.toFixed(2);

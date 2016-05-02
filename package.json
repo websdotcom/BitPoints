@@ -9,7 +9,8 @@
     "Jack Anderson @jackwanders"
   ],
   "scripts": {
-    "start": "node app.js",
+    "server": "node app.js",
+		"start": "npm run build && npm run server",
     "build": "lessc --clean-css=advanced --source-map ./public/stylesheets/style.less ./public/stylesheets/style.css",
 		"lint": "eslint ."
   },

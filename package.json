@@ -10,9 +10,8 @@
   ],
   "scripts": {
     "server": "node app.js",
-		"start": "npm run build && npm run server",
-    "build": "lessc --clean-css=advanced --source-map ./public/stylesheets/style.less ./public/stylesheets/style.css",
-		"lint": "eslint ."
+    "start": "npm run server",
+    "lint": "eslint ."
   },
   "engines": {
     "node": "4.2.*",
@@ -24,6 +23,7 @@
     "errorhandler": "^1.4.3",
     "express": "4.13.4",
     "express-favicon": "^1.0.1",
+    "express-less-middleware": "^1.4.5",
     "gravatar": "1.5.2",
     "jade": "1.11.0",
     "lodash": "4.11.1",
@@ -32,8 +32,6 @@
     "socket.io": "0.9.16"
   },
   "devDependencies": {
-    "eslint": "^2.8.0",
-    "less": "^2.6.1",
-    "less-plugin-clean-css": "^1.5.1"
+    "eslint": "^2.8.0"
   }
 }

@@ -7,6 +7,7 @@ var config = require('./config.js').config;
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server, {log: false});
+var lessCompiler = require('express-less-middleware')();
 
 var rooms = {};
 var userCount = 0;
@@ -67,6 +68,7 @@ app.use(require('body-parser').json());
 app.use(require('body-parser').urlencoded({extended: false}));
 app.use(require('cookie-parser')());
 app.use(require('serve-static')(path.join(__dirname, 'public')));
+app.use(lessCompiler);
 
 // Configure socket.io.
 app.locals.io = io;

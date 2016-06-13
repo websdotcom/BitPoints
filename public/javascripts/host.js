@@ -169,10 +169,10 @@ var page = new BP.Page({
 	initialize: function() {
 		socket.emit('createRoom', {roomId: roomId, title: title});
 		this.useNotifications = BP.localStorage.get('useNotifications');
-		var inviteId = $("#showLink").attr('data-link');
+		var inviteId = $('#showLink').attr('data-link');
 		var inviteLinkMarkup = document.location.host + '/<strong>' + inviteId + '</strong>';
-		$("#showLink").attr('data-link', inviteLinkMarkup);
-		$("#inviteUrl").html(inviteLinkMarkup);
+		$('#showLink').attr('data-link', inviteLinkMarkup);
+		$('#inviteUrl').html(inviteLinkMarkup);
 
 	},
 
@@ -209,7 +209,7 @@ var page = new BP.Page({
 				$cornerValues.addClass('coffee');
 			}
 			$cardBack.css('background-color', data.color).attr('class', 'cardBack').addClass(data.pattern);
-			$cardBack.css('background-image', 'url(/images/cards/' + data.pattern + '.png)')
+			$cardBack.css('background-image', 'url(/images/cards/' + data.pattern + '.png)');
 			$card.addClass('visible');
 
 			if(!$voter.data('observer'))
@@ -280,6 +280,10 @@ var page = new BP.Page({
 
 		// If there's only one person, vote data is useless
 		if(voteData.numVotes > 1) {
+
+			// Log info for advanced users
+			console.log(votes);
+			console.log(voteData);
 
 			var averageText;
 			if (voteData.trueAverage > -1 && voteData.average !== voteData.trueAverage) {

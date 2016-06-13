@@ -9,23 +9,29 @@
     "Jack Anderson @jackwanders"
   ],
   "scripts": {
-    "start": "node app.js"
+    "server": "node app.js",
+    "start": "npm run server",
+    "lint": "eslint ."
   },
   "engines": {
-    "node": "0.8.*",
-    "npm": "1.2.*"
+    "node": "4.2.*",
+    "npm": "2.14.7"
   },
   "dependencies": {
-    "express": "3.4.8",
-    "jade": "1.6.0",
-    "less-middleware": "1.0.4",
-    "socket.io": "0.9.16",
-    "gravatar": "1.0.6",
-    "lodash": "3.10.0"
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
+    "errorhandler": "^1.4.3",
+    "express": "4.13.4",
+    "express-favicon": "^1.0.1",
+    "express-less-middleware": "^1.4.5",
+    "gravatar": "1.5.2",
+    "jade": "1.11.0",
+    "lodash": "4.11.1",
+    "morgan": "^1.7.0",
+    "serve-static": "^1.10.2",
+    "socket.io": "0.9.16"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.11.2",
-    "load-grunt-tasks": "^3.2.0"
+    "eslint": "^2.8.0"
   }
 }

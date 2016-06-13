@@ -1,4 +1,3 @@
-
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -7,7 +6,8 @@ var routes = require('./routes');
 var config = require('./config.js').config;
 var app = express();
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, {log: false});
+var lessCompiler = require('express-less-middleware')();
 
 var rooms = {};
 var userCount = 0;
@@ -19,10 +19,10 @@ var userCount = 0;
  */
 var setupRoomEvents = function(socket,room,events) {
 	var emitFn = function(eventName) {
-			return function(data) {
-				io.sockets.in(room).emit(eventName, data);
-			};
+		return function(data) {
+			io.sockets.in(room).emit(eventName, data);
 		};
+	};
 
 	for(var i = 0; i < events.length; i++) {
 		socket.on(events[i], emitFn(events[i]));
@@ -56,31 +56,28 @@ app.config = config;
 app.utils = {
 	setupRoomEvents: setupRoomEvents,
 	getRoomCount: getRoomCount,
-	getUserCount: getUserCount,
+	getUserCount: getUserCount
 };
 
 // Configure the app for all environments.
 app.set('port', config.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(express.favicon(path.join(__dirname, 'public/images/favicon.png')));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
-app.use(express.cookieParser());
-app.use(app.router);
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(require('express-favicon')(path.join(__dirname, 'public/images/favicon.png')));
+app.use(require('body-parser').json());
+app.use(require('body-parser').urlencoded({extended: false}));
+app.use(require('cookie-parser')());
+app.use(require('serve-static')(path.join(__dirname, 'public')));
+app.use(lessCompiler);
 
 // Configure socket.io.
-io.set('log level', config.ioLogLevel);
 app.locals.io = io;
 app.locals.rooms = rooms;
 
 // Debugging for dev environments.
 if (config.debug) {
-	app.use(express.logger('dev'));
-	app.use(express.errorHandler());
+	app.use(require('morgan')('dev'));
+	app.use(require('errorhandler')());
 }
 
 // Routes.
@@ -90,10 +87,11 @@ app.get(/^\/host\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.host);
 app.get('/join/:id', routes.join);
 app.get('/kick', routes.kick);
 app.get(/^\/([0-9a-z]{1,5})$/, routes.invite);
-app.get('/addTicketCookie', routes.ticketing.addTicketCookie);
 
 // Listen on the port.
-server.listen(app.get('port'));
+server.listen(app.get('port'), function() {
+	console.log('BitPoints is ready to go at http://localhost:' + config.port);
+});
 
 // Socket stuff.
 io.sockets.on('connection', function (socket) {
@@ -174,4 +172,3 @@ app.use(function(req, res){
 	res.type('txt').send('Not found');
 });
 
-console.log('BitPoints is ready to go at http://localhost:' + config.port);

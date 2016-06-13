@@ -3,7 +3,6 @@ var roomId = BP.room.roomId;
 var username = BP.user.name;
 var avatar = BP.user.avatar;
 var uid;
-var avatarClicks = 0;
 var cardStyleTemp = '<label for="pattern">Pattern'+
 		'<select id="pattern">'+
 			'<option value="denim">Denim</option>'+
@@ -88,18 +87,6 @@ var page = new BP.Page({
 
 		this.joinRoom();
 		this.initCardStyle();
-
-		var self = this;
-		$(".voterImage").click(function() {
-
-			avatarClicks++;
-
-			if (avatarClicks >= 8) {
-				self.$cardBack.attr('class', 'cardBack squirrel');
-				self.$cardBack.css('background-image', 'url(/images/cards/squirrel.png)');
-				self.setCardAttr('pattern', 'squirrel');
-			}
-		});
 	},
 
 	updateRoomName: function(data) {

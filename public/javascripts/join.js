@@ -35,6 +35,7 @@ var cardStyleTemp = '<label for="pattern">Pattern'+
 			'<option value="rebelAlliance">Rebel Alliance</option>'+
 			'<option value="spoon">Spoon</option>'+
 			'<option value="watchmen">Watchmen</option>'+
+			'<option value="tron">TRON</option>'+
 		'</select>'+
 	'</label>'+
 	'<label for="color">Color'+

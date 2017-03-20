@@ -143,7 +143,7 @@ io.sockets.on('connection', function (socket) {
 
 	// set up host <-> client events that just pass through app
 	setupRoomEvents(socket,inRoom,[
-		'newVote','newRound','roundEnd','deckChange','kickVoter'
+		'newVote','newRound','roundEnd','deckChange','kickVoter','updateVoters'
 	]);
 
 });

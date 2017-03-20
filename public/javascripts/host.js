@@ -59,7 +59,9 @@ var socket = io.connect('http://'+window.location.host);
 var roomId = BP.room.roomId;
 var title = BP.room.title;
 var votes = {};
+var voters = {};
 var voteData = {};
+var voting = false;
 
 // 0 - start, 1 - betting open, 2 - reveal
 var roundStatus = 0;
@@ -177,15 +179,26 @@ var page = new BP.Page({
 	},
 
 	addVoter: function(data) {
+		voters[data.uid] = data;
 		data.name = $('<span></span>').html(data.name).text();
 		var html = BP.template(userTemp, data);
 		$(html).appendTo(this.$users);
 		this.updateVoterDecks();
+		socket.emit('updateVoters', {roomId: roomId, voters: voters});
+
+		// emit the appropriate voting state for the new voter to pick up on
+		if (voting) {
+			socket.emit('newRound', {roomId: roomId, ticket: BP.currentTicket});
+		} else {
+			socket.emit('roundEnd',{roomId: roomId});
+		}
 	},
 
 	removeVoter: function(data) {
 		delete votes[data.uid];
+		delete voters[data.uid];
 		this.$('li[data-uid="' + data.uid + '"]').remove();
+		socket.emit('updateVoters', {roomId: roomId, voters: voters});
 	},
 
 	updateTicket: function(data) {
@@ -254,6 +267,7 @@ var page = new BP.Page({
 	},
 
 	startNewRound: function(e, $el) {
+		voting = true;
 		this.$average.hide().find('.val').empty();
 		this.$largeSpread.hide();
 		$el.text('Stop Estimating');
@@ -272,6 +286,7 @@ var page = new BP.Page({
 	},
 
 	endCurrentRound: function(e, $el) {
+		voting = false;
 		$el.text('Begin Estimating');
 		this.$('.card').addClass('showValue');
 		$('html').removeClass('voting');

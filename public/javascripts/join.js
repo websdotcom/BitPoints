@@ -144,8 +144,14 @@ var page = new BP.Page({
 		this.$estimateTable.removeClass('roundEnd').addClass('newRound');
 	},
 
-	endRound: function() {
-		this.$status.hide().filter('.roundEnd').show();
+	endRound: function(data) {
+		var text = 'Voting is closed.';
+
+		if (data.outcome) {
+			text += ' Outcome: ' + data.outcome;
+		}
+
+		this.$status.hide().filter('.roundEnd').text(text).show();
 		this.$estimateTable.removeClass('newRound').addClass('roundEnd');
 	},
 

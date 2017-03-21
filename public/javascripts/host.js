@@ -327,7 +327,7 @@ var page = new BP.Page({
 			}
 		}
 
-		socket.emit('roundEnd',{roomId: roomId});
+		socket.emit('roundEnd',{roomId: roomId, outcome: outcomeText});
 	},
 
 	toggleRound: function(e, $el){

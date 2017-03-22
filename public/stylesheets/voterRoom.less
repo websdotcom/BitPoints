@@ -3,16 +3,26 @@
  */
 #voterRoomInfo {
 	display: block;
-	height: 30px;
+	height: 60px;
 	padding: 0 20px;
 	background: rgba(0,0,0,0.5);
-	line-height: 30px;
+	line-height: 60px;
 	font-size: 14px;
 	font-weight: bold;
 
-	.status {
+	#voterList {
 		float: right;
-		display: none;
+
+		.avatars {
+			float: right;
+		}
+	}
+
+	.voterImageSmall {
+		float: left;
+		height: 30px;
+		width: 30px;
+		margin: 15px 5px;
 	}
 }
 
@@ -21,13 +31,33 @@
 	margin: 10px auto;
 	max-width: 500px;
 
+	.status {
+		display: none;
+		width: 100%;
+		height: 20px;
+		padding: 10px;
+		margin: 10px 0;
+		border-radius: 6px;
+		line-height: 20px;
+		background: rgba(0,0,0,0.5);
+		color: white;
+
+		&.roundEnd {
+			display: block;
+		}
+
+		&.newRound {
+			background: @accentColor;
+		}
+	}
+
 	.voterName,.voterImage {
 		margin-left: 0;
 	}
 
 	#cardStyle {
 		position: absolute;
-		top: 0;
+		top: 40px;
 		left: 170px;
 		h4 {
 			height: 32px;
@@ -45,25 +75,41 @@
 table#estimateOptions {
 	width: 100%;
 	border-spacing: 10px;
+	position: relative;
 	td {
 		width: 33%;
 		font: normal 2.5em/2.5em @sans;
 		text-align: center;
 		color: @darktext;
 		border-radius: 3px;
-		cursor: pointer;
-		background: @link;
-		&:hover {
-			background: @hover;
-		}
-		&.lastVote {
-			background: darken(@link,20%);
-		}
-		&.blank {
-			background: none !important;
-		}
 		.fa {
 			.iconDark();
+		}
+	}
+
+	&.roundEnd {
+		td,
+		td:hover,
+		td.lastVote,
+		td.blank {
+			cursor: not-allowed;
+			background: darken(@link, 20%);
+		}
+	}
+
+	&.newRound {
+		td {
+			cursor: pointer;
+			background: @link;
+			&:hover {
+				background: @hover;
+			}
+			&.lastVote {
+				background: darken(@link,20%);
+			}
+			&.blank {
+				background: none !important;
+			}
 		}
 	}
 }

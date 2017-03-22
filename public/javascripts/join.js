@@ -3,6 +3,9 @@ var roomId = BP.room.roomId;
 var username = BP.user.name;
 var avatar = BP.user.avatar;
 var uid;
+
+var voterTemp = '<img class="voterImageSmall" title="{{name}}" src="{{avatar}}" />';
+
 var cardStyleTemp = '<label for="pattern">Pattern'+
 		'<select id="pattern">'+
 			'<option value="denim">Denim</option>'+
@@ -53,7 +56,8 @@ var page = new BP.Page({
 		'deckChange': 'renderDeck',
 		'kickVoter': 'processKick',
 		'uidAssignment': 'saveUid',
-		'roomName': 'updateRoomName'
+		'roomName': 'updateRoomName',
+		'updateVoters': 'updateVoters'
 	},
 
 	domEvents: {
@@ -69,7 +73,8 @@ var page = new BP.Page({
 		ticketInfo: '#ticketInfo',
 		status: '.status',
 		estimateTable: '#estimateOptions',
-		roomName: '#roomName'
+		roomName: '#roomName',
+		voterList: '#voterList .avatars'
 	},
 
 	initialize: function() {
@@ -136,10 +141,29 @@ var page = new BP.Page({
 		this.$lastVote.removeClass('lastVote');
 		if(data.ticket){ this.$ticketInfo.html(': <a href="'+data.ticket.url+'" target="_blank">'+data.ticket.key+'</a>'); }
 		this.$status.hide().filter('.newRound').show();
+		this.$estimateTable.removeClass('roundEnd').addClass('newRound');
 	},
 
-	endRound: function() {
-		this.$status.hide().filter('.roundEnd').show();
+	endRound: function(data) {
+		var text = 'Voting is closed.';
+
+		if (data.outcome) {
+			text += ' Outcome: ' + data.outcome;
+		}
+
+		this.$status.hide().filter('.roundEnd').text(text).show();
+		this.$estimateTable.removeClass('newRound').addClass('roundEnd');
+	},
+
+	updateVoters: function(data) {
+		var voters = data.voters;
+		var html = '';
+		for (var uid in voters) {
+			if (voters.hasOwnProperty(uid)) {
+				html += BP.template(voterTemp, voters[uid]);
+			}
+		}
+		this.$voterList.html(html);
 	},
 
 	processKick: function(data) {

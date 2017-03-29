@@ -29,6 +29,12 @@ var setupRoomEvents = function(socket,room,events) {
 	}
 };
 
+var setupPassThroughEvents = function(socket, room) {
+	setupRoomEvents(socket,room,[
+		'newVote','newRound','roundEnd','deckChange','kickVoter','updateVoters'
+	]);
+};
+
 var addUser = function() {
 	userCount++;
 };
@@ -112,6 +118,8 @@ io.sockets.on('connection', function (socket) {
 		// if there are any voters in the room that's just been created, prompt them to join
 		io.sockets.in(data.roomId).emit('roomRefresh', {});
 
+		// set up host <-> client events that just pass through app
+		setupPassThroughEvents(socket, data.roomId);
 	});
 
 	socket.on('joinRoom', function (data) {
@@ -130,6 +138,8 @@ io.sockets.on('connection', function (socket) {
 		// Send the user their uid.
 		socket.emit('uidAssignment', {uid: uid});
 
+		// set up host <-> client events that just pass through app
+		setupPassThroughEvents(socket, data.roomId);
 	});
 
 	socket.on('disconnect', function() {
@@ -140,11 +150,6 @@ io.sockets.on('connection', function (socket) {
 			dropRoom(hostRoomId);
 		}
 	});
-
-	// set up host <-> client events that just pass through app
-	setupRoomEvents(socket,inRoom,[
-		'newVote','newRound','roundEnd','deckChange','kickVoter','updateVoters'
-	]);
 
 });
 

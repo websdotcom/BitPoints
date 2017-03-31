@@ -49,6 +49,8 @@ var page = new BP.Page({
 
 	socket: socket,
 
+	voting: false,
+
 	socketEvents: {
 		'roomRefresh': 'joinRoom',
 		'newRound': 'reset',
@@ -138,6 +140,7 @@ var page = new BP.Page({
 	},
 
 	reset: function(data) {
+		this.voting = true;
 		this.$lastVote.removeClass('lastVote');
 		if(data.ticket){ this.$ticketInfo.html(': <a href="'+data.ticket.url+'" target="_blank">'+data.ticket.key+'</a>'); }
 		this.$status.hide().filter('.newRound').show();
@@ -145,6 +148,7 @@ var page = new BP.Page({
 	},
 
 	endRound: function(data) {
+		this.voting = false;
 		var text = 'Voting is closed.';
 
 		if (data.outcome) {
@@ -207,6 +211,8 @@ var page = new BP.Page({
 	},
 
 	submitEstimate: function(e, $el) {
+		if (!this.voting) { return; }
+
 		$('.lastVote').removeClass('lastVote');
 
 		var points = $el.addClass('lastVote').data('value'),

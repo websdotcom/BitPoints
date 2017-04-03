@@ -13,6 +13,10 @@ var logger = require('./logger');
 var rooms = {};
 var userCount = 0;
 
+var loggableEvents = [
+	'newVote','newRound','roundEnd','kickVoter','updateVoters'
+];
+
 var logEvent = function(event, data) {
 	logger.info({
 		event: event,
@@ -28,7 +32,9 @@ var logEvent = function(event, data) {
 var setupRoomEvents = function(socket,room,events) {
 	var emitFn = function(eventName) {
 		return function(data) {
-			logEvent(eventName, data);
+			if (_.includes(loggableEvents, eventName)) {
+				logEvent(eventName, data);
+			}
 			io.sockets.in(room).emit(eventName, data);
 		};
 	};

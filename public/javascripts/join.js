@@ -149,6 +149,9 @@ var page = new BP.Page({
 
 		if (data.outcome) {
 			text += ' Outcome: ' + data.outcome;
+			if (data.nearestCard) {
+				text += ' Nearest Card: ' + data.nearestCard;
+			}
 		}
 
 		this.$status.hide().filter('.roundEnd').text(text).show();

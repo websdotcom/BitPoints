@@ -87,6 +87,31 @@ var getDeck = function() {
 	return decks[$('input[name=deckType]:checked').val() || 'standard'];
 };
 
+var useNearestRounding = function() {
+	return $('input[name=roundNearest]:checked').val();
+};
+
+var getNearestCard = function(average, deck) {
+  var compareArr = [];
+  BP.each(deck, function(card) {
+    if(!isNaN(card.value)) {
+      compareArr.push(card);
+    }
+  });
+
+  var curr = compareArr[0];
+  var diff = Math.abs (average - curr.value);
+  BP.each(compareArr, function(compareVal) {
+    var newdiff = Math.abs (average - compareVal.value);
+    if (newdiff < diff) {
+      diff = newdiff;
+      curr = compareVal;
+    }
+  });
+
+  return curr;
+};
+
 var getNumVotes = function() {
 	var count = 0;
 	BP.each(votes,function() {
@@ -109,6 +134,7 @@ var processVotes = function() {
 	};
 
 	var deck = getDeck();
+	var nearestRounding = useNearestRounding();
 	var minCardIdx = 0, maxCardIdx = 0;
 
 	BP.each(votes, function(vote) {
@@ -132,11 +158,17 @@ var processVotes = function() {
 	});
 
 	voteData.spread = maxCardIdx - minCardIdx;
-	voteData.average = voteData.numVotes === 0 ? 0 : voteData.total/voteData.numVotes;
-	if(voteData.average > 0.5) {
-		voteData.trueAverage = voteData.average;
-		voteData.average = Math.round(voteData.average);
+
+	voteData.average = voteData.numVotes === 0 ? 0 : voteData.total / voteData.numVotes;
+
+	if (nearestRounding) {
+    voteData.nearestCard = getNearestCard(voteData.average, deck);
 	}
+
+  if (voteData.average > 0.5) {
+    voteData.trueAverage = voteData.average;
+    voteData.average = Math.round(voteData.average);
+  }
 };
 
 var page = new BP.Page({
@@ -165,6 +197,7 @@ var page = new BP.Page({
 		users: '#users',
 		ticket: '#ticket',
 		average: '#average',
+    nearestCard: '#nearestCard',
 		largeSpread: '#largeSpread'
 	},
 
@@ -269,6 +302,7 @@ var page = new BP.Page({
 	startNewRound: function(e, $el) {
 		voting = true;
 		this.$average.hide().find('.val').empty();
+		this.$nearestCard.hide().find('.val').empty();
 		this.$largeSpread.hide();
 		$el.text('Stop Estimating');
 		this.$('.card').removeClass('visible showValue spin');
@@ -318,6 +352,12 @@ var page = new BP.Page({
 				averageText += ' - The vote spread is large';
 			}
 
+			var nearestText = '';
+			if (voteData.nearestCard) {
+        nearestText = voteData.nearestCard.estimate;
+        this.$nearestCard.show().find('.val').text(nearestText);
+			}
+
 			this.$average.show().find('.val').text(outcomeText);
 			this.$average.show().find('.val').attr('title', averageText);
 
@@ -327,7 +367,7 @@ var page = new BP.Page({
 			}
 		}
 
-		socket.emit('roundEnd',{roomId: roomId, outcome: outcomeText});
+		socket.emit('roundEnd',{roomId: roomId, outcome: outcomeText, nearestCard: nearestText});
 	},
 
 	toggleRound: function(e, $el){

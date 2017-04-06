@@ -28,6 +28,12 @@ block content
 									input(type="radio", value="tshirt", name="deckType", id="tshirt")
 									span T-Shirt Sizes
 					.dropItem
+						span.title Round To Card:
+						.control
+							.option
+								label(for="roundNearest")
+									input(type="checkbox", name="roundNearest" id="roundNearest")
+					.dropItem
 						span.title Invite URL:
 						.control
 							span
@@ -37,6 +43,8 @@ block content
 		button#toggleRound Begin Estimating
 
 		#average The average estimate is&nbsp;
+			span.val
+		#nearestCard The nearest card is&nbsp;
 			span.val
 		#largeSpread Looks like there's some uncertainty about this estimate...
 

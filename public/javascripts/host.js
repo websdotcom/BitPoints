@@ -122,6 +122,7 @@ var getNumVotes = function() {
 
 var processVotes = function() {
 	voteData = {
+		votes: votes,
 		average: -1,
 		trueAverage: -1,
 		min: -1,
@@ -367,7 +368,12 @@ var page = new BP.Page({
 			}
 		}
 
-		socket.emit('roundEnd',{roomId: roomId, outcome: outcomeText, nearestCard: nearestText});
+		socket.emit('roundEnd',{
+			roomId: roomId,
+			roundData: voteData,
+			outcome: outcomeText,
+      nearestCard: nearestText
+		});
 	},
 
 	toggleRound: function(e, $el){

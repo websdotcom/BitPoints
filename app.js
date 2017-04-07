@@ -8,9 +8,21 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server, {log: false});
 var lessCompiler = require('express-less-middleware')();
+var logger = require('./logger');
 
 var rooms = {};
 var userCount = 0;
+
+var loggableEvents = [
+	'newVote','newRound','roundEnd','kickVoter','updateVoters'
+];
+
+var logEvent = function(event, data) {
+	logger.info({
+		event: event,
+		data: data
+	}, 'socket event');
+};
 
 /**
  * Method for passing events between host and clients
@@ -20,6 +32,9 @@ var userCount = 0;
 var setupRoomEvents = function(socket,room,events) {
 	var emitFn = function(eventName) {
 		return function(data) {
+			if (_.includes(loggableEvents, eventName)) {
+				logEvent(eventName, data);
+			}
 			io.sockets.in(room).emit(eventName, data);
 		};
 	};
@@ -96,7 +111,7 @@ app.get(/^\/([0-9a-z]{1,5})$/, routes.invite);
 
 // Listen on the port.
 server.listen(app.get('port'), function() {
-	console.log('BitPoints is ready to go at http://localhost:' + config.port);
+	logger.info('BitPoints is ready to go at http://localhost:' + config.port);
 });
 
 // Socket stuff.
@@ -108,8 +123,8 @@ io.sockets.on('connection', function (socket) {
 	var hostRoomId;
 
 	socket.on('createRoom', function (data) {
+		logEvent('createRoom', data);
 
-		console.log('Room', data.roomId, 'created.');
 		rooms[data.roomId] = data;
 		socket.join(data.roomId);
 		host = true;
@@ -123,6 +138,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('joinRoom', function (data) {
+		logEvent('joinRoom', data);
 
 		// Set client socket metadata.
 		myName = data.name;

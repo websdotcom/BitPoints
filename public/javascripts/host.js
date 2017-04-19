@@ -198,7 +198,7 @@ var page = new BP.Page({
 		users: '#users',
 		ticket: '#ticket',
 		average: '#average',
-    nearestCard: '#nearestCard',
+		nearestCard: '#nearestCard',
 		largeSpread: '#largeSpread'
 	},
 

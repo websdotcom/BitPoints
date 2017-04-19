@@ -163,7 +163,7 @@ var processVotes = function() {
 	voteData.average = voteData.numVotes === 0 ? 0 : voteData.total / voteData.numVotes;
 
 	if (nearestRounding) {
-    voteData.nearestCard = getNearestCard(voteData.average, deck);
+	    voteData.nearestCard = getNearestCard(voteData.average, deck);
 	}
 
   if (voteData.average > 0.5) {

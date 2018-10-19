@@ -66,20 +66,21 @@ var voting = false;
 // 0 - start, 1 - betting open, 2 - reveal
 var roundStatus = 0;
 
-var userTemp =  '<li data-name="{{name}}" data-uid="{{uid}}">'+
-				'<div title="Don\'t count this voter\'s estimates" class="ಠ_ಠ"><i class="fa fa-eye"></i></div>'+
-				'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
-				'<img class="voterImage" src="{{avatar}}" />'+
-				'<h3 class="voterName">{{name}}</h3>'+
-				'<div class="card">'+
-					'<div class="cardBack"></div>'+
-					'<div class="cardInner">'+
-						'<div class="cardValue"></div>'+
-						'<div class="cornerValue topleft"></div>'+
-						'<div class="cornerValue bottomright"></div>'+
-					'</div>'+
-				'</div>'+
-			'</li>';
+var userTemp = '<li data-name="{{name}}" data-uid="{{uid}}">'+
+	'<div title="Don\'t count this voter\'s estimates" class="ಠ_ಠ"><i class="fa fa-eye"></i></div>'+
+	'<div title="Remove this voter from room" class="kickVoter">&times;</div>'+
+	'<div class="name">{{name}}</div>'+
+	'<div class="card">'+
+		'<div class="cardBack">'+
+		'</div>'+
+		'<div class="cardInner">'+
+			'<div class="name">{{name}}</div>'+
+			'<div class="cardValue"></div>'+
+			'<div class="cornerValue topleft"></div>'+
+			'<div class="cornerValue bottomright"></div>'+
+		'</div>'+
+	'</div>'+
+'</li>';
 
 var ticketTemp = '<a href="{{url}}" class="key" target="_blank">{{key}}</a>: <span class="title">{{title}}</span>';
 
@@ -92,24 +93,24 @@ var useNearestRounding = function() {
 };
 
 var getNearestCard = function(average, deck) {
-  var compareArr = [];
-  BP.each(deck, function(card) {
-    if(!isNaN(card.value)) {
-      compareArr.push(card);
-    }
-  });
+	var compareArr = [];
+	BP.each(deck, function(card) {
+		if(!isNaN(card.value)) {
+			compareArr.push(card);
+		}
+	});
 
-  var curr = compareArr[0];
-  var diff = Math.abs (average - curr.value);
-  BP.each(compareArr, function(compareVal) {
-    var newdiff = Math.abs (average - compareVal.value);
-    if (newdiff < diff) {
-      diff = newdiff;
-      curr = compareVal;
-    }
-  });
+	var curr = compareArr[0];
+	var diff = Math.abs (average - curr.value);
+	BP.each(compareArr, function(compareVal) {
+		var newdiff = Math.abs (average - compareVal.value);
+		if (newdiff < diff) {
+			diff = newdiff;
+			curr = compareVal;
+		}
+	});
 
-  return curr;
+	return curr;
 };
 
 var getNumVotes = function() {
@@ -163,13 +164,13 @@ var processVotes = function() {
 	voteData.average = voteData.numVotes === 0 ? 0 : voteData.total / voteData.numVotes;
 
 	if (nearestRounding) {
-	    voteData.nearestCard = getNearestCard(voteData.average, deck);
+			voteData.nearestCard = getNearestCard(voteData.average, deck);
 	}
 
-  if (voteData.average > 0.5) {
-    voteData.trueAverage = voteData.average;
-    voteData.average = Math.round(voteData.average);
-  }
+	if (voteData.average > 0.5) {
+		voteData.trueAverage = voteData.average;
+		voteData.average = Math.round(voteData.average);
+	}
 };
 
 var page = new BP.Page({
@@ -182,7 +183,8 @@ var page = new BP.Page({
 		'newVoter': 'addVoter',
 		'voterLeave': 'removeVoter',
 		'updateTicket': 'updateTicket',
-		'newVote': 'acceptVote'
+		'newVote': 'acceptVote',
+		'updateCardStyle': 'updateCard'
 	},
 
 	domEvents: {
@@ -215,8 +217,10 @@ var page = new BP.Page({
 	addVoter: function(data) {
 		voters[data.uid] = data;
 		data.name = $('<span></span>').html(data.name).text();
-		var html = BP.template(userTemp, data);
-		$(html).appendTo(this.$users);
+		var $html = $(BP.template(userTemp, data));
+		var $cardBack = $html.find('.cardBack');
+		this.setCardStyle($cardBack, data);
+		$html.appendTo(this.$users);
 		this.updateVoterDecks();
 		socket.emit('updateVoters', {roomId: roomId, voters: voters});
 
@@ -240,6 +244,17 @@ var page = new BP.Page({
 		this.$ticket.html(BP.template(ticketTemp, data));
 	},
 
+	setCardStyle: function($cardBack, data) {
+		$cardBack.css('background-color', data.color).attr('class', 'cardBack').addClass(data.pattern);
+		$cardBack.css('background-image', 'url(/images/cards/' + data.pattern + '.png)');
+	},
+
+	updateCard: function(data) {
+		var $user = $('[data-uid="' + data.uid + '"]');
+		var $cardBack = $user.find('.cardBack');
+		this.setCardStyle($cardBack, data);
+	},
+
 	acceptVote: function(data) {
 		if(roundStatus === 1){
 			var
@@ -255,8 +270,7 @@ var page = new BP.Page({
 				$mainValue.addClass('coffee');
 				$cornerValues.addClass('coffee');
 			}
-			$cardBack.css('background-color', data.color).attr('class', 'cardBack').addClass(data.pattern);
-			$cardBack.css('background-image', 'url(/images/cards/' + data.pattern + '.png)');
+			this.setCardStyle($cardBack, data);
 			$card.addClass('visible');
 
 			if(!$voter.data('observer'))
@@ -355,8 +369,8 @@ var page = new BP.Page({
 
 			var nearestText = '';
 			if (voteData.nearestCard) {
-        nearestText = voteData.nearestCard.estimate;
-        this.$nearestCard.show().find('.val').text(nearestText);
+				nearestText = voteData.nearestCard.estimate;
+				this.$nearestCard.show().find('.val').text(nearestText);
 			}
 
 			this.$average.show().find('.val').text(outcomeText);
@@ -372,7 +386,7 @@ var page = new BP.Page({
 			roomId: roomId,
 			roundData: voteData,
 			outcome: outcomeText,
-      nearestCard: nearestText
+			nearestCard: nearestText
 		});
 	},
 

@@ -7,6 +7,5 @@ block mainContent
 			form(id="join", action="/join")
 				input#room-id(name='room-id',type='hidden',value='#{room.roomId}')
 				input#name(name='name',type='text',placeholder='Name',data-required='true')
-				input#email(name='email',type='text',placeholder='Gravatar Email (optional)')
 				input(type='submit', value='Join Room')#join-room
 		p or, go to <a href="/">bitpoints.digital.vistaprint.io</a>

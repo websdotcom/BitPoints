@@ -2,5 +2,5 @@
 	"port": 80,
 	"debug": false,
 	"ioLogLevel": 0,
-	"appHost": "bitpoints.io"
+	"appHost": "bitpoints.digital.vistaprint.io"
 }

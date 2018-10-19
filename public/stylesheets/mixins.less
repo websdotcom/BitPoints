@@ -33,8 +33,7 @@
 	width: 200px * @size;
 	height: 270px * @size;
 	left: 0;
-	top: 5000px;
-	&.visible { top: 180px; }
+	top: 2rem;
 	-webkit-transition: 1.5s;
 	transition: 1.5s;
 	-webkit-transform-style: preserve-3d;
@@ -60,9 +59,12 @@
 		.backface-visibility(hidden);
 	}
 	.cardBack {
+		-webkit-transition: 1.5s;
+		transition: 1.5s;
 		background-repeat: repeat;
 		background-position: 50% 50%;
 		background-size: 100%;
+		filter: saturate(0) brightness(0.5);
 		&.denim {
 			background-size: auto;
 		}
@@ -96,7 +98,8 @@
 		}
 		.cardValue {
 			text-align: center;
-			position: relative;
+			position: absolute;
+			top: 0; right: 0; bottom: 0; left: 0;
 			font-size: 6em * @size;
 			font-weight: normal;
 			line-height: 250px * @size;
@@ -122,6 +125,11 @@
 				right: 0;
 				.rotate(180deg);
 			}
+		}
+	}
+	&.visible {
+		.cardBack {
+			filter: saturate(1) brightness(1);
 		}
 	}
 }

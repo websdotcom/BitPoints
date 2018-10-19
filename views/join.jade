@@ -3,21 +3,21 @@ extends layout
 block content
 	#voterRoomInfo Room:
 		#roomName #{room.roomId}
-		#voterList Players:
+		#voterList Players:&nbsp;
 			.avatars
 	#voterInfo
 		.status.newRound
 			| Voting is open - choose a card
 			span#ticketInfo
 		.status.roundEnd Voting is closed
-		img.voterImage#avatar(src='#{user.avatar}')
-		h3.voterName #{user.name}
+		
+		table#estimateOptions.roundEnd
+
 		#cardStyle
 			h4 Card Style
 			div#cardPreview
-				div.cardBack.argyle(style='background-color:#{user.cardColor}')
+				div.cardBack.voter.argyle(style='background-color:#{user.cardColor}')
 
-		table#estimateOptions.roundEnd
 
 	script.
 		BP.room = !{JSON.stringify(room)};

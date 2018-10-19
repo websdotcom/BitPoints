@@ -4,7 +4,7 @@ var username = BP.user.name;
 var avatar = BP.user.avatar;
 var uid;
 
-var voterTemp = '<img class="voterImageSmall" title="{{name}}" src="{{avatar}}" />';
+var voterTemp = '<span>{{name}}</span>';
 
 var cardStyleTemp = '<label for="pattern">Pattern'+
 		'<select id="pattern">'+
@@ -93,8 +93,8 @@ var page = new BP.Page({
 			color: '#color'
 		});
 
-		this.joinRoom();
 		this.initCardStyle();
+		this.joinRoom();
 	},
 
 	updateRoomName: function(data) {
@@ -103,6 +103,13 @@ var page = new BP.Page({
 
 	setCardAttr: function(attr,style) {
 		BP.localStorage.set(username+'-card-'+attr, style);
+		var cardData = this.getCardData();
+		this.socket.emit('updateCardStyle', {
+			uid: uid,
+			roomId: roomId,
+			pattern: cardData.pattern,
+			color: cardData.color
+		});
 	},
 
 	getCardAttr: function(attr) {
@@ -136,7 +143,14 @@ var page = new BP.Page({
 	},
 
 	joinRoom: function() {
-		socket.emit('joinRoom', {roomId: roomId, avatar: avatar, name: username});
+		var cardData = this.getCardData();
+		socket.emit('joinRoom', {
+			pattern: cardData.pattern,
+			color: cardData.color,
+			roomId: roomId,
+			avatar: avatar,
+			name: username
+		});
 	},
 
 	reset: function(data) {
@@ -164,13 +178,13 @@ var page = new BP.Page({
 
 	updateVoters: function(data) {
 		var voters = data.voters;
-		var html = '';
+		var html = [];
 		for (var uid in voters) {
 			if (voters.hasOwnProperty(uid)) {
-				html += BP.template(voterTemp, voters[uid]);
+				html.push(BP.template(voterTemp, voters[uid]));
 			}
 		}
-		this.$voterList.html(html);
+		this.$voterList.html(html.join(', '));
 	},
 
 	processKick: function(data) {
@@ -213,6 +227,13 @@ var page = new BP.Page({
 		this.setCardAttr('color', $el.val());
 	},
 
+	getCardData: function() {
+		return {
+			pattern: this.$cardBack.attr('class').split(/\s+/)[1],
+			color: this.$color.val().length >= 4 ? this.$color.val() : '#032E63'
+		};
+	},
+
 	submitEstimate: function(e, $el) {
 		if (!this.voting) { return; }
 
@@ -220,9 +241,8 @@ var page = new BP.Page({
 
 		var points = $el.addClass('lastVote').data('value'),
 			estimate = $el.html(),
-			pattern = this.$cardBack.attr('class').split(/\s+/)[1],
-			color = this.$color.val().length >= 4 ? this.$color.val() : '#032E63';
-		socket.emit('newVote', {uid: uid, roomId: roomId, name: username, value: points, cardValue: estimate, pattern: pattern, color: color });
+			cardData = this.getCardData();
+		socket.emit('newVote', {uid: uid, roomId: roomId, name: username, value: points, cardValue: estimate, pattern: cardData.pattern, color: cardData.color });
 	}
 });
 

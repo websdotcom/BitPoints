@@ -48,12 +48,7 @@
 		}
 	}
 
-	.voterName,.voterImage {
-		margin-left: 0;
-	}
-
 	#cardStyle {
-		position: absolute;
 		top: 40px;
 		left: 170px;
 		h4 {
@@ -63,8 +58,12 @@
 		#cardPreview {
 			.cardStyle(.45);
 			position: relative;
+			margin: auto;
 			top: auto; left: auto;
 			.box-sizing();
+			.cardBack {
+				filter: saturate(1) brightness(1) !important;
+			}
 		}
 	}
 }

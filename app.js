@@ -47,7 +47,7 @@ var setupRoomEvents = function(socket,room,events) {
 
 var setupPassThroughEvents = function(socket, room) {
 	setupRoomEvents(socket,room,[
-		'newVote','newRound','roundEnd','deckChange','kickVoter','updateVoters'
+		'newVote','newRound','roundEnd','deckChange','kickVoter','updateVoters','updateCardStyle'
 	]);
 };
 

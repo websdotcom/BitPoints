@@ -63,6 +63,7 @@ var page = new BP.Page({
 				name: this.$name.val(),
 				email: this.$email.val()
 			});
+			debugger;
 			document.location = '/join/' + this.$roomId.val() + '?name=' + this.$name.val() + '&email=' + this.$email.val();
 		}
 		e.preventDefault();

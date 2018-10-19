@@ -2,11 +2,11 @@ extends external
 
 block mainContent
 	section#actions
-		p You've been invited to play planning poker in the room: "#{room.title}"
+		p Let your friends in room #[b #{room.roomId}] know who you are.
 		div.join
 			form(id="join", action="/join")
 				input#room-id(name='room-id',type='hidden',value='#{room.roomId}')
 				input#name(name='name',type='text',placeholder='Name',data-required='true')
-				input#email(name='email',type='text',placeholder='Gravatar Email')
+				input#email(name='email',type='text',placeholder='Gravatar Email (optional)')
 				input(type='submit', value='Join Room')#join-room
-		p or, go to <a href="/">bitpoints.io</a>
+		p or, go to <a href="/">bitpoints.digital.vistaprint.io</a>

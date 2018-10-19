@@ -2,8 +2,6 @@ extends layout
 
 block content
 	#room
-		h1 Welcome to #{room.title} (#{room.roomId})
-
 		ul#settings
 			li
 				i.setting.fa.fa-cog.fa-2x
@@ -33,12 +31,6 @@ block content
 							.option
 								label(for="roundNearest")
 									input(type="checkbox", name="roundNearest" id="roundNearest")
-					.dropItem
-						span.title Invite URL:
-						.control
-							span
-								span#inviteUrl #{inviteId}
-								i.fa.fa-share-square-o#showLink(data-link="#{inviteId}")
 
 		button#toggleRound Begin Estimating
 
@@ -52,6 +44,9 @@ block content
 
 		ul#users
 
+	#roomId
+		p.text room code
+		p.id #{room.roomId}
 	script.
 		BP.room = !{JSON.stringify(room)};
 	script(src="/socket.io/socket.io.js")

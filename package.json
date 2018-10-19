@@ -18,6 +18,7 @@
     "npm": "2.14.7"
   },
   "dependencies": {
+    "base-x": "^3.0.4",
     "body-parser": "^1.15.0",
     "bunyan": "^1.8.9",
     "cookie-parser": "^1.4.1",

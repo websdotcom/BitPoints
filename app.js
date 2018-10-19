@@ -10,6 +10,7 @@ var io = require('socket.io').listen(server, {log: false});
 var lessCompiler = require('express-less-middleware')();
 var logger = require('./logger');
 
+
 var rooms = {};
 var userCount = 0;
 
@@ -104,10 +105,10 @@ if (config.debug) {
 // Routes.
 app.get('/', routes.index);
 app.get('/create', routes.create);
-app.get(/^\/host\/([0-9]+)\/([-%a-zA-Z0-9]*)/, routes.host);
+app.get(/^\/host\/([a-z0-9]{1,5})/, routes.host);
 app.get('/join/:id', routes.join);
 app.get('/kick', routes.kick);
-app.get(/^\/([0-9a-z]{1,5})$/, routes.invite);
+app.get('/invite', routes.invite);
 
 // Listen on the port.
 server.listen(app.get('port'), function() {

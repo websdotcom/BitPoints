@@ -5,19 +5,16 @@ block mainContent
 		div.join
 			h2
 				span Join a Room In Progress
-			form(id="join", action="/join")
-				input#room-id.halfwidth(name='room-id',type='text',placeholder='Room ID*',data-required='true')
-				input#name.halfwidth(name='name',type='text',placeholder='Name*',data-required='true')
-				input#email(name='email',type='text',placeholder='Gravatar Email')
-				input(type='submit', value='Join a Room')#join-room
+			form(id="invite", action="/invite")
+				input#room-id.halfwidth(name='room-id',type='text',placeholder='Room Code',data-required='true')
+				input.halfwidth(type='submit', value='Join a Room')#join-room
 		div#stats.
 			#{voterString} estimating stories in #{roomString}
 		div.create
 			h2
 				span Create a new BitPoints Room
 			form(id="create", action="/create")
-				input#title.halfwidth(name='title',type='text',placeholder='Room Title*',data-required='true')
-				input#join-room.halfwidth(type='submit',value='Create a Room')
+				input#join-room(type='submit',value='Create a Room')
 				.roomOptions
 					label(for='notifications')
 						input#notifications(name='notifications',type='checkbox',value='yes')

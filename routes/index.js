@@ -18,30 +18,25 @@ exports.index = function(req, res){
 
 /**
  * GET create room from homepage
- * @param	title	Room name
  */
 exports.create = function(req, res) {
-	var id = Math.floor(Math.random() * 50000);
-
-	res.redirect('/host/' + id + '/' + req.query.title);
+	// This number range will result in the base36 strings 1000 through zzzz
+	var id = (46656 + Math.floor(Math.random() * 1632960)).toString(36).toLowerCase();
+	res.redirect('/host/' + id);
 };
 
 /**
  * GET room UI
  * @param	id	BitPoint RoomID
- * @param	title	Room name
  */
 exports.host = function(req, res) {
-	var id = req.params[0],
-		title = req.params[1] ? req.params[1] : 'Room '+id;
+	var id = req.params[0];
 
 	res.cookie('roomID', id, { maxAge: 900000 });
 	res.render('host', {
 		room: {
-			roomId: id,
-			title: title
+			roomId: id
 		},
-		inviteId: (+id).toString(36),
 		appHost: req.app.config.appHost
 	});
 };
@@ -51,14 +46,11 @@ exports.host = function(req, res) {
  * @param  id  invite id in url
  */
 exports.invite = function(req, res) {
-	var id = req.params[0];
-	var roomId = parseInt(id, 36);
-	var roomTitle = _.get(req, 'app.locals.rooms[roomId].title', 'A BitPoints room');
-
+	var roomId = req.query['room-id'];
 	var room = {
-		roomId: roomId,
-		title: roomTitle
+		roomId: roomId
 	};
+
 	req.params.id = roomId;
 	res.render('invite',{
 		room: room,

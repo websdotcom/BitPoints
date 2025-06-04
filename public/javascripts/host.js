@@ -363,7 +363,7 @@ var page = new BP.Page({
 			this.$average.show().find('.val').attr('title', averageText);
 
 			// Animate fun-times if everyone votes the same
-			if(voteData.numVotes > 3 && voteData.allVotesEqual){
+			if(voteData.numVotes > 2 && voteData.allVotesEqual){
 				this.$('.card').addClass('spin');
 			}
 		}
